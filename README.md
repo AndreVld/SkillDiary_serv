@@ -5,7 +5,7 @@
 ## Стек
 
 * Python>3.5
-* Django<3.0
+* Django>3.0
 * VSCode
 * PostgreSQL
 
