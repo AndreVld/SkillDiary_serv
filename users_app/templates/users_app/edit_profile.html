@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+
+    {% for message in messages %}
+    {{ message }}
+    {% endfor %}
+
+<form action="{% url 'users:edit_profile' user.id %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div>
+        <label for="{{ form.username.id_for_label }}">Логин</label>
+        {{ form.username }}
+    </div>
+    <div>
+        <label for="{{ form.email.id_for_label }}">Email</label>
+        {{ form.email }}
+    </div>
+
+    <div>
+        <label for="{{ form.first_name.id_for_label }}">Имя</label>
+        {{ form.first_name }}
+    </div>
+
+    <div>
+        <label for="{{ form.last_name.id_for_label }}">фамилия</label>
+        {{ form.last_name }}
+    </div>
+
+    <div>
+        <label for="{{ form.surname.id_for_label }}">Отчество</label>
+        {{ form.surname }}
+    </div>
+
+    <div>
+        <label for="{{ form.avatar.id_for_label }}">avatar</label>
+        {{ form.avatar }}
+    </div>
+
+    <div>
+        <label for="{{ form.age.id_for_label }}">age</label>
+        {{ form.age }}
+    </div>
+    <div>
+        <label for="{{ form.city.id_for_label }}">city</label>
+        {{ form.city }}
+    </div>
+
+    <input type="submit" value="Сохранить">
+
+</form>
+</body>
+</html>

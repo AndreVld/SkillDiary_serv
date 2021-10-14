@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+<form action="{% url 'users:login' %}" method="post">
+{% csrf_token %}
+    <div class="form-group">
+        <label class="#" for="{{ form.username.id_for_label }}">
+            Имя пользователя</label>
+        {{ form.username }}
+    </div>
+    <div class="#">
+        <label class="#" for="{{ form.password.id_for_label }}">Пароль</label>
+        {{ form.password }}
+    </div>
+    <input  type="submit" value="Авторизоваться">
+</form>
+ {% if user.is_authenticated %}
+
+<a style="color: red; font-size: 2em;" href="{% url 'users:edit_profile' user.id %}">
+    {{user.username}}<i class="fas fa-user-circle"></i>
+
+<a style="color: grey; font-size: 2em; " href="{% url 'users:logout' %}">Выйти</a>
+
+{% else %}
+<a style="color: green; font-size: 2em; " href="{% url 'users:registration' %}">Нужен аккаунт? Зарегистрируйся!</a>
+{% endif %}
+</body>
+</html>
