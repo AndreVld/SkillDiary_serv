@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+<form action="{% url 'users:registration' %}" method="post">
+    {% csrf_token %}
+    <div>
+        <label for="{{ form.username.id_for_label }}">Логин</label>
+        {{ form.username }}
+        <div>
+        <label for="{{ form.email.id_for_label }}">email</label>
+        {{ form.email }}
+    </div>
+        <div>
+        <label for="{{ form.password.id_for_label }}">password1</label>
+        {{ form.password1 }}
+    </div>
+        <div>
+        <label for="{{ form.password2.id_for_label }}">password2</label>
+        {{ form.password2 }}
+    </div>
+    <input type="submit" value="Создать аккаунт">
+</form>
+</body>
+</html>
