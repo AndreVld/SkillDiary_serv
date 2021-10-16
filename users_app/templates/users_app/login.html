@@ -1,32 +1,66 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ title }}</title>
-</head>
-<body>
-<form action="{% url 'users:login' %}" method="post">
-{% csrf_token %}
-    <div class="form-group">
-        <label class="#" for="{{ form.username.id_for_label }}">
-            Имя пользователя</label>
-        {{ form.username }}
-    </div>
-    <div class="#">
-        <label class="#" for="{{ form.password.id_for_label }}">Пароль</label>
-        {{ form.password }}
-    </div>
-    <input  type="submit" value="Авторизоваться">
-</form>
- {% if user.is_authenticated %}
+{% extends "base.html" %}
+{% load static %}
+{% block title %} {{ extra_context }} {% endblock %}
+{% block menu%}
+{% endblock %}
+{% block content %}
+<div class="login-wrap">
+    <div class="login">
+        <div class="login-logo">
+            <svg width="70" height="58" viewBox="0 0 70 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect y="29.0067" width="40.9148" height="40.9148" rx="11" transform="rotate(-45 0 29.0067)" fill="url(#paint0_linear)"/>
+                <rect x="12.1377" y="28.9311" width="40.9148" height="40.9148" rx="11" transform="rotate(-45 12.1377 28.9311)" fill="url(#paint1_linear)"/>
+                <defs>
+                <linearGradient id="paint0_linear" x1="20.4574" y1="29.0067" x2="20.4574" y2="69.9215" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#C4C4C4"/>
+                <stop offset="1" stop-color="#333333"/>
+                </linearGradient>
+                <linearGradient id="paint1_linear" x1="32.5951" y1="28.9311" x2="32.5951" y2="69.8459" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#66C1DE"/>
+                <stop offset="1" stop-color="#27AED9"/>
+                </linearGradient>
+                </defs>
+            </svg>  
+            Skilldiary
+            
+        </div>
+        <div class="login-form-wrap">
+        <form action="{% url 'users:login' %}" method="post">
+        {% csrf_token %}
+            <div class="title-field">
+                <i class="fas fa-user"></i>Логин
+            </div>
+            <div class="wrap-field">
+                {{ form.username }}
+               
+            </div>
 
-<a style="color: red; font-size: 2em;" href="{% url 'users:edit_profile' user.id %}">
-    {{user.username}}<i class="fas fa-user-circle"></i>
+            <div class="title-field">
+                <i class="fas fa-key"></i>Пароль
+            </div>
+            <div class="wrap-field">
+               {{ form.password }}
+               
+            </div>
+                <input class="btn btn-blue" type="submit" value="Вход">
+                
+                <div class="reg">
 
-<a style="color: grey; font-size: 2em; " href="{% url 'users:logout' %}">Выйти</a>
+                <a class="forget" href="{% url 'users:registration' %}">
+                    Регистрация
+                </a>
+ 
+                <a class="forget" href="profile-edit.html">
+                    Забыли пароль?
+                </a>
+                </div>
+                <div class="google">
+                    <i class="fab fa-google"></i>
+                </div>
+                <a class="btn btn-white" href="profile-edit.html">
+                    Вход через Google
+                </a>
+                </form>
+     
 
-{% else %}
-<a style="color: green; font-size: 2em; " href="{% url 'users:registration' %}">Нужен аккаунт? Зарегистрируйся!</a>
-{% endif %}
-</body>
-</html>
+{% endblock %}

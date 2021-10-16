@@ -1,28 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ title }}</title>
-</head>
-<body>
-<form action="{% url 'users:registration' %}" method="post">
-    {% csrf_token %}
-    <div>
-        <label for="{{ form.username.id_for_label }}">Логин</label>
-        {{ form.username }}
-        <div>
-        <label for="{{ form.email.id_for_label }}">email</label>
-        {{ form.email }}
-    </div>
-        <div>
-        <label for="{{ form.password.id_for_label }}">password1</label>
-        {{ form.password1 }}
-    </div>
-        <div>
-        <label for="{{ form.password2.id_for_label }}">password2</label>
-        {{ form.password2 }}
-    </div>
-    <input type="submit" value="Создать аккаунт">
-</form>
-</body>
-</html>
+{% extends "base.html" %}
+{% load static %}
+{% block title %} {{ extra_context }} {% endblock %}
+{% block menu%}
+{% endblock %}
+{% block content %}
+<div class="login-wrap">
+    <div class="login">
+        <div class="login-logo">
+            <svg width="70" height="58" viewBox="0 0 70 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect y="29.0067" width="40.9148" height="40.9148" rx="11" transform="rotate(-45 0 29.0067)" fill="url(#paint0_linear)"/>
+                <rect x="12.1377" y="28.9311" width="40.9148" height="40.9148" rx="11" transform="rotate(-45 12.1377 28.9311)" fill="url(#paint1_linear)"/>
+                <defs>
+                <linearGradient id="paint0_linear" x1="20.4574" y1="29.0067" x2="20.4574" y2="69.9215" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#C4C4C4"/>
+                <stop offset="1" stop-color="#333333"/>
+                </linearGradient>
+                <linearGradient id="paint1_linear" x1="32.5951" y1="28.9311" x2="32.5951" y2="69.8459" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#66C1DE"/>
+                <stop offset="1" stop-color="#27AED9"/>
+                </linearGradient>
+                </defs>
+            </svg>  
+            Skilldiary
+            
+        </div>
+        <div class="login-form-wrap">
+    <form action="{% url 'users:registration' %}" method="post">
+        {% csrf_token %}
+            <div class="title-field">
+                <i class="fas fa-user"></i>Логин
+            </div>
+            <div class="wrap-field">
+                {{ form.username }}  
+            </div>
+
+             <div class="title-field">
+                <i class="fas fa-envelope-square"></i> Email
+            </div>
+            <div class="wrap-field">
+                {{ form.email }}       
+            </div>
+
+
+            <div class="title-field">
+                <i class="fas fa-key"></i>Пароль
+            </div>
+            <div class="wrap-field">
+                {{ form.password1 }}       
+            </div>
+
+            <div class="title-field">
+                <i class="fas fa-key"></i>Подтверждение пароля
+            </div>
+            <div class="wrap-field">
+                 {{ form.password2 }}
+               
+            </div>
+               <input class="btn btn-blue" type="submit" value="Регистрация">
+
+              
+                {% if form.errors %}
+                {{ form.errors }}
+                {% endif %}
+            </form>
+                
+{% endblock %}

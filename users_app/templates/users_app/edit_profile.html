@@ -1,57 +1,100 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ title }}</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% load static %}
+{% block title %} {{ extra_context }} {% endblock %}
 
-    {% for message in messages %}
-    {{ message }}
-    {% endfor %}
+{% block content %}
+              
+                <form action="{% url 'users:edit_profile' user.id  %}" method="post" class = 'form' enctype="multipart/form-data">
+                 {% csrf_token %}
+                    <div class="avatar">
+                        <img src="{% if user.avatar %}{{ user.avatar.url }} {% else %} {% static 'img/ava-2.jpg'%}{% endif %}" alt="Аватарка"> 
+                        <a class="avatar-edit" id = "avatar-edit">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                    </div>
 
-<form action="{% url 'users:edit_profile' user.id %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div>
-        <label for="{{ form.username.id_for_label }}">Логин</label>
-        {{ form.username }}
-    </div>
-    <div>
-        <label for="{{ form.email.id_for_label }}">Email</label>
-        {{ form.email }}
-    </div>
+                    <div class="form-group">
+    <label class="avatar-edit">
+      <i class="fas fa-edit"></i>
+       {{ form.avatar }} 
+    </label>
+  </div>
 
-    <div>
-        <label for="{{ form.first_name.id_for_label }}">Имя</label>
-        {{ form.first_name }}
-    </div>
+                    <div class="btn btn-blue" >
+                        <i class="fas fa-save"></i>
+                        <input type="submit" value="Сохранить" class = "button-blue">
+                    </div>
 
-    <div>
-        <label for="{{ form.last_name.id_for_label }}">фамилия</label>
-        {{ form.last_name }}
-    </div>
+                     <div class="btn btn-white" >
+                        <i class="fas fa-ban"></i>
+                        <input type="reset" value="Отменить" class = "button-white">
+                    </div>
+            
+                   
+                </div>
+            </div> 
+            <div class="col-sm-12 col-md-9">
 
-    <div>
-        <label for="{{ form.surname.id_for_label }}">Отчество</label>
-        {{ form.surname }}
-    </div>
+                <div class="main-wrap">
+                    <h1>Редактирование профиля</h1>
 
-    <div>
-        <label for="{{ form.avatar.id_for_label }}">avatar</label>
-        {{ form.avatar }}
-    </div>
+                    <div class="title-field">
+                        <i class="fas fa-user"></i>Фамилия
+                    </div>
+                    <div class="wrap-field">
+                       {{ form.surname }}
+                        
+                    </div>
 
-    <div>
-        <label for="{{ form.age.id_for_label }}">age</label>
-        {{ form.age }}
-    </div>
-    <div>
-        <label for="{{ form.city.id_for_label }}">city</label>
-        {{ form.city }}
-    </div>
+                    <div class="title-field">
+                        <i class="fas fa-user"></i>Имя
+                    </div>
+                    <div class="wrap-field">
+                       {{ form.first_name }}
+                       
+                    </div>
 
-    <input type="submit" value="Сохранить">
+                    <div class="title-field">
+                        <i class="fas fa-user"></i>Отчество
+                    </div>
+                    <div class="wrap-field">
+                       {{ form.last_name }}
+                       
+                    </div>
 
-</form>
-</body>
-</html>
+                    <div class="title-field">
+                        <i class="fas fa-map-marker"></i>Адрес
+                    </div>
+                     <div class="wrap-field add-course-i">
+                    <i class="fas fa-sort-down i-sort-1"></i>  
+                        {{ form.city }}
+                    </div>
+
+                    <div class="title-field">
+                        <i class="fas fa-envelope"></i>E-mail
+                    </div>
+
+                    <div class="wrap-field">
+                        {{ form.email }}
+                    </div>
+
+                     <div class="title-field">
+                        <i class="fas fa-pager"></i> Возраст
+                    </div>
+
+                    <div class="wrap-field">
+                        {{ form.age }}
+                    </div>
+
+                </div>
+                {% if form.errors %}
+{{ form.errors }}
+{% endif %}
+                </form>
+
+                {% for message in messages %}
+                {{ message }}
+                {% endfor %}
+{% endblock %}
+
+

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} {{ extra_context }} {% endblock %}
+
+{% block content %}
+    
+                    <div class="avatar">
+                        <img src="{% if user.avatar %}{{ user.avatar.url }} {% else %} {% static 'img/ava-2.jpg'%} {% endif %}" alt="Аватарка"> 
+                        
+                    </div>
+
+                    <a class="btn btn-blue" href="{% url 'users:edit_profile' user.id %}">
+                        <i class="fas fa-edit"></i>Редактировать
+                    </a>
+
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-9">
+
+                <div class="main-wrap">
+                    <h1>  
+                          {{user.surname}} {{ user.first_name|default:"Профиль" }} {{ user.last_name }} </h1>
+                    <div class="location">
+                        <i class="fas fa-map-marker"></i> {{ user.city|default:"Москва"  }}
+                       
+                       
+                    </div>
+                    <div class="email-wrap">
+                        <i class="fas fa-envelope"></i><span class="b">E-mail: </span> {{ user.email }}
+                    </div>
+                     <div class="email-wrap">
+                     <i class="fas fa-pager"></i> <span class="b">Возраст: </span> {{ user.age }}
+                     </div>
+                    <div class="rate-wrap">
+                        <i class="fas fa-star"></i><span class="b">Рейтинг: </span>
+                        <span class="rate-circle">
+                            <span class="rate b">{{ user.rate }}</span>
+                        </span>
+                    </div>
+                     
+                    </div>
+
+                </div>
+        
+{% endblock %}
