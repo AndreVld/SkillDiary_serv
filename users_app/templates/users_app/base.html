@@ -1,0 +1,75 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block title %} {% endblock %}
+    <link rel="icon" href="{% static 'css/favicon/favicon.ico'%}" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
+    <link href="{% static 'css/bootstrap-grid.min.css'%}" rel="stylesheet">
+    <link href="{% static 'css/fontawesome/css/all.css'%}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/main.css'%}">
+    <link rel="stylesheet" href="{% static 'css/django.css'%}">
+    
+</head>
+<body>
+
+{% block menu %}
+<div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-3">
+                <div class="logo-wrap">
+                    <a href="#">
+                    <svg width="70" height="58" viewBox="0 0 70 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect y="29.0067" width="40.9148" height="40.9148" rx="11" transform="rotate(-45 0 29.0067)" fill="url(#paint0_linear)"/>
+                        <rect x="12.1377" y="28.9311" width="40.9148" height="40.9148" rx="11" transform="rotate(-45 12.1377 28.9311)" fill="url(#paint1_linear)"/>
+                        <defs>
+                        <linearGradient id="paint0_linear" x1="20.4574" y1="29.0067" x2="20.4574" y2="69.9215" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#C4C4C4"/>
+                        <stop offset="1" stop-color="#333333"/>
+                        </linearGradient>
+                        <linearGradient id="paint1_linear" x1="32.5951" y1="28.9311" x2="32.5951" y2="69.8459" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#66C1DE"/>
+                        <stop offset="1" stop-color="#27AED9"/>
+                        </linearGradient>
+                        </defs>
+                    </svg>  
+                    </a>                 
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-9">
+                <div class="menu-warp">
+                    <div class="menu-l">
+                        <div class="menu-l-item">
+                            <i class="fas fa-graduation-cap"></i><a href="#">Курсы</a>
+                        </div>
+                    </div>
+                    <div class="menu-r">
+                        <div class="menu-r-item">
+                            <i class="fas fa-user-edit"></i><a href="{% url 'users:profile' %}">Профиль</a>
+                        </div>
+                        <div class="menu-r-item">
+                            <i class="fas fa-sign-out-alt"></i><a href="{% url 'users:login' %}">Выход</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-3">
+                <div class="main-menu-wrap">
+{% endblock %}
+{% block content %} 
+{% endblock %}
+</div>
+</div>
+</div>
+</body>
+</html>
