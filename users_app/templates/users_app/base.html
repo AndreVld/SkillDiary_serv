@@ -53,10 +53,10 @@
                     </div>
                     <div class="menu-r">
                         <div class="menu-r-item">
-                            <i class="fas fa-user-edit"></i><a href="{% url 'users:profile' %}">Профиль</a>
+                            <i class="fas fa-user-edit"></i><a href="{% url 'users:profile' %}">{{user.username}}</a>
                         </div>
                         <div class="menu-r-item">
-                            <i class="fas fa-sign-out-alt"></i><a href="{% url 'users:login' %}">Выход</a>
+                            <i class="fas fa-sign-out-alt"></i><a href="{% url 'users:logout' %}">Выход</a>
                         </div>
                     </div>
                 </div>

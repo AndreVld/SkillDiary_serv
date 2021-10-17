@@ -7,7 +7,7 @@
                 <form action="{% url 'users:edit_profile' user.id  %}" method="post" class = 'form' enctype="multipart/form-data">
                  {% csrf_token %}
                     <div class="avatar">
-                        <img src="{% if user.avatar %}{{ user.avatar.url }} {% else %} {% static 'img/ava-2.jpg'%}{% endif %}" alt="Аватарка"> 
+                        <img src="{% if user.avatar %}{{ user.avatar.url }} {% else %} {% static 'img/default_ava.jpg'%}{% endif %}" alt="Аватарка"> 
                         <a class="avatar-edit" id = "avatar-edit">
                             <i class="fas fa-edit"></i>
                         </a>

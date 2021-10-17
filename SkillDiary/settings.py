@@ -56,7 +56,7 @@ ROOT_URLCONF = 'SkillDiary.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, "users_app", "templates", "users_app")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -133,4 +133,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users_app.Person'
 
 LOGIN_REDIRECT_URL = '/profile'
-#LOGOUT_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
