@@ -6,6 +6,7 @@ from django.views.generic.base import TemplateView
 from users_app.forms import UserLoginForm, UserRegistrationForm, UserProfileForm
 from users_app.models import Person
 from django.conf import settings
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 
 
@@ -29,7 +30,7 @@ class ProfileView(TemplateView):
     extra_context = {'title': 'SkillDiary - Профиль', "media_url": settings.MEDIA_URL}
 
 
-class EditProfileUserView(SuccessMessageMixin, UpdateView):
+class EditProfileUserView(SuccessMessageMixin, UserPassesTestMixin, UpdateView):
     form_class = UserProfileForm
     template_name = 'users_app/edit_profile.html'
     model = Person
@@ -38,6 +39,9 @@ class EditProfileUserView(SuccessMessageMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('users:edit_profile', args=(self.object.id,))
+
+    def test_func(self):
+        return self.request.user.id == self.kwargs.get('pk')
 
 
     
