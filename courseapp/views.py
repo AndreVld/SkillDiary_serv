@@ -1,16 +1,20 @@
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 from django.views.generic.detail import DetailView
+from courseapp.models import Course
 
-from mainapp.models import Course
+
+
 
 
 class CourseList(ListView):
     model = Course
-
+    template_name = 'courseapp/courses.html'
     def get_queryset(self):
-        return Course.objects.filter(person=self.request.person, is_active=True)
+        return Course.objects.filter(person=self.request.user, is_active=True)
 
 
+
+"""
 class CourseRead(DetailView):
     model = Course
 
@@ -18,3 +22,4 @@ class CourseRead(DetailView):
         context = super(CourseRead, self).get_context_data(**kwargs)
         context["title"] = "курс/просмотр"
         return context
+"""

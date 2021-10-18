@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} {{ extra_context }} {% endblock %}
+
+{% block content %}
+                <div class="main-menu-wrap">
+                    <a class="btn btn-blue" href="course-add.html">
+                        <i class="fas fa-plus-circle"></i>Добавить курс
+                    </a>
+                    
+                    <div class="radio-select">
+ 
+                        <div>
+                            <input class="custom-radio" type="radio" id="1" name="radio-select" value="1" checked>
+                            <label for="1">Все курсы</label>
+                        </div>
+                      
+                      <div>
+                        <input class="custom-radio" type="radio" id="2" name="radio-select" value="2">
+                        <label for="2">Пройденые курсы</label>
+                      </div>
+                      
+                      <div>
+                        <input class="custom-radio" type="radio" id="3" name="radio-select" value="3">
+                        <label for="3">Просроченые курсы</label>
+                      </div>
+                      <div>
+                        <input class="custom-radio" type="radio" id="4" name="radio-select" value="4">
+                        <label for="4">Не пройденные курсы</label>
+                      </div>
+
+                    </div>    
+
+
+                    <a class="btn btn-blue" href="#">
+                        <i class="fas fa-file-alt"></i>Отчет
+                    </a>
+                       
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-9">
+                <div class="sorts-wrap">
+
+                     <div class="wrap-field">
+                         <i class="fas fa-search"></i>   
+                         <input class="field" placeholder="Поиск..." type="text">
+                     </div>
+
+                     <div class="wrap-field">
+                         Профессия
+                         <i class="fas fa-sort-down i-sort-1"></i>  
+                         <select class="field select">
+                             <option selected >Какая-то профессиия</option>
+                             <option>Какая-то профессиия два</option>
+                             <option>Python программист</option>
+                        </select>
+                        
+                     </div>
+
+                     <div class="wrap-field">
+                        Сортировка
+                        <i class="fas fa-sort-down i-sort-2"></i>  
+                        <select class="field select">
+                            <option selected >Дедлайн</option>
+                            <option>Пункт 2</option>
+                          </select>
+                       
+                    </div>
+                </div>
+{% for course in course_list %}
+                <a href="course.html" class="course-wrap">
+                    <div class="container mycontainer">
+                        <div class="row myrow">
+                            <div class="col-11 mycol">
+                                <div class="course-main">
+                                    <div class="course-title">
+                                        {{ course.name }}
+                                    </div>
+                                    <div class="course-location">
+                                       {{ course.location }}
+                                    </div>
+                                    <div class="course-progress">
+                                        Прогрес
+                                    </div>
+                                    <div class="course-bar">
+                                        <div class="coures-start-date">
+                                           {{ course.start_date|date:"d.m.y" }}
+                                        </div>
+                                        <div class="bar">
+                                            <div class="bar-blue"></div>
+                                        </div>
+                                        <div class="coures-end-date">
+                                            {{ course.end_date|date:"d.m.y" }}
+                                        </div>
+                                    </div>
+                                    <div class="course-description">
+                                    {{ course.target }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1 mycol">
+                                <div class="course-rate">
+                                    {{ course.rate }}
+                                </div>
+                            </div>
+                        </div>          
+                    </div>
+                </a>
+{% endfor %}
+
+                <div class="pagination">
+                    <a href="#" class="page">1</a>
+                    <a href="#" class="page">2</a>
+                    <a href="#" class="page">3</a>
+                </div>
+            </div>
+       {% endblock %}
