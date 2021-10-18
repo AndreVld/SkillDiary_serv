@@ -12,8 +12,6 @@ class CourseList(ListView):
     def get_queryset(self):
         return Course.objects.filter(person=self.request.user, is_active=True)
 
-
-
 """
 class CourseRead(DetailView):
     model = Course
