@@ -8,7 +8,7 @@ class CourseList(ListView):
     model = Course
 
     def get_queryset(self):
-        return Course.objects.filter(person=self.request.person, is_active=True)
+        return Course.objects.filter(person=self.request.user, is_active=True)
 
 
 class CourseRead(DetailView):
