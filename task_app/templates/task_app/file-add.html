@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} {% endblock %}
+{% block content %}
+
+                <div class="main-menu-wrap margin-menu">
+
+                    <a class="btn btn-blue" href="course.html">
+                        <i class="fas fa-save"></i>Сохранить
+                    </a>
+                    <a class="btn btn-white" href="course.html">
+                        <i class="fas fa-ban"></i>Отменить
+                    </a>
+
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-9">
+                <div class="breadcrumbs">
+                    <div class="breadcrumbs-item"><a href="courses.html">Курсы</a></div>
+                    <div class="separator">></div>
+                    <div class="breadcrumbs-item"><a href="courses.html">Название курса раз</a></div>
+                    <div class="separator">></div>
+                    <div class="breadcrumbs-item"><a href="courses.html">Название задачи</a></div>
+                    <div class="separator">></div>
+                    <div class="breadcrumbs-item">Добавление файла</div>
+                </div>
+                <div class="main-wrap">
+                    <h1>Добавление файла</h1>
+                
+                    <div class="title-field">
+                        <i class="fas fa-tag"></i>Описание:
+                    </div>
+                    <div class="wrap-field">
+                        <textarea class="field textarea" cols="40" rows="5"></textarea>         
+                    </div>
+
+                     <div class="date-wrap">
+                        <div class="file-l">
+                             <div class="title-field">
+                        <i class="fas fa-file"></i>Файл:
+                            </div>
+                        </div>
+                        <div class="file-r">
+                             <a class="btn btn-white" href="course.html">
+                             <i class="fas fa-upload"></i> Выберите файл
+                             </a>
+                        </div>
+                    </div>
+
+                </div>
+
+                
+        
+            </div>
+        </div>
+    </div>
+{% endblock %}
