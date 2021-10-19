@@ -145,6 +145,7 @@ a:active {
     margin-bottom: 20px;
     padding: 0 40px;
     text-align: center;
+cursor: pointer;
 }
 .btn-blue {
     color: #fff;
@@ -172,7 +173,7 @@ a:active {
     margin-right: 10px;
 }
 
-.location, .email-wrap, .phone-wrap, .rate-wrap, .friend-wrap {
+.location, .email-wrap, .phone-wrap, .rate-wrap, .friend-wrap, .prof-wrap, .local-wrap, .date-start-wrap, .date-end-wrap, .goal-wrap, .prog-wrap{
     margin-bottom: 10px;
 }
 .rate-wrap {
@@ -659,4 +660,194 @@ border: none;
     background: #CA4040;
     text-decoration: none;
 }
+.breadcrumbs {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-wrap: wrap;
+    font-size: 14px;
+    margin-left: 40px;
+    margin-top: 20px;
+}
+.separator {
+    padding: 0px 10px;
+}
+.goal-wrap {
+    display: flex;
+    align-items: start;
+    justify-content: start;
+}
+.goal-wrap div {
+    margin-left: 6px;
+}
+.prog-wrap {
+    display: flex;
+    align-items: start;
+    justify-content: start;
+}
+.file-l {
+    margin-right: 40px;
+}
 
+.file-r {
+    margin-top: 8px;
+}
+.goal-wrap i {
+    margin-top: 3px;
+}
+.margin-menu {
+    margin-top: 75px;
+}
+.extra-wrap {
+    display: flex;
+    align-items: start;
+    justify-content: start;
+   
+}
+
+.extra-title {
+    min-width: 130px;
+}
+.del i{
+    color: #DE6666;
+   
+}
+tr:nth-child(odd) {
+    background-color: #FAFAFA;
+}
+td {
+    padding: 12px;
+}
+.task-wrap {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.task-title {
+    background-color: #66C1DE;
+    border-top-left-radius: 19px;
+    border-top-right-radius: 19px;
+    color: #fff;
+    padding: 14px 30px 14px 30px;
+}
+.task-complete {
+    background-color: #66DE87;
+}
+.task {
+    
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 30px 14px 30px;
+    border-bottom-left-radius: 19px;
+    border-bottom-right-radius: 19px;
+    background-color: #FAFAFA;
+    margin-bottom: 30px;
+}
+.task-date {
+    padding-right: 30px;
+}
+.task-r i{
+    color: #333;
+    margin-left: 20px;
+}
+.task-unfinished {
+    background-color: #DE6666;
+}
+.sort-for-course {
+    margin-bottom: 20px;
+}
+.modal {
+    display: none; /* Скрыто по умолчанию */
+    position: fixed; /* Оставаться на месте */
+    align-items: center;
+    justify-content: center;
+    z-index: 1; /* Сидеть на вершине */
+    left: 0;
+    top: 0;
+    width: 100%; /* Полная ширина */
+    height: 100%; /* Полная высота */
+    overflow: auto; /* Включите прокрутку, если это необходимо */
+    background-color: rgb(0,0,0); /* Цвет запасной вариант */
+    background-color: rgba(0,0,0,0.4); /* Черный с непрозрачностью */
+  }
+
+.modal-contentt {
+    background-color: #fff;
+    width: 600px;
+    min-height: 400px;
+    border-radius: 19px;
+}
+.modal-contentt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+.modal-text {
+
+font-weight: 700;
+font-size: 24px;
+margin-bottom: 30px;
+
+}
+.modal-body {
+    display: flex;
+}
+.modal .btn {
+    margin-right: 10px;
+    margin-left: 10px;
+}
+.modal .btn-white {
+    color: #66C1DE;
+}
+
+.modal .btn-white:hover {
+    color: #27AED9;
+    border-color: #27AED9;
+    text-decoration: none;
+
+}
+.modal .btn-white:active {
+    color: #10A1CF;
+    border-color: #10A1CF;
+    text-decoration: none;
+}
+.prog-wrap i, .extra-wrap i {
+    margin-top: 3px;
+}
+.task-wrap {
+    color: #333;
+}
+.task-wrap:hover {
+    color: #333;
+    text-decoration: none;
+}
+.task-wrap:active {
+    color: #333;
+}
+.files-wrap {
+    display: flex;
+    align-items: start;
+    justify-content: start;
+}
+.p-file {
+    margin: 0px 0px 10px 0px;
+}
+.file-title {
+    margin-right: 10px;
+}
+.files i {
+    color: #333;
+    margin-left: 6px;
+}
+.comment-wrap {
+    padding: 14px 30px 14px 30px;
+    border-radius: 19px;
+    background-color: #FAFAFA;
+    margin-bottom: 30px;
+}
+.comment-text {
+    margin-top: 10px;
+
+}
