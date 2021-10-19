@@ -3,7 +3,7 @@
 {% block title %} {{ extra_context }} {% endblock %}
 
 {% block content %}
-              
+                <div class="main-menu-wrap">
                 <form action="{% url 'users:edit_profile' user.id  %}" method="post" class = 'form' enctype="multipart/form-data">
                  {% csrf_token %}
                     <div class="avatar">

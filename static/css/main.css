@@ -629,7 +629,34 @@ border: none;
     background: url(img/down.png) no-repeat;
     left: -12px;
     margin-top: 6px;
-
-
-
 }
+.btn-green {
+    color: #fff;
+    background: #66DE87;
+}
+.btn-green:hover {
+    color: #fff;
+    background: #62D783;
+    text-decoration: none;
+}
+.btn-green:active {
+    color: #fff;
+    background: #56CD78;
+    text-decoration: none;
+}
+
+.btn-red {
+    color: #fff;
+    background: #DE6666;
+}
+.btn-red:hover {
+    color: #fff;
+    background: #D24B4B;
+    text-decoration: none;
+}
+.btn-red:active {
+    color: #fff;
+    background: #CA4040;
+    text-decoration: none;
+}
+
