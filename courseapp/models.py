@@ -1,9 +1,10 @@
 from django.db import models
 from users_app.models import Person
 
+
 class Profession(models.Model):
     name = models.CharField(max_length=128, unique=True)
-   # description = models.CharField(max_length=128, blank=True)
+    # description = models.CharField(max_length=128, blank=True)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(
@@ -13,6 +14,7 @@ class Profession(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Course(models.Model):
     LEVEL_CHOICES = [
@@ -33,7 +35,7 @@ class Course(models.Model):
     end_date = models.DateField()
     status = models.CharField(
         max_length=9,
-        choices=STATUS_CHOICES, 
+        choices=STATUS_CHOICES,
         default='PLAN'
     )
     level = models.CharField(
@@ -42,10 +44,10 @@ class Course(models.Model):
         default='1'
     )
     rate = models.IntegerField(default=0)
-    profession = models.ForeignKey(Profession, on_delete=models.PROTECT)
+    profession = models.ForeignKey(Profession, on_delete=models.PROTECT, related_name='courses')
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
-    person = models.ForeignKey(Person, on_delete=models.PROTECT)
+    person = models.ForeignKey(Person, on_delete=models.PROTECT, related_name='courses' )
     is_active = models.BooleanField(
         default=True,
         help_text='Unselect this instead of deleting tasks.'
@@ -53,6 +55,7 @@ class Course(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class AdditionalInfo(models.Model):
     TYPE_CHOICES = [
@@ -70,5 +73,5 @@ class AdditionalInfo(models.Model):
     )
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
-    course = models.ForeignKey(Course, on_delete=models.PROTECT)
+    course = models.ForeignKey(Course, on_delete=models.PROTECT, related_name='addinfo')
     is_active = models.BooleanField(default=True, help_text='Unselect this instead of deleting element.')
