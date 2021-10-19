@@ -44,10 +44,10 @@ class Course(models.Model):
 
     )
     rate = models.IntegerField(default=0, blank=True, null=True)
-    profession = models.ForeignKey(Profession, on_delete=models.PROTECT)
+    profession = models.ForeignKey(Profession, related_name='courses', on_delete=models.PROTECT)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
-    person = models.ForeignKey(Person, on_delete=models.PROTECT)
+    person = models.ForeignKey(Person, related_name='courses', on_delete=models.PROTECT)
     is_active = models.BooleanField(
         default=True,
         help_text='Unselect this instead of deleting tasks.'
@@ -78,7 +78,7 @@ class Task(models.Model):
     )
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
-    course = models.ForeignKey(Course, on_delete=models.PROTECT)
+    course = models.ForeignKey(Course, on_delete=models.PROTECT, related_name='tasks')
 
     def __str__(self):
         return self.name
@@ -86,7 +86,7 @@ class Task(models.Model):
 
 class Comment(models.Model):
     text = models.TextField()
-    task = models.ForeignKey(Task, on_delete=models.PROTECT)
+    task = models.ForeignKey(Task, on_delete=models.PROTECT, related_name="comments")
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(
@@ -112,7 +112,7 @@ class AdditionalInfo(models.Model):
     )
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
-    course = models.ForeignKey(Course, on_delete=models.PROTECT, blank=True, null=True)
+    course = models.ForeignKey(Course, on_delete=models.PROTECT, related_name='addinfo', blank=True, null=True)
     is_active = models.BooleanField(default=True, help_text='Unselect this instead of deleting element.')
 
 
@@ -122,10 +122,10 @@ class File(models.Model):
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
     file = models.FileField(upload_to="files")
-    task = models.ForeignKey(Task, on_delete=models.PROTECT, blank=True, null=True)
-    additional_info = models.ForeignKey(AdditionalInfo, on_delete=models.PROTECT, blank=True, null=True)
+    task = models.ForeignKey(Task, on_delete=models.PROTECT, blank=True, null=True, related_name='files')
+    additional_info = models.ForeignKey(AdditionalInfo, on_delete=models.PROTECT, blank=True, null=True,
+                                        related_name='files')
 
-    @property
     def __str__(self):
         return self.name
 
