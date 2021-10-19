@@ -7,7 +7,7 @@ app_name = CourseappConfig.name
 
 urlpatterns = [
     path("courses/", courseapp.CourseList.as_view()),
-    path("add_course/", courseapp.add_course),
+    #path("add_course/", courseapp.add_course),
     #re_path(r"^$", courseapp.CourseList.as_view(), name="courses_list"),
     #re_path(r"^read/(?P<pk>\d+)/$", courseapp.CourseRead.as_view(), name="course_read"),
 ]
