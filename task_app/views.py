@@ -1,5 +1,8 @@
-from django.views.generic import DetailView
+from django.urls import reverse_lazy
+from django.views.generic import DetailView, CreateView
 
+from courseapp.models import Course
+from task_app.forms import TaskAddForm
 from task_app.models import Task
 
 
@@ -11,3 +14,15 @@ class TaskView(DetailView):
     def get_queryset(self):
         task_id = self.kwargs.get('pk')
         return Task.objects.prefetch_related('comments', 'files').filter(pk=task_id)
+
+
+# class TaskAddView(CreateView):
+#     form_class = TaskAddForm
+#     template_name = 'task_app/task-add.html'
+#
+#     def form_valid(self, form):
+#         form.instance.course = Course.objects.get(pk=self.kwargs.get('pk'))
+#         return super(TaskAddView, self).form_valid(form)
+#
+#     def get_success_url(self):
+#         return reverse_lazy('task:add_task', args=(self.kwargs.get('pk'),))

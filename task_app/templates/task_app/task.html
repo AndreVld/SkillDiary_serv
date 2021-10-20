@@ -42,10 +42,10 @@
                         <i class="fas fa-project-diagram"></i><span class="b">Статус: </span>{{ task.get_status_display }}
                     </div>
                     <div class="date-start-wrap">
-                        <i class="fas fa-calendar-day"></i><span class="b">Дата начала: </span>{{ task.start_date }}
+                        <i class="fas fa-calendar-day"></i><span class="b">Дата начала: </span>{{ task.start_date|date:"d.m.y" }}
                     </div>
                     <div class="date-end-wrap">
-                        <i class="fas fa-calendar-day"></i><span class="b">Дата окончания: </span>{{ task.end_date }}
+                        <i class="fas fa-calendar-day"></i><span class="b">Дата окончания: </span>{{ task.end_date|date:"d.m.y" }}
                     </div>
 
                     <div class="files-wrap">
