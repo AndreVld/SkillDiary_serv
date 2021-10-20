@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.parsers import JSONParser
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -16,22 +16,23 @@ from users_app.models import Person, City
 
 
 class ProfessionViewSet(viewsets.ModelViewSet):
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Profession.objects.all()
     serializer_class = ProfessionSerializer
 
 
-
 class PersonViewSet(viewsets.ModelViewSet):
-    #authentication_classes = [SessionAuthentication]
-    #permission_classes = [IsAuthenticated]
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     queryset = Person.objects.all()
     serializer_class = PersonSerializer
 
 
 class CourseViewSet(viewsets.ModelViewSet):
-    #authentication_classes = [SessionAuthentication]
-    #permission_classes = [IsAuthenticated]
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
@@ -46,10 +47,8 @@ class CourseViewSet(viewsets.ModelViewSet):
 
 
 class TaskViewSet(viewsets.ModelViewSet):
-    #authentication_classes = [SessionAuthentication]
-    #permission_classes = [IsAuthenticated]
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-
-
