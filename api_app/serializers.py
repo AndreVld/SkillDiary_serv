@@ -147,7 +147,7 @@ class NestedCommentSerializer(WritableNestedSerializer):
 
 
 class ProfessionSerializer(serializers.ModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='course-detail')
+    url = serializers.HyperlinkedIdentityField(view_name='profession-detail')
 
     class Meta:
         model = Profession
