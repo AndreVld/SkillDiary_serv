@@ -24,6 +24,7 @@ class Task(models.Model):
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
     course = models.ForeignKey(Course, on_delete=models.PROTECT, related_name='tasks')
+    user = models.ForeignKey('users_app.Person', on_delete=models.PROTECT, related_name='tasks')
 
     def __str__(self):
         return self.name
@@ -45,7 +46,7 @@ class Comment(models.Model):
 
 class File(models.Model):
     name = models.CharField(max_length=128)
-    description = models.CharField(max_length=128)
+    description = models.CharField(max_length=128, blank=True)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
     file = models.FileField(upload_to="files")

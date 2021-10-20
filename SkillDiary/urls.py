@@ -23,7 +23,7 @@ urlpatterns = [
     path('', include('users_app.urls', namespace='users')),
     path('', include('courseapp.urls', namespace='course')),
     path('api/', include('api_app.urls')),
-    path('task/', include('task_app.urls', namespace='task')),
+    path('<int:pk>/', include('task_app.urls', namespace='tasks')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -16,13 +16,15 @@ class TaskView(DetailView):
         return Task.objects.prefetch_related('comments', 'files').filter(pk=task_id)
 
 
-# class TaskAddView(CreateView):
-#     form_class = TaskAddForm
-#     template_name = 'task_app/task-add.html'
-#
-#     def form_valid(self, form):
-#         form.instance.course = Course.objects.get(pk=self.kwargs.get('pk'))
-#         return super(TaskAddView, self).form_valid(form)
-#
-#     def get_success_url(self):
-#         return reverse_lazy('task:add_task', args=(self.kwargs.get('pk'),))
+class TaskAddView(CreateView):
+    form_class = TaskAddForm
+    template_name = 'task_app/task-add.html'
+
+    def form_valid(self, form):
+        form.instance.course = Course.objects.get(pk=self.kwargs['pk'])
+        form.instance.user = self.request.user
+        return super(TaskAddView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('users:profile', )
+        #     return reverse_lazy('path to course', args=(self.kwargs.get('pk'),))

@@ -52,11 +52,17 @@
                         <i class="fas fa-file"></i>
                         <span class="b file-title">Файлы: </span>
                         <div class="files">
+                            {% if  task.files %}
+                            {% for file in task.files.all %}
    <a href="#"><p class="p-file">Методичка<i class="fas fa-download"></i></p></a>
    <a href="#"><p class="p-file">Схема БД<i class="fas fa-download"></i></p></a>
    <a href="#"><p class="p-file">Руководство Django<i class="fas fa-download"></i></p></a>
    <a href="#"><p class="p-file">Разнообразный и богатый опыт новая модель организационной деятельности представляет собой интересный эксперимент проверки модели развития.<i class="fas fa-download"></i></p></a>
-                </div>
+                       {% endfor %}
+                       {% endif %}
+                   </div>
+
+
                     </div>
                     <h2>Комментарии</h2>
                     {% if  task.comments %}
