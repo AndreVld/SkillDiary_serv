@@ -3,7 +3,7 @@
 
 {% block content %}
 <form action="
-{% url  current_url.view_name pk=current_url.kwargs.pk  %}" method="post">
+{% url  current_url.view_name pk=current_url.kwargs.pk  task_id=current_url.kwargs.task_id  %}" method="post">
     {% csrf_token %}
     <div class="main-menu-wrap margin-menu">
         <div class="btn btn-blue" >
@@ -23,10 +23,10 @@
             <div class="separator">></div>
             <div class="breadcrumbs-item"><a href="courses.html">Название курса раз</a></div>
             <div class="separator">></div>
-            <div class="breadcrumbs-item">Новая задача</div>
+            <div class="breadcrumbs-item">Редактирование Задачи</div>
         </div>
         <div class="main-wrap">
-            <h1>Новая задача </h1>
+            <h1> Редактирование Задачи </h1>
 
             <div class="title-field">
                 <i class="fas fa-user-graduate"></i>Название задачи
