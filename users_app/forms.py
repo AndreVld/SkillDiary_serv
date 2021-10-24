@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 
-from users_app.models import Person, City
+from users_app.models import Person
 
 
 class UserLoginForm(AuthenticationForm):
@@ -38,8 +38,7 @@ class UserProfileForm(UserChangeForm):
     surname = forms.CharField(widget=forms.TextInput(attrs={'class': 'field'}), required=False)
     avatar = forms.ImageField(widget=forms.FileInput(attrs={'id':'input_avatar', 'class':'avatar-edit'}), required=False)
     age = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'field'}), required=False)
-    city = forms.ModelChoiceField(
-        queryset=City.objects.all(), widget=forms.Select(attrs={'class': 'field select select-width'}), required=False)
+    city = forms.CharField(widget=forms.TextInput(attrs={'class': 'field'}))
 
     class Meta:
         model = Person

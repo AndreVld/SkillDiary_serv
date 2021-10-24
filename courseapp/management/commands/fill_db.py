@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 from SkillDiary.settings import BASE_DIR
 from courseapp.models import Profession, Course
 from task_app.models import Task, Comment
-from users_app.models import City, Person
+from users_app.models import Person
 
 
 class Command(BaseCommand):
@@ -23,8 +23,6 @@ class Command(BaseCommand):
         with open(f'{BASE_DIR}/courseapp/data/persons.json', "r", errors='ignore') as infile:
             persons = json.load(infile)
             for person in persons:
-                result = City.objects.get_or_create(name=person['city'])
-                person['city'] = result[0]
                 new_user = Person(**person)
                 new_user.save()
 
@@ -34,10 +32,11 @@ class Command(BaseCommand):
             for course in courses:
                 persons = Person.objects.all()
                 professions = Profession.objects.all()
-                city = City.objects.all()
-                Course.objects.get_or_create(name=course, person=persons[randrange(40)],
+
+                perosn = persons[randrange(40)]
+                Course.objects.get_or_create(name=course, person=perosn,
                                              profession=professions[randrange(40)], rate=randrange(100),
-                                             location=city[randrange(40)],
+                                             location=perosn.city,
                                              target="win", start_date="2021-10-14", end_date="2021-10-30",
                                              status='WORK')
             file.close()
