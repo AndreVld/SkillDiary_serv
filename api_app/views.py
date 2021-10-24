@@ -12,7 +12,7 @@ from rest_framework.views import APIView
 from api_app.serializers import PersonSerializer, CourseSerializer, TaskSerializer, ProfessionSerializer
 from courseapp.models import Profession, AdditionalInfo, Course
 from task_app.models import File, Task, Comment
-from users_app.models import Person, City
+from users_app.models import Person
 
 
 class ProfessionViewSet(viewsets.ModelViewSet):
