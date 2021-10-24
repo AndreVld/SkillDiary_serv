@@ -1,0 +1,100 @@
+/	users_app.views.LoginUserView	users:login
+/admin/	django.contrib.admin.sites.index	admin:index
+/admin/<app_label>/	django.contrib.admin.sites.app_index	admin:app_list
+/admin/<url>	django.contrib.admin.sites.catch_all_view
+/admin/account/emailaddress/	django.contrib.admin.options.changelist_view	admin:account_emailaddress_changelist
+/admin/account/emailaddress/<path:object_id>/	django.views.generic.base.RedirectView
+/admin/account/emailaddress/<path:object_id>/change/	django.contrib.admin.options.change_view	admin:account_emailaddress_change
+/admin/account/emailaddress/<path:object_id>/delete/	django.contrib.admin.options.delete_view	admin:account_emailaddress_delete
+/admin/account/emailaddress/<path:object_id>/history/	django.contrib.admin.options.history_view	admin:account_emailaddress_history
+/admin/account/emailaddress/add/	django.contrib.admin.options.add_view	admin:account_emailaddress_add
+/admin/auth/group/	django.contrib.admin.options.changelist_view	admin:auth_group_changelist
+/admin/auth/group/<path:object_id>/	django.views.generic.base.RedirectView
+/admin/auth/group/<path:object_id>/change/	django.contrib.admin.options.change_view	admin:auth_group_change
+/admin/auth/group/<path:object_id>/delete/	django.contrib.admin.options.delete_view	admin:auth_group_delete
+/admin/auth/group/<path:object_id>/history/	django.contrib.admin.options.history_view	admin:auth_group_history
+/admin/auth/group/add/	django.contrib.admin.options.add_view	admin:auth_group_add
+/admin/authtoken/tokenproxy/	django.contrib.admin.options.changelist_view	admin:authtoken_tokenproxy_changelist
+/admin/authtoken/tokenproxy/<path:object_id>/	django.views.generic.base.RedirectView
+/admin/authtoken/tokenproxy/<path:object_id>/change/	django.contrib.admin.options.change_view	admin:authtoken_tokenproxy_change
+/admin/authtoken/tokenproxy/<path:object_id>/delete/	django.contrib.admin.options.delete_view	admin:authtoken_tokenproxy_delete
+/admin/authtoken/tokenproxy/<path:object_id>/history/	django.contrib.admin.options.history_view	admin:authtoken_tokenproxy_history
+/admin/authtoken/tokenproxy/add/	django.contrib.admin.options.add_view	admin:authtoken_tokenproxy_add
+/admin/autocomplete/	django.contrib.admin.sites.autocomplete_view	admin:autocomplete
+/admin/courseapp/additionalinfo/	django.contrib.admin.options.changelist_view	admin:courseapp_additionalinfo_changelist
+/admin/courseapp/additionalinfo/<path:object_id>/	django.views.generic.base.RedirectView
+/admin/courseapp/additionalinfo/<path:object_id>/change/	django.contrib.admin.options.change_view	admin:courseapp_additionalinfo_change
+/admin/courseapp/additionalinfo/<path:object_id>/delete/	django.contrib.admin.options.delete_view	admin:courseapp_additionalinfo_delete
+/admin/courseapp/additionalinfo/<path:object_id>/history/	django.contrib.admin.options.history_view	admin:courseapp_additionalinfo_history
+/admin/courseapp/additionalinfo/add/	django.contrib.admin.options.add_view	admin:courseapp_additionalinfo_add
+/admin/courseapp/course/	django.contrib.admin.options.changelist_view	admin:courseapp_course_changelist
+/admin/courseapp/course/<path:object_id>/	django.views.generic.base.RedirectView
+/admin/courseapp/course/<path:object_id>/change/	django.contrib.admin.options.change_view	admin:courseapp_course_change
+/admin/courseapp/course/<path:object_id>/delete/	django.contrib.admin.options.delete_view	admin:courseapp_course_delete
+/admin/courseapp/course/<path:object_id>/history/	django.contrib.admin.options.history_view	admin:courseapp_course_history
+/admin/courseapp/course/add/	django.contrib.admin.options.add_view	admin:courseapp_course_add
+/admin/courseapp/profession/	django.contrib.admin.options.changelist_view	admin:courseapp_profession_changelist
+/admin/courseapp/profession/<path:object_id>/	django.views.generic.base.RedirectView
+/admin/courseapp/profession/<path:object_id>/change/	django.contrib.admin.options.change_view	admin:courseapp_profession_change
+/admin/courseapp/profession/<path:object_id>/delete/	django.contrib.admin.options.delete_view	admin:courseapp_profession_delete
+/admin/courseapp/profession/<path:object_id>/history/	django.contrib.admin.options.history_view	admin:courseapp_profession_history
+/admin/courseapp/profession/add/	django.contrib.admin.options.add_view	admin:courseapp_profession_add
+/admin/jsi18n/	django.contrib.admin.sites.i18n_javascript	admin:jsi18n
+/admin/login/	django.contrib.admin.sites.login	admin:login
+/admin/logout/	django.contrib.admin.sites.logout	admin:logout
+/admin/password_change/	django.contrib.admin.sites.password_change	admin:password_change
+/admin/password_change/done/	django.contrib.admin.sites.password_change_done	admin:password_change_done
+/admin/r/<int:content_type_id>/<path:object_id>/	django.contrib.contenttypes.views.shortcut	admin:view_on_site
+/admin/sites/site/	django.contrib.admin.options.changelist_view	admin:sites_site_changelist
+/admin/sites/site/<path:object_id>/	django.views.generic.base.RedirectView
+/admin/sites/site/<path:object_id>/change/	django.contrib.admin.options.change_view	admin:sites_site_change
+/admin/sites/site/<path:object_id>/delete/	django.contrib.admin.options.delete_view	admin:sites_site_delete
+/admin/sites/site/<path:object_id>/history/	django.contrib.admin.options.history_view	admin:sites_site_history
+/admin/sites/site/add/	django.contrib.admin.options.add_view	admin:sites_site_add
+/admin/task_app/task/	django.contrib.admin.options.changelist_view	admin:task_app_task_changelist
+/admin/task_app/task/<path:object_id>/	django.views.generic.base.RedirectView
+/admin/task_app/task/<path:object_id>/change/	django.contrib.admin.options.change_view	admin:task_app_task_change
+/admin/task_app/task/<path:object_id>/delete/	django.contrib.admin.options.delete_view	admin:task_app_task_delete
+/admin/task_app/task/<path:object_id>/history/	django.contrib.admin.options.history_view	admin:task_app_task_history
+/admin/task_app/task/add/	django.contrib.admin.options.add_view	admin:task_app_task_add
+/admin/users_app/person/	django.contrib.admin.options.changelist_view	admin:users_app_person_changelist
+/admin/users_app/person/<path:object_id>/	django.views.generic.base.RedirectView
+/admin/users_app/person/<path:object_id>/change/	django.contrib.admin.options.change_view	admin:users_app_person_change
+/admin/users_app/person/<path:object_id>/delete/	django.contrib.admin.options.delete_view	admin:users_app_person_delete
+/admin/users_app/person/<path:object_id>/history/	django.contrib.admin.options.history_view	admin:users_app_person_history
+/admin/users_app/person/add/	django.contrib.admin.options.add_view	admin:users_app_person_add
+/api/	rest_framework.routers.APIRootView	api-root
+/api/\.<format>/	rest_framework.routers.APIRootView	api-root
+/api/courses/	api_app.views.CourseViewSet	course-list
+/api/courses/<pk>/	api_app.views.CourseViewSet	course-detail
+/api/courses/<pk>\.<format>/	api_app.views.CourseViewSet	course-detail
+/api/courses\.<format>/	api_app.views.CourseViewSet	course-list
+/api/dj-rest-auth/login/	dj_rest_auth.views.LoginView	rest_login
+/api/dj-rest-auth/logout/	dj_rest_auth.views.LogoutView	rest_logout
+/api/dj-rest-auth/password/change/	dj_rest_auth.views.PasswordChangeView	rest_password_change
+/api/dj-rest-auth/password/reset/	dj_rest_auth.views.PasswordResetView	rest_password_reset
+/api/dj-rest-auth/password/reset/confirm/	dj_rest_auth.views.PasswordResetConfirmView	rest_password_reset_confirm
+/api/dj-rest-auth/registration/	dj_rest_auth.registration.views.RegisterView	rest_register
+/api/dj-rest-auth/registration/account-confirm-email/<key>/	django.views.generic.base.TemplateView	account_confirm_email
+/api/dj-rest-auth/registration/resend-email/	dj_rest_auth.registration.views.ResendEmailVerificationView	rest_resend_email
+/api/dj-rest-auth/registration/verify-email/	dj_rest_auth.registration.views.VerifyEmailView	rest_verify_email
+/api/dj-rest-auth/user/	dj_rest_auth.views.UserDetailsView	rest_user_details
+/api/persons/	api_app.views.PersonViewSet	person-list
+/api/persons/<pk>/	api_app.views.PersonViewSet	person-detail
+/api/persons/<pk>\.<format>/	api_app.views.PersonViewSet	person-detail
+/api/persons\.<format>/	api_app.views.PersonViewSet	person-list
+/api/professions/	api_app.views.ProfessionViewSet	profession-list
+/api/professions/<pk>/	api_app.views.ProfessionViewSet	profession-detail
+/api/professions/<pk>\.<format>/	api_app.views.ProfessionViewSet	profession-detail
+/api/professions\.<format>/	api_app.views.ProfessionViewSet	profession-list
+/api/tasks/	api_app.views.TaskViewSet	task-list
+/api/tasks/<pk>/	api_app.views.TaskViewSet	task-detail
+/api/tasks/<pk>\.<format>/	api_app.views.TaskViewSet	task-detail
+/api/tasks\.<format>/	api_app.views.TaskViewSet	task-list
+/courses/	courseapp.views.CourseList	course:courses
+/edit_profile/<int:pk>/	users_app.views.EditProfileUserView	users:edit_profile
+/logout/	django.contrib.auth.views.LogoutView	users:logout
+/media/<path>	django.views.static.serve
+/profile/	users_app.views.ProfileView	users:profile
+/registration/	users_app.views.register	users:registration
+/verify/<email>/<activation_key>/	users_app.views.verify	users:verify
