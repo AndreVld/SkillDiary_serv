@@ -171,8 +171,8 @@ ACCOUNT_EMAIL_VERIFICATION = 'optional'
 
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = '25'
-EMAIL_HOST_USER = 'django@geekshop.local'
-EMAIL_HOST_PASSWORD = 'geekshop'
+EMAIL_HOST_USER = 'django@localhost.local'
+EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_SSL = False
 
 DOMAIN_NAME = 'http://localhost:8000'
