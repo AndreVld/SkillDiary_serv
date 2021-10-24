@@ -1,3 +1,6 @@
+import hashlib
+import random
+
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 
@@ -20,14 +23,25 @@ class UserLoginForm(AuthenticationForm):
 
 
 class UserRegistrationForm(UserCreationForm):
-    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'field',}))
-    email = forms.CharField(widget=forms.EmailInput(attrs={'class': 'field',}))
+    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'field', }))
+    email = forms.CharField(widget=forms.EmailInput(attrs={'class': 'field', }))
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'field'}))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'field'}))
 
     class Meta:
         model = Person
         fields = ('username', 'email', 'password1',)
+
+    def save(self, **kwargs):
+        user = super(UserRegistrationForm, self).save()
+        user.is_active = False
+        salt = hashlib.sha1(str(random.random()).encode('utf8')).hexdigest()[:6]
+        user.activation_key = hashlib.sha1((user.email + salt).encode('utf8')).hexdigest()
+        user.save()
+        return user
+
+
+
 
 
 class UserProfileForm(UserChangeForm):
