@@ -7,7 +7,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from courseapp.models import Course, AdditionalInfo
 from task_app.models import Task
 from django.urls import reverse_lazy
-from courseapp.forms import CourseEditForm
+from courseapp.forms import CourseEditForm, AddCourseForm
 
 from django.http import request
 from django.shortcuts import get_object_or_404, redirect
