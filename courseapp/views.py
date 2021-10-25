@@ -5,7 +5,7 @@ from django.views.generic.detail import DetailView
 
 from django.contrib.messages.views import SuccessMessageMixin
 from courseapp.models import Course, AdditionalInfo
-from task_app.models import Task
+from task_app.models import Task, File
 from django.urls import reverse_lazy
 from courseapp.forms import CourseEditForm, AddCourseForm, AddAdditionalInfoForm
 
@@ -108,5 +108,9 @@ class AddAdditionalInfoCreateView(CreateView):
     def form_valid(self, form):
         course = get_object_or_404(Course, id=self.kwargs['pk'])
         form.instance.course = course
-
-        return super(AddAdditionalInfoCreateView, self).form_valid(form)
+        form_valid = super(AddAdditionalInfoCreateView, self).form_valid(form)
+        File.objects.create(name=form.cleaned_data['name'],
+                            description=form.cleaned_data['name'],
+                            file=form.cleaned_data['file'],
+                            additional_info=self.object)
+        return form_valid
