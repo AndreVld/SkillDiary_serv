@@ -1,7 +1,10 @@
+import hashlib
+import random
+
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 
-from users_app.models import Person, City
+from users_app.models import Person
 
 
 class UserLoginForm(AuthenticationForm):
@@ -20,14 +23,25 @@ class UserLoginForm(AuthenticationForm):
 
 
 class UserRegistrationForm(UserCreationForm):
-    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'field',}))
-    email = forms.CharField(widget=forms.EmailInput(attrs={'class': 'field',}))
+    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'field', }))
+    email = forms.CharField(widget=forms.EmailInput(attrs={'class': 'field', }))
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'field'}))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'field'}))
 
     class Meta:
         model = Person
         fields = ('username', 'email', 'password1',)
+
+    def save(self, **kwargs):
+        user = super(UserRegistrationForm, self).save()
+        user.is_active = False
+        salt = hashlib.sha1(str(random.random()).encode('utf8')).hexdigest()[:6]
+        user.activation_key = hashlib.sha1((user.email + salt).encode('utf8')).hexdigest()
+        user.save()
+        return user
+
+
+
 
 
 class UserProfileForm(UserChangeForm):
@@ -38,8 +52,7 @@ class UserProfileForm(UserChangeForm):
     surname = forms.CharField(widget=forms.TextInput(attrs={'class': 'field'}), required=False)
     avatar = forms.ImageField(widget=forms.FileInput(attrs={'id':'input_avatar', 'class':'avatar-edit'}), required=False)
     age = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'field'}), required=False)
-    city = forms.ModelChoiceField(
-        queryset=City.objects.all(), widget=forms.Select(attrs={'class': 'field select select-width'}), required=False)
+    city = forms.CharField(widget=forms.TextInput(attrs={'class': 'field'}))
 
     class Meta:
         model = Person

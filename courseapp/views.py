@@ -2,6 +2,7 @@ from datetime import date
 from django.db.models import Q
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 from django.views.generic.detail import DetailView
+
 from django.contrib.messages.views import SuccessMessageMixin
 from courseapp.models import Course, AdditionalInfo
 from task_app.models import Task
@@ -10,6 +11,9 @@ from courseapp.forms import CourseEditForm
 
 from django.http import request
 from django.shortcuts import get_object_or_404, redirect
+
+from django.shortcuts import render, redirect
+
 
 
 class CourseList(ListView):
@@ -33,7 +37,6 @@ class CourseDetailView(DetailView):
         context ["tasks"] = tasks
         return context
 
-    
 
 class EditCourseView(SuccessMessageMixin,UpdateView):
     form_class = CourseEditForm
@@ -72,4 +75,14 @@ def update_course_status(request, pk):
     return redirect('course:course_detail', course.pk)
 
 
-
+def course_add(request):
+    if request.method == "POST":
+        form = AddCourseForm(request.POST)
+        if form.is_valid():
+            course = form.save(commit=False)
+            course.person = request.user
+            course.save()
+            #return redirect('course_list')
+    else:
+        form = AddCourseForm()
+    return render(request, 'courseapp/course-add.html', {'form': form})
