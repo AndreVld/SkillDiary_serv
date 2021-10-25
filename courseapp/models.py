@@ -65,7 +65,6 @@ class AdditionalInfo(models.Model):
     ]
     name = models.CharField(max_length=128)
     url = models.URLField(blank=True)
-    file = models.FileField(upload_to='additional_files', blank=True)
     note = models.CharField(max_length=256, blank=True)
     type_info = models.CharField(
         max_length=4,
