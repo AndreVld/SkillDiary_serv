@@ -47,7 +47,7 @@ class Course(models.Model):
     profession = models.ForeignKey(Profession, on_delete=models.PROTECT, related_name='courses')
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
-    person = models.ForeignKey(Person, on_delete=models.PROTECT, related_name='courses' )
+    person = models.ForeignKey(Person, on_delete=models.PROTECT, related_name='courses')
     is_active = models.BooleanField(
         default=True,
         help_text='Unselect this instead of deleting tasks.'
@@ -59,13 +59,14 @@ class Course(models.Model):
 
 class AdditionalInfo(models.Model):
     TYPE_CHOICES = [
-        ('URL', 'Url'),
-        ('TEXT', 'Text'),
-        ('FILE', 'File'),
+        ('URL', 'Ссылка'),
+        ('TEXT', 'Заметка'),
+        ('FILE', 'Файл'),
     ]
     name = models.CharField(max_length=128)
     url = models.URLField(blank=True)
-    description = models.TextField(blank=True)
+    file = models.FileField(upload_to='additional_files', blank=True)
+    note = models.CharField(max_length=256, blank=True)
     type_info = models.CharField(
         max_length=4,
         choices=TYPE_CHOICES,
