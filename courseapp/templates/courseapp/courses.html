@@ -68,7 +68,7 @@
                     </div>
                 </div>
 {% for course in course_list %}
-                <a href="course.html" class="course-wrap">
+                <a href="{% url 'course:course_detail' course.id %}" class="course-wrap">
                     <div class="container mycontainer">
                         <div class="row myrow">
                             <div class="col-11 mycol">

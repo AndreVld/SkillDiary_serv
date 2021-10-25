@@ -66,3 +66,14 @@ background-color: #fff;
     border-color: #10A1CF;
     text-decoration: none;
 }
+
+td {
+    word-break: break-all;
+}
+
+.button_for_search {
+    position: absolute;
+    top: 9px;
+    left: 17px;
+   
+}
