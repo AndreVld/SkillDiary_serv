@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<form action="{% url current_url.view_name pk=current_url.kwargs.pk task_id=current_url.kwargs.task_id  %}"
+      method="post">{% csrf_token %}
+    <div class="main-menu-wrap margin-menu">
+
+         <div class="btn btn-blue" >
+                        <i class="fas fa-save"></i>
+                        <input type="submit" value="Сохранить" class = "button-blue">
+                    </div>
+
+                     <div class="btn btn-white" >
+                        <i class="fas fa-ban"></i>
+                        <input type="reset" value="Отменить" class = "button-white">
+                    </div>
+
+    </div>
+    </div>
+    <div class="col-sm-12 col-md-9">
+        <div class="breadcrumbs">
+            <div class="breadcrumbs-item"><a href="{% url 'course:course_list' %}">Курсы</a></div>
+            <div class="separator">></div>
+            <div class="breadcrumbs-item"><a href="{% url 'course:course_detail' pk=current_url.kwargs.pk %}">
+                {{course.name}}</a></div>
+            <div class="separator">></div>
+            <div class="breadcrumbs-item">
+                <a href="{% url 'tasks:task' pk=current_url.kwargs.pk  task_id=current_url.kwargs.task_id %}">
+                {{task.name}}</a></div>
+            <div class="separator">></div>
+            <div class="breadcrumbs-item">Дополнительние комментария</div>
+        </div>
+        <div class="main-wrap">
+            <h1>Добавление кoмментария</h1>
+
+            <div class="title-field">
+                <i class="fas fa-comment"></i>Комментарий
+            </div>
+            <div class="wrap-field">
+                {{form.text}}
+            </div>
+
+        </div>
+
+    </div>
+    </div>
+    </div>
+</form>
+{% endblock %}

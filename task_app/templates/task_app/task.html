@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+                <div class="main-menu-wrap margin-menu">
+                    <a class="btn btn-blue" href="{% url 'tasks:edit_task'  pk=request.resolver_match.kwargs.pk task_id=task.id %}">
+                        <i class="fas fa-edit"></i>Редактировать
+                    </a>
+
+                    <a class="btn btn-green" href="{% url 'tasks:complete_task' pk=request.resolver_match.kwargs.pk task_id=task.id %}">
+                        <i class="fas fa-check"></i>Завершить
+                    </a>
+
+                    <a class="btn btn-white" href="
+                    {% url 'tasks:add_file' pk=request.resolver_match.kwargs.pk task_id=task.id %}">
+                        <i class="fas fa-plus-circle"></i>Добавить файл
+                    </a>
+
+                    <a class="btn btn-white" href="
+                    {% url 'tasks:add_comment' pk=request.resolver_match.kwargs.pk task_id=task.id %}">
+                        <i class="fas fa-plus-circle"></i>Добавить комментарий
+                     </a>
+
+                    <div class="btn btn-red" id="myBtn">
+                        <i class="fas fa-trash-alt"></i>Удалить
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-9">
+                <div class="breadcrumbs">
+                    <div class="breadcrumbs-item"><a href="{% url 'course:course_list' %}">Курсы</a></div>
+                    <div class="separator">></div>
+                    <div class="breadcrumbs-item"><a href="{% url 'course:course_detail' pk=request.resolver_match.kwargs.pk %}">
+                        {{ task.course }}</a></div>
+                    <div class="separator">></div>
+                    <div class="breadcrumbs-item">{{ task.name }}</div>
+                </div>
+
+                <div class="main-wrap">
+                    <h1>{{ task.name }}</h1>
+                    <div class="prof-wrap">
+                        <i class="fas fa-project-diagram"></i><span class="b">Статус: </span>{{ task.get_status_display }}
+                    </div>
+                    <div class="date-start-wrap">
+                        <i class="fas fa-calendar-day"></i><span class="b">Дата начала: </span>{{ task.start_date|date:"d.m.y" }}
+                    </div>
+                    <div class="date-end-wrap">
+                        <i class="fas fa-calendar-day"></i><span class="b">Дата окончания: </span>{{ task.end_date|date:"d.m.y" }}
+                    </div>
+
+                    <div class="files-wrap">
+                        <i class="fas fa-file"></i>
+                        <span class="b file-title">Файлы: </span>
+                        <div class="files">
+                            {% if  task.files %}
+                            {% for file in task.files.all%}
+   <a href="{{file.file.url}}"><p class="p-file">{{file }}<i class="fas fa-download"></i></p></a>
+                       {% endfor %}
+                       {% endif %}
+                   </div>
+
+
+                    </div>
+                    <h2>Комментарии</h2>
+                    {% if  task.comments %}
+                    {% for comment in task.comments.all %}
+                    <div class="comment-wrap">
+                        <div class="comment-date b">
+                            {{comment.update_at|date:"d.m.y"}}
+                        </div>
+                        <div class="comment-text">
+                            {{comment.text}}
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="modal" id="myModal">
+        <div class="modal-contentt">
+            <div class="modal-text">
+                Подтвердите удаление
+            </div>
+            <div class="modal-body">
+            <a class="btn btn-red" href="{% url 'tasks:delete_task' pk=request.resolver_match.kwargs.pk task_id=task.id %}">
+                        <i class="fas fa-trash-alt"></i>Удалить
+                    </a>
+                <div class="btn btn-white" id="close" >
+                    <i class="fas fa-ban"></i>Отмена
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

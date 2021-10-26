@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %} {% endblock %}
 
 {% block content %}
 
@@ -20,7 +19,7 @@
                     {% endif %}
 
 
-                    <a class="btn btn-white" href="profile-edit.html">
+                    <a class="btn btn-white" href="{% url 'tasks:add_task' course.id %}">
                         <i class="fas fa-plus-circle"></i>Добавить задачу
                     </a>
 
@@ -141,7 +140,7 @@
                     <div class ="task-sort">
                    {% for task in tasks %}
                    {% if task.status == 'COMPLETED' %} 
-                   <a href="#" class="task-wrap" date-start={{ task.start_date|date:"d.m.y" }} date-end = {{ task.end_date|date:"d.m.y" }} >
+                   <a href="{% url 'tasks:task' pk=course.id task_id=task.id  %}" class="task-wrap" date-start={{ task.start_date|date:"d.m.y" }} date-end = {{ task.end_date|date:"d.m.y" }} >
                        <div class="task-title task-complete b">
                             {{ task.name }}
                        </div>
@@ -157,7 +156,7 @@
                        </div>
                    </a>
                  {% elif task.status == 'WORK' %} 
-                <a href="#" class="task-wrap" date-start={{ task.start_date|date:"d.m.y" }} date-end = {{ task.end_date|date:"d.m.y" }} >
+                <a href="{% url 'tasks:task' pk=course.id task_id=task.id  %}" class="task-wrap" date-start={{ task.start_date|date:"d.m.y" }} date-end = {{ task.end_date|date:"d.m.y" }} >
                     <div class="task-title b">
                         {{ task.name }}
                     </div>
@@ -173,7 +172,7 @@
                     </div>
                 </a>
                 {% elif task.status == 'PLAN' %} 
-                 <a href="#" class="task-wrap" date-start={{ task.start_date|date:"d.m.y" }} date-end = {{ task.end_date|date:"d.m.y" }} >
+                 <a href="{% url 'tasks:task' pk=course.id task_id=task.id  %}" class="task-wrap" date-start={{ task.start_date|date:"d.m.y" }} date-end = {{ task.end_date|date:"d.m.y" }} >
                     <div class="task-title b">
                          {{ task.name }}
                     </div>
@@ -190,7 +189,7 @@
                 </a>
 
                 {% else %}
-                 <a href="#" class="task-wrap" date-start={{ task.start_date|date:"d.m.y" }} date-end = {{ task.end_date|date:"d.m.y" }} >
+                 <a href="{% url 'tasks:task' pk=course.id task_id=task.id  %}" class="task-wrap" date-start={{ task.start_date|date:"d.m.y" }} date-end = {{ task.end_date|date:"d.m.y" }} >
                     <div class="task-title task-unfinished b">
                         {{ task.name }}
                     </div>

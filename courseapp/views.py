@@ -14,7 +14,6 @@ from django.shortcuts import get_object_or_404, redirect
 
 from django.shortcuts import render, redirect
 
-
 class CourseList(ListView):
     model = Course
     template_name = 'courseapp/courses.html'
@@ -29,6 +28,8 @@ class CourseDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         tasks = Task.objects.filter(is_active=True, course=(self.get_object()).pk)
+        for task in tasks:
+            task.check_status()
 
         context = super(CourseDetailView, self).get_context_data(**kwargs)
         context["title"] = "курс/просмотр"
