@@ -21,24 +21,24 @@
                 </linearGradient>
                 </defs>
             </svg>  
-            Skilldiary
+
             
         </div>
         <div class="login-form-wrap">
-    <form action="{% url 'users:registration' %}" method="post">
+    <form action="{% url 'users:registration' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
             <div class="title-field">
                 <i class="fas fa-user"></i>Логин
             </div>
             <div class="wrap-field">
-                {{ form.username }}  
+                {{ form.username }}
             </div>
 
              <div class="title-field">
                 <i class="fas fa-envelope-square"></i> Email
             </div>
             <div class="wrap-field">
-                {{ form.email }}       
+                {{ form.email }}
             </div>
 
 
@@ -46,7 +46,7 @@
                 <i class="fas fa-key"></i>Пароль
             </div>
             <div class="wrap-field">
-                {{ form.password1 }}       
+                {{ form.password1 }}
             </div>
 
             <div class="title-field">
@@ -54,14 +54,16 @@
             </div>
             <div class="wrap-field">
                  {{ form.password2 }}
-               
+
             </div>
                <input class="btn btn-blue" type="submit" value="Регистрация">
 
-              
+
                 {% if form.errors %}
                 {{ form.errors }}
                 {% endif %}
             </form>
-                
+                </div>
+</div>
+</div>
 {% endblock %}

@@ -1,97 +1,82 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %}  {% endblock %}
+{% block content %}
+<form action="{% url 'course:course_add' %}" method="post">
+    {% csrf_token %}
+    <div class="main-menu-wrap add-course-menu"> 
+        <a class="btn btn-blue">
+            <i class="fas fa-save"></i>
+            <input type="submit" value="Сохранить" class = "button-blue">
+        </a>
+        <a class="btn btn-white" href="{% url 'course:course_list' %}">
+            <i class="fas fa-ban"></i>Отменить
+        </a>
+    </div>
+</div>
+    <div class="col-sm-12 col-md-9">
+        <div class="main-wrap">
+                <h1>Добавление курса</h1>
 
-{% block content %}        
-                <div class="main-menu-wrap add-course-menu">
-
-
-                    <a class="btn btn-blue" href="course.html">
-                        <i class="fas fa-save"></i>Сохранить
-                    </a>
-                    <a class="btn btn-white" href="course.html">
-                        <i class="fas fa-ban"></i>Отменить
-                    </a>
-
+                <div class="title-field">
+                    <i class="fas fa-user-graduate"></i>Название курса
                 </div>
-            </div>
-            <div class="col-sm-12 col-md-9">
+                <div class="wrap-field">
+                    {{ form.name }}
+                </div>
 
-                <div class="main-wrap">
-                    <h1>Добавление курса</h1>
+                <div class="title-field">
+                    <i class="fas fa-project-diagram add-course-i"></i>Профессия
+                </div>
 
-                    <div class="title-field">
-                        <i class="fas fa-user-graduate"></i>Название курса
-                    </div>
-                    <div class="wrap-field">
-                       
-                        <input class="field" value="Название курса два" type="text">
-                    </div>
+                <div class="wrap-field add-course-i">
+                    <i class="fas fa-sort-down i-sort-1"></i>  
+                        {{ form.profession }}               
+                </div>
 
-                    <div class="title-field">
-                        <i class="fas fa-project-diagram add-course-i"></i>Профессия
-                    </div>
-
-                    <div class="wrap-field add-course-i">
-                        <i class="fas fa-sort-down i-sort-1"></i>  
-                        <select class="field select select-width">
-                            <option selected >Какая-то профессиия</option>
-                            <option>Какая-то профессиия два</option>
-                            <option>Python программист</option>
-                       </select>
-                       
-                    </div>
-
-
-                    <div class="title-field">
-                        <i class="fas fa-university"></i>Место проведения
-                    </div>
-                    <div class="wrap-field">
-                        
-                        <input class="field" value="GeekBrains" type="text">
-                    </div>
-                    <div class="date-wrap">
-                        <div class="date-l">
-                            <div class="title-field">
-                                <i class="fas fa-calendar-day"></i>Дата начала
-                            </div>
-                            <div class="wrap-field">
-                                <i class="fas fa-sort-down i-sort-1"></i> 
-                                <input class="field" value="+7 (950) 500 25 65" type="date">
-                            </div>
-                        </div>
-                        <div class="date-r">
-                            <div class="title-field">
-                                <i class="fas fa-calendar-day"></i>Дата окончания
-                            </div>
-                            <div class="wrap-field">
-                                <i class="fas fa-sort-down i-sort-1"></i> 
-                                <input class="field" value="+7 (950) 500 25 65" type="date">
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="title-field">
-                        <i class="fas fa-check"></i></i>Цель
-                    </div>
-                    <div class="wrap-field">
-                        <textarea class="field textarea" cols="40" rows="5"></textarea>
-                        
-                    </div>
-
-
-
-
-
-                    
-                       
-
-
-                        
-
-
+                <div class="title-field">
+                    <i class="fas fa-university"></i>Место проведения
+                </div>
+                <div class="wrap-field">
+                    {{ form.location }}
+                </div>
                 
+                <div class="date-wrap">
+                    <div class="date-l">
+                        <div class="title-field">
+                            <i class="fas fa-calendar-day"></i>Дата начала
+                        </div>
+                        <div class="wrap-field">
+                            <i class="fas fa-sort-down i-sort-1"></i> 
+                            {{ form.start_date }}
+                        </div>
+                    </div>
+                    <div class="date-r">
+                        <div class="title-field">
+                            <i class="fas fa-calendar-day"></i>Дата окончания
+                        </div>
+                        <div class="wrap-field">
+                            <i class="fas fa-sort-down i-sort-1"></i> 
+                            {{ form.end_date }}
+                        </div>
+                    </div>
 
                 </div>
-        
-      {% endblock %}
+                <div class="title-field">
+                    <i class="fas fa-check"></i></i>Цель
+                </div>
+                <div class="wrap-field">
+                    {{ form.target }}
+                </div>
+                            
+        </div>
+        {% if form.errors %}
+            {{ form.errors }}
+        {% endif %}
+    </div>
+</div>
+</div>
+</div>
+
+</form>
+{% endblock %}

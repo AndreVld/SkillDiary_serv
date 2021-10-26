@@ -4,7 +4,7 @@
 
 {% block content %}
                 <div class="main-menu-wrap">
-                    <a class="btn btn-blue" href="course-add.html">
+                    <a class="btn btn-blue" href="{% url 'course:course_add' %}">
                         <i class="fas fa-plus-circle"></i>Добавить курс
                     </a>
                     
@@ -68,7 +68,7 @@
                     </div>
                 </div>
 {% for course in course_list %}
-                <a href="course.html" class="course-wrap">
+                <a href="{% url 'course:course_detail' course.id %}" class="course-wrap">
                     <div class="container mycontainer">
                         <div class="row myrow">
                             <div class="col-11 mycol">
@@ -114,4 +114,7 @@
                     <a href="#" class="page">3</a>
                 </div>
             </div>
+            </div>
+</div>
+</div>
        {% endblock %}

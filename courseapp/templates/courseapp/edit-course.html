@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+ 
+
+{% load static %}
+{% block title %}  {% endblock %}
+
+{% block content %}        
+ <form action="{% url 'course:course_edit' course.id %}" method="post" >
+                 {% csrf_token %}
+                <div class="main-menu-wrap add-course-menu">
+   
+                      <div class="btn btn-blue" >
+                        <i class="fas fa-save"></i>
+                        <input type="submit" value="Сохранить" class = "button-blue">
+                    </div>
+
+                    <a class="btn btn-white" href="{% url 'course:course_detail' course.id %}">
+                        <i class="fas fa-ban"></i>Отменить
+                    </a>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-9">
+
+                <div class="main-wrap">
+              
+                    <h1>Редактирование курса</h1>
+      
+                    <div class="title-field">
+                        <i class="fas fa-user-graduate"></i>Название курса
+                    </div>
+                    <div class="wrap-field">
+                       {{ form.name }}
+                       
+                    </div>
+
+                    <div class="title-field">
+                        <i class="fas fa-project-diagram add-course-i"></i>Профессия
+                    </div>
+
+                    <div class="wrap-field add-course-i">
+                        <i class="fas fa-sort-down i-sort-1"></i>  
+                        {{ form.profession }}
+                       
+                    </div>
+
+                    <div class="title-field">
+                        <i class="fas fa-university"></i>Место проведения
+                    </div>
+                    <div class="wrap-field">
+                        {{ form.location }}
+                       
+                    </div>
+                    <div class="date-wrap">
+                        <div class="date-l">
+                            <div class="title-field">
+                                <i class="fas fa-calendar-day"></i>Дата начала
+                            </div>
+                            <div class="wrap-field">
+                                <i class="fas fa-sort-down i-sort-1"></i> 
+                                {{ form.start_date}}
+                                
+                            </div>
+                        </div>
+                        <div class="date-r">
+                            <div class="title-field">
+                                <i class="fas fa-calendar-day"></i>Дата окончания
+                            </div>
+                            <div class="wrap-field">
+                                <i class="fas fa-sort-down i-sort-1"></i> 
+                                {{ form.end_date}}
+                    
+                            </div>        
+
+                        </div>
+
+                    </div>
+                    <div class="title-field">
+                        <i class="fas fa-check"></i></i>Цель
+                    </div>
+                    <div class="wrap-field">
+                    {{ form.target}}
+                        
+                    </div>
+                        
+        </div>
+        </div>
+        </div>         
+                </div>
+                 {% if form.errors %}
+                {{ form.errors }}
+                {% endif %}
+                </form>
+                {% for message in messages %}
+                {{ message }}
+                {% endfor %}
+
+        
+      {% endblock %}

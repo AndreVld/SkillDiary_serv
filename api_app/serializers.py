@@ -4,7 +4,7 @@ from rest_framework.exceptions import ValidationError
 
 from courseapp.models import Profession, AdditionalInfo, Course
 from task_app.models import File, Task, Comment
-from users_app.models import Person, City
+from users_app.models import Person
 
 
 def dict_to_filter_params(d, prefix=''):
@@ -100,12 +100,6 @@ class WritableNestedSerializer(BaseModelSerializer):
             )
 
 
-class NestedCitySerializer(WritableNestedSerializer):
-    class Meta:
-        model = City
-        fields = ['id', 'name']
-
-
 class NestedPersonSerializer(WritableNestedSerializer):
     class Meta:
         model = Person
@@ -147,7 +141,7 @@ class NestedCommentSerializer(WritableNestedSerializer):
 
 
 class ProfessionSerializer(serializers.ModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='course-detail')
+    url = serializers.HyperlinkedIdentityField(view_name='profession-detail')
 
     class Meta:
         model = Profession
@@ -155,7 +149,6 @@ class ProfessionSerializer(serializers.ModelSerializer):
 
 
 class PersonSerializer(serializers.ModelSerializer):
-    city = NestedCitySerializer()
     url = serializers.HyperlinkedIdentityField(view_name='person-detail')
 
     class Meta:

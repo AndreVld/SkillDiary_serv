@@ -1,65 +1,24 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skilldiary</title>
-    <link rel="icon" href="favicon/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="bootstrap-grid.min.css">
-    <link href="fontawesome/css/all.css" rel="stylesheet">
-    <link rel="stylesheet" href="main.css">
-</head>
-<body>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12 col-md-3">
-                <div class="logo-wrap">
-                    <a href="courses.html">
-                    <svg width="70" height="58" viewBox="0 0 70 58" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect y="29.0067" width="40.9148" height="40.9148" rx="11" transform="rotate(-45 0 29.0067)" fill="url(#paint0_linear)"/>
-                        <rect x="12.1377" y="28.9311" width="40.9148" height="40.9148" rx="11" transform="rotate(-45 12.1377 28.9311)" fill="url(#paint1_linear)"/>
-                        <defs>
-                        <linearGradient id="paint0_linear" x1="20.4574" y1="29.0067" x2="20.4574" y2="69.9215" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#C4C4C4"/>
-                        <stop offset="1" stop-color="#333333"/>
-                        </linearGradient>
-                        <linearGradient id="paint1_linear" x1="32.5951" y1="28.9311" x2="32.5951" y2="69.8459" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#66C1DE"/>
-                        <stop offset="1" stop-color="#27AED9"/>
-                        </linearGradient>
-                        </defs>
-                    </svg>  
-                    </a>                 
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-9">
-                <div class="menu-warp">
-                    <div class="menu-l">
-                        <div class="menu-l-item">
-                            <i class="fas fa-graduation-cap"></i><a href="courses.html">Курсы</a>
-                        </div>
-                    </div>
-                    <div class="menu-r">
-                        <div class="menu-r-item">
-                            <i class="fas fa-user-edit"></i><a href="profile.html">Профиль</a>
-                        </div>
-                        <div class="menu-r-item">
-                            <i class="fas fa-sign-out-alt"></i><a href="index.html">Выход</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12 col-md-3">
+{% extends "base.html" %}
+{% load static %}
+{% block title %} {% endblock %}
+
+{% block content %}
+
                 <div class="main-menu-wrap margin-menu">
-                    <a class="btn btn-blue" href="profile-edit.html">
+                    <a class="btn btn-blue" href="{% url 'course:course_edit' course.id %}">
                         <i class="fas fa-edit"></i>Редактировать
                     </a>
-
-                    <a class="btn btn-green" href="profile-edit.html">
+                     {% if  course.status == 'COMPLETED' %}
+                     <a class="btn btn-green" href="{% url 'course:course_update_status' course.id %}">
+                        <i class="fas fa-check"></i>Вернуть в работу
+                    </a>
+                    {% else %}
+                    <a class="btn btn-green" href="{% url 'course:course_update_status' course.id %}">
                         <i class="fas fa-check"></i>Завершить курс
                     </a>
+                   
+                    {% endif %}
+
 
                     <a class="btn btn-white" href="profile-edit.html">
                         <i class="fas fa-plus-circle"></i>Добавить задачу
@@ -78,27 +37,31 @@
             </div>
             <div class="col-sm-12 col-md-9">
                 <div class="breadcrumbs">
-                    <div class="breadcrumbs-item"><a href="courses.html">Курсы</a></div>
+                    <div class="breadcrumbs-item"><a href="{% url 'course:course_list' %}">Курсы</a></div>
                     <div class="separator">></div>
-                    <div class="breadcrumbs-item">Название курса раз</div>
+                    <div class="breadcrumbs-item"> {{ course.name }}</div>
                 </div>
                 
                 <div class="main-wrap">
-                    <h1>Название курса раз</h1>
+                    <h1>{{ course.name }}</h1>
+                          
                     <div class="prof-wrap">
-                        <i class="fas fa-project-diagram"></i><span class="b">Профессия: </span>Какая-то профессия
+                        <i class="fas fa-project-diagram"></i><span class="b">Профессия: </span> {{ course.profession }}
+                    </div>
+                    <div class="prof-wrap">
+                        <i class="fas fa-lightbulb"></i><span class="b">Статус: </span> {{ course.get_status_display }}
                     </div>
                     <div class="local-wrap">
-                        <i class="fas fa-university"></i><span class="b">Место проведения: </span>GeekBrains
+                        <i class="fas fa-university"></i><span class="b">Место проведения: </span> {{ course.location }}
                     </div>
                     <div class="date-start-wrap">
-                        <i class="fas fa-calendar-day"></i><span class="b">Дата начала: </span>27.01.19
+                        <i class="fas fa-calendar-day"></i><span class="b">Дата начала: </span> {{ course.start_date|date:"d.m.y" }}
                     </div>
                     <div class="date-end-wrap">
-                        <i class="fas fa-calendar-day"></i><span class="b">Дата окончания: </span>10.03.20
+                        <i class="fas fa-calendar-day"></i><span class="b">Дата окончания: </span>{{ course.end_date|date:"d.m.y" }}
                     </div>
                     <div class="goal-wrap">
-                        <i class="fas fa-check"></i><span class="b">Цель: </span><div> Разнообразный и богатый опыт новая модель организационной деятельности представляет собой интересный эксперимент проверки модели развития. Таким образом новая модель организационной деятельности играет важную роль в формировании модели развития.</div>
+                        <i class="fas fa-check"></i><span class="b">Цель: </span><div> {{ course.target }}</div>
                     </div>
                     <div class="prog-wrap">
                         <i class="fas fa-tasks"></i><span class="b">Прогресс: </span>
@@ -111,61 +74,81 @@
                     <div class="rate-wrap">
                         <i class="fas fa-star"></i><span class="b">Рейтинг: </span>
                         <span class="rate-circle">
-                            <span class="rate b">97</span>
+                            <span class="rate b">{{ course.rate }}</span>
                         </span>
                     </div>
 
-                    <div class="extra-wrap">
+                    <div class="extra-wrap"> 
+                    {% if additionals %}
                         <i class="fas fa-file"></i>
                         <span class="b extra-title">Доп. матерьялы: </span>
+                    {% endif %}
                         <div class="extra-table">
-                        <table> 
+                     
+                        <table class ="fixed" > 
+
+                            {% for aditional in additionals %}
+                            {% if aditional.type_info == 'URL'%}  
                             <tr>
-                                <td>Название поля ссылка</td>
-                                <td><a href="#">https://github.com/topics/bootstrap</a></td>
-                                <td><a class="del" href="#"><i class="fas fa-trash-alt"></i></a></td>
+                                <td>{{ aditional.name }}</td>
+                                <td><a href="#">{{ aditional.url }}</a></td>
+                                <td><a class="del" href="{% url 'course:additional_delete' course.pk aditional.pk %}"><i class="fas fa-trash-alt"></i></a></td>
                             </tr>
+                            {% elif aditional.type_info == 'FILE' %}
                             <tr>
-                                <td>Название поля файл</td>
+                                <td> {{ aditional.name }}</td>
                                 <td><a href="#">Разнообразный и богатый опыт новая модель организационной деятельности представляет собой интересный эксперимент проверки модели развития. </a></td>
-                                <td><a class="del" href="#"><i class="fas fa-trash-alt"></i></a></td>
+                               <td><a class="del" href="{% url 'course:additional_delete' course.pk aditional.pk %}"><i class="fas fa-trash-alt"></i></a></td>
                             </tr>
+                            {% else %}
                             <tr>
-                                <td>Название тествого поля и богатый опыт новая модель организационной деятельности представляет собой интересный   </td>
-                                <td>Разнообразный и богатый опыт новая модель организационной деятельности представляет собой интересный эксперимент проверки модели развития. Таким образом новая модель организационной деятельности играет важную роль в формировании модели развития.</td>
-                                <td><a class="del" href="#"><i class="fas fa-trash-alt"></i></a></td>
+                                <td> {{ aditional.name }}</td>
+                                <td> {{ aditional.description}}</td>
+                              <td><a class="del" href="{% url 'course:additional_delete' course.pk aditional.pk %}"><i class="fas fa-trash-alt"></i></a></td>
                             </tr>
+                                {% endif %}
+                              {% endfor %}
                         </table>
 
 
                         </div>
                     </div>
-                    <h2>Задачи курса</h2>
-                    <div class="sorts-wrap sort-for-course">
 
+                    <h2>Задачи курса</h2>
+                      <form>
+                    <div class="sorts-wrap sort-for-course">
+                  
                         <div class="wrap-field">
-                            <i class="fas fa-search"></i>   
-                            <input class="field" placeholder="Поиск..." type="text">
+                        
+                            <i class="fas fa-search"></i>  
+                            <input class="field" placeholder="Поиск..." type="text" id="searchInput" onkeyup="searchFunction()">
+                                                    
                         </div>
+                        </form>
    
                         <div class="wrap-field">
                            Сортировка
                            <i class="fas fa-sort-down i-sort-2"></i>  
                            <select class="field select">
-                               <option selected >Дедлайн</option>
-                               <option>Пункт 2</option>
-                             </select>
-                          
+                            <option selected="selected" disabled="disabled">Выбор:</option>
+                               <option value="1" id="1" >По убыванию даты окончания </option>
+                               <option value="2" id="2" >По возрастанию даты окончания </option>
+                               <option value="3" id="3" >По убыванию даты начала </option>
+                               <option value="4" id="4" >По возрастанию даты начала </option>
+                             </select>      
                        </div>
                    </div>
-                   <a href="#" class="task-wrap">
+                    <div class ="task-sort">
+                   {% for task in tasks %}
+                   {% if task.status == 'COMPLETED' %} 
+                   <a href="#" class="task-wrap" date-start={{ task.start_date|date:"d.m.y" }} date-end = {{ task.end_date|date:"d.m.y" }} >
                        <div class="task-title task-complete b">
-                            Задача номер один
+                            {{ task.name }}
                        </div>
                        <div class="task">
                             <div class="task-l">
-                                <span class="b">Дата начала: </span><span class="task-date">27.01.19</span> 
-                                <span class="b">Дата окончания: </span><span class="task-date">27.01.19</span>
+                              <span class="b">Дата начала: </span><span class="task-date">{{ task.start_date|date:"d.m.y" }}</span> 
+                             <span class="b">Дата окончания: </span><span class="task-date">{{ task.end_date|date:"d.m.y" }}</span>
                             </div>
                             <div class="task-r">
                                 <i class="fas fa-comment"></i><span class="task-number">10</span>
@@ -173,15 +156,31 @@
                             </div>
                        </div>
                    </a>
-
-                <a href="#" class="task-wrap">
+                 {% elif task.status == 'WORK' %} 
+                <a href="#" class="task-wrap" date-start={{ task.start_date|date:"d.m.y" }} date-end = {{ task.end_date|date:"d.m.y" }} >
                     <div class="task-title b">
-                         Задача номер один
+                        {{ task.name }}
                     </div>
                     <div class="task">
                          <div class="task-l">
-                             <span class="b">Дата начала: </span><span class="task-date">27.01.19</span> 
-                             <span class="b">Дата окончания: </span><span class="task-date">27.01.19</span>
+                              <span class="b">Дата начала: </span><span class="task-date">{{ task.start_date|date:"d.m.y" }}</span> 
+                             <span class="b">Дата окончания: </span><span class="task-date">{{ task.end_date|date:"d.m.y" }}</span>
+                         </div>
+                         <div class="task-r">
+                             <i class="fas fa-comment"></i><span class="task-number">10</span>
+                             <i class="fas fa-file"></i>3
+                         </div>
+                    </div>
+                </a>
+                {% elif task.status == 'PLAN' %} 
+                 <a href="#" class="task-wrap" date-start={{ task.start_date|date:"d.m.y" }} date-end = {{ task.end_date|date:"d.m.y" }} >
+                    <div class="task-title b">
+                         {{ task.name }}
+                    </div>
+                    <div class="task">
+                         <div class="task-l">
+                             <span class="b">Дата начала: </span><span class="task-date">{{ task.start_date|date:"d.m.y" }}</span> 
+                             <span class="b">Дата окончания: </span><span class="task-date">{{ task.end_date|date:"d.m.y" }}</span>
                          </div>
                          <div class="task-r">
                              <i class="fas fa-comment"></i><span class="task-number">10</span>
@@ -190,46 +189,15 @@
                     </div>
                 </a>
 
-                <a href="#" class="task-wrap">
-                    <div class="task-title b">
-                         Задача номер один
-                    </div>
-                    <div class="task">
-                         <div class="task-l">
-                             <span class="b">Дата начала: </span><span class="task-date">27.01.19</span> 
-                             <span class="b">Дата окончания: </span><span class="task-date">27.01.19</span>
-                         </div>
-                         <div class="task-r">
-                             <i class="fas fa-comment"></i><span class="task-number">10</span>
-                             <i class="fas fa-file"></i>3
-                         </div>
-                    </div>
-                </a>
-
-                <a href="#" class="task-wrap">
-                    <div class="task-title b">
-                        Название задачи Разнообразный и богатый опыт новая модель организационной деятельности представляет собой интересный эксперимент проверки модели развития. 
-                    </div>
-                    <div class="task">
-                         <div class="task-l">
-                             <span class="b">Дата начала: </span><span class="task-date">27.01.19</span> 
-                             <span class="b">Дата окончания: </span><span class="task-date">27.01.19</span>
-                         </div>
-                         <div class="task-r">
-                             <i class="fas fa-comment"></i><span class="task-number">10</span>
-                             <i class="fas fa-file"></i>3
-                         </div>
-                    </div>
-                </a>
-
-                <a href="#" class="task-wrap">
+                {% else %}
+                 <a href="#" class="task-wrap" date-start={{ task.start_date|date:"d.m.y" }} date-end = {{ task.end_date|date:"d.m.y" }} >
                     <div class="task-title task-unfinished b">
-                         Задача номер один
+                        {{ task.name }}
                     </div>
                     <div class="task">
                          <div class="task-l">
-                             <span class="b">Дата начала: </span><span class="task-date">27.01.19</span> 
-                             <span class="b">Дата окончания: </span><span class="task-date">27.01.19</span>
+                             <span class="b">Дата начала: </span><span class="task-date">{{ task.start_date|date:"d.m.y" }}</span> 
+                             <span class="b">Дата окончания: </span><span class="task-date">{{ task.end_date|date:"d.m.y" }}</span>
                          </div>
                          <div class="task-r">
                              <i class="fas fa-comment"></i><span class="task-number">10</span>
@@ -237,33 +205,38 @@
                          </div>
                     </div>
                 </a>
+                {% endif %}
+                {% endfor %}
 
-
-
-
+                </div>
                 </div>
         
             </div>
         </div>
     </div>
 
-    <div class="modal" id="myModal">
+    
+
+
+
+<div class="modal" id="myModal">
         <div class="modal-contentt">
             <div class="modal-text">
                 Подтвердите удаление
             </div>
             <div class="modal-body">
-                <div class="btn btn-red">
-                    <i class="fas fa-trash-alt"></i>Удалить
-                </div>
+            <a class="btn btn-red" href="{% url 'course:course_delete' course.id %}">
+                        <i class="fas fa-trash-alt"></i>Удалить
+                    </a>
                 <div class="btn btn-white" id="close" > 
                     <i class="fas fa-ban"></i>Отмена
                 </div>
             </div>
+            </form>
         </div>
     </div>
+<script src="{% static 'js/sort_task.js' %}"></script>
+<script src="{% static 'js/search_task.js' %}"></script>
 
 
-    <script src=js/script.js></script>
-</body>
-</html>
+{% endblock %}
