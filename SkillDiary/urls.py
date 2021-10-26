@@ -23,7 +23,7 @@ urlpatterns = [
     path('', include('users_app.urls', namespace='users')),
     path('', include('courseapp.urls', namespace='course')),
     path('api/', include('api_app.urls')),
-    path('<int:pk>/', include('task_app.urls', namespace='tasks')),
+    path('course/<int:pk>/', include('task_app.urls', namespace='tasks')),
 ]
 
 if settings.DEBUG:

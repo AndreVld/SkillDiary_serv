@@ -9,7 +9,7 @@
                         <i class="fas fa-edit"></i>Редактировать
                     </a>
 
-                    <a class="btn btn-green" href="#">
+                    <a class="btn btn-green" href="{% url 'tasks:complete_task' pk=request.resolver_match.kwargs.pk task_id=task.id %}">
                         <i class="fas fa-check"></i>Завершить
                     </a>
 
@@ -30,9 +30,10 @@
             </div>
             <div class="col-sm-12 col-md-9">
                 <div class="breadcrumbs">
-                    <div class="breadcrumbs-item"><a href="courses.html">Курсы</a></div>
+                    <div class="breadcrumbs-item"><a href="{% url 'course:course_list' %}">Курсы</a></div>
                     <div class="separator">></div>
-                    <div class="breadcrumbs-item"><a href="courses.html">{{ task.course }}</a></div>
+                    <div class="breadcrumbs-item"><a href="{% url 'course:course_detail' pk=request.resolver_match.kwargs.pk %}">
+                        {{ task.course }}</a></div>
                     <div class="separator">></div>
                     <div class="breadcrumbs-item">{{ task.name }}</div>
                 </div>
@@ -80,19 +81,20 @@
         </div>
     </div>
 
-    <div class="modal" id="myModal">
+<div class="modal" id="myModal">
         <div class="modal-contentt">
             <div class="modal-text">
                 Подтвердите удаление
             </div>
             <div class="modal-body">
-                <div class="btn btn-red">
-                    <i class="fas fa-trash-alt"></i>Удалить
-                </div>
-                <div class="btn btn-white" id="close">
+            <a class="btn btn-red" href="{% url 'tasks:delete_task' pk=request.resolver_match.kwargs.pk task_id=task.id %}">
+                        <i class="fas fa-trash-alt"></i>Удалить
+                    </a>
+                <div class="btn btn-white" id="close" >
                     <i class="fas fa-ban"></i>Отмена
                 </div>
             </div>
+            </form>
         </div>
     </div>
 {% endblock %}

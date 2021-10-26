@@ -1,4 +1,7 @@
+from datetime import date
+
 from django.db.models import Prefetch
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, resolve
 from django.views.generic import DetailView, CreateView, UpdateView
 
@@ -15,7 +18,7 @@ class TaskView(DetailView):
     def get_object(self, queryset=None):
         comments = Prefetch('comments', Comment.objects.order_by('-create_at'))
         task_id = self.kwargs.get('task_id')
-        return Task.objects.prefetch_related(comments, 'files').get(id=task_id)
+        return Task.objects.prefetch_related(comments, 'files').get(id=task_id, is_active=True)
 
 
 class TaskAddView(CreateView):
@@ -26,11 +29,14 @@ class TaskAddView(CreateView):
     def form_valid(self, form):
         form.instance.course = Course.objects.get(id=self.kwargs['pk'])
         form.instance.user = self.request.user
+        if form.cleaned_data['start_date'] > date.today():
+            form.instance.status = 'PLAN'
         return super(TaskAddView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super(TaskAddView, self).get_context_data()
         context['current_url'] = resolve(self.request.path_info)
+        context['course'] = Course.objects.values('name').get(id=self.kwargs.get('pk'))
         return context
 
     def get_success_url(self):
@@ -48,6 +54,7 @@ class TaskEditView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super(TaskEditView, self).get_context_data()
         context['current_url'] = resolve(self.request.path_info)
+        context['course'] = Course.objects.values('name').get(id=self.kwargs.get('pk'))
         return context
 
     def get_success_url(self):
@@ -63,6 +70,7 @@ class CommentAddView(CreateView):
         context = super(CommentAddView, self).get_context_data()
         context['current_url'] = resolve(self.request.path_info)
         context['task'] = Task.objects.values('name').get(id=self.kwargs.get('task_id'))
+        context['course'] = Course.objects.values('name').get(id=self.kwargs.get('pk'))
         return context
 
     def form_valid(self, form):
@@ -82,6 +90,7 @@ class FileAddView(CreateView):
         context = super(FileAddView, self).get_context_data()
         context['current_url'] = resolve(self.request.path_info)
         context['task'] = Task.objects.values('name').get(id=self.kwargs.get('task_id'))
+        context['course'] = Course.objects.values('name').get(id=self.kwargs.get('pk'))
         return context
 
     def form_valid(self, form):
@@ -90,3 +99,13 @@ class FileAddView(CreateView):
 
     def get_success_url(self):
         return reverse_lazy('tasks:task', kwargs=self.kwargs)
+
+
+def delete_task(request, pk, task_id):
+    Task.objects.filter(id=task_id).update(is_active='False')
+    return HttpResponseRedirect(reverse_lazy('course:course_detail', args=(pk,)))
+
+
+def complete_task(request, pk, task_id):
+    Task.objects.filter(id=task_id).update(status='COMPLETED')
+    return HttpResponseRedirect(reverse_lazy('course:course_detail', args=(pk,)))

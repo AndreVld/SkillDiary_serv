@@ -25,7 +25,7 @@ class CommentAddForm(forms.ModelForm):
 class FileAddForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class': 'field'}))
     description = forms.CharField(widget=forms.TextInput(attrs={'class': 'field textarea'}), required=False)
-    file = forms.FileField(widget=forms.FileInput())
+    file = forms.FileField(widget=forms.FileInput(attrs={'class': 'title-field'}))
 
     class Meta:
         model = File

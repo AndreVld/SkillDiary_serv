@@ -19,9 +19,10 @@
     </div>
     <div class="col-sm-12 col-md-9">
         <div class="breadcrumbs">
-            <div class="breadcrumbs-item"><a href="courses.html">Курсы</a></div>
+            <div class="breadcrumbs-item"><a href="{% url 'course:course_list' %}">Курсы</a></div>
             <div class="separator">></div>
-            <div class="breadcrumbs-item"><a href="courses.html">Название курса раз</a></div>
+            <div class="breadcrumbs-item"><a href="{% url 'course:course_detail' pk=current_url.kwargs.pk %}">
+                {{course.name}}</a></div>
             <div class="separator">></div>
             <div class="breadcrumbs-item">Новая задача</div>
         </div>
