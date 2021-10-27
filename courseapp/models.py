@@ -23,10 +23,10 @@ class Course(models.Model):
         ('3', 'Высокий'),
     ]
     STATUS_CHOICES = [
-        ('WORK', 'в работе'),
-        ('PLAN', 'планируется'),
-        ('OVERDUE', 'просрочена'),
-        ('COMPLETED', 'завершена'),
+        ('WORK', 'В работе'),
+        ('PLAN', 'Планируется'),
+        ('OVERDUE', 'Пройден не доконца'),
+        ('COMPLETED', 'Завершен'),
     ]
     name = models.CharField(max_length=128)
     location = models.CharField(max_length=128, blank=True)
@@ -45,6 +45,7 @@ class Course(models.Model):
     )
     rate = models.IntegerField(default=0)
     profession = models.ForeignKey(Profession, on_delete=models.PROTECT, related_name='courses')
+    add_report = models.BooleanField(default=True)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
     person = models.ForeignKey(Person, on_delete=models.PROTECT, related_name='courses')
