@@ -6,10 +6,12 @@ from api_app import views
 from api_app.views import CourseList
 
 router = routers.DefaultRouter()
-router.register(r'persons', views.PersonViewSet)
-router.register(r'courses', views.CourseViewSet)
+#router.register(r'persons', views.PersonViewSet)
+router.register(r'courses', views.CourseWithOutTaskViewSet, "cwt")
+router.register(r'courses_and_task', views.CourseViewSet)
 router.register(r'tasks', views.TaskViewSet)
 router.register(r'professions', views.ProfessionViewSet)
+router.register(r'profile', views.PersonDetailsView,"profile")
 
 
 urlpatterns = [

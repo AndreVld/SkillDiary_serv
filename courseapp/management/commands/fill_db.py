@@ -46,7 +46,7 @@ class Command(BaseCommand):
         for course in courses:
             for i in range(randrange(10)):
                 Task.objects.get_or_create(name=f'Task {i}', start_date="2021-10-14", end_date="2021-10-30",
-                                           course=course, status="WORK")
+                                           course=course, status="WORK",user=course.person)
 
         # adding comments
         tasks = Task.objects.all()
@@ -56,4 +56,4 @@ class Command(BaseCommand):
 
     # Create superuser
     print('Create superuser: skilldiary')
-    super_user = Person.objects.create_superuser('skilldiary', 'root@localhost.local', input('Enter password for super user: '))
+    super_user = Person.objects.create_superuser('skilldiary', 'root@localhost.local', input('Enter password for super user: '),city='Moscow',first_name='Alex',last_name='Ivanov')

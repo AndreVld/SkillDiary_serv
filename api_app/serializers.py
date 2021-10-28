@@ -1,10 +1,13 @@
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned, FieldError
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+from SkillDiary import settings
 from courseapp.models import Profession, AdditionalInfo, Course
 from task_app.models import File, Task, Comment
 from users_app.models import Person
+
 
 
 def dict_to_filter_params(d, prefix=''):
@@ -169,13 +172,33 @@ class CourseSerializer(serializers.ModelSerializer):
                   'update_at', 'is_active', 'profession', 'person', 'tasks', 'addinfo']
 
 
+class CourseWithOutTaskSerializer(serializers.ModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name='course-detail')
+    profession = NestedProfessionSerializer()
+    person = NestedPersonSerializer()
+    addinfo = NestedAdditionalInfoSerializer(many=True)
+
+    class Meta:
+        model = Course
+        fields = ['id', 'url', 'name', 'location', 'target', 'status', 'level', 'rate', 'start_date', 'end_date',
+                  'update_at', 'is_active', 'profession', 'person', 'addinfo']
+
+
 class TaskSerializer(serializers.ModelSerializer):
     files = NestedFileSerializer(many=True)
     url = serializers.HyperlinkedIdentityField(view_name='task-detail')
-    course = CourseSerializer()
+    # course = CourseSerializer()
     comments = NestedCommentSerializer(many=True)
 
     class Meta:
         model = Task
-        fields = ['id', 'url', 'name', 'start_date', 'end_date', 'status', 'is_active', 'comments', 'files', 'course',
+        fields = ['id', 'url', 'name', 'start_date', 'end_date', 'status', 'is_active', 'comments', 'files',
                   'update_at', ]
+
+
+class PersonDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        exclude=['password', 'is_superuser','activation_key',
+                 'activation_key_expires', 'groups', 'user_permissions']
+        model = Person
+
