@@ -7,23 +7,27 @@
                     <a class="btn btn-blue" href="{% url 'course:course_edit' course.id %}">
                         <i class="fas fa-edit"></i>Редактировать
                     </a>
-                     {% if  course.status == 'COMPLETED' %}
+                     {% if  course.status == 'COMPLETED' and today <= course.end_date  %}
                      <a class="btn btn-green" href="{% url 'course:course_update_status' course.id %}">
                         <i class="fas fa-check"></i>Вернуть в работу
                     </a>
-                    {% else %}
-                    <a class="btn btn-green" href="{% url 'course:course_update_status' course.id %}">
-                        <i class="fas fa-check"></i>Завершить курс
+                     {% elif  course.status == 'COMPLETED' and today > course.end_date %}
+                     <a class="btn btn-green disabled" href="{% url 'course:course_update_status' course.id %}">
+                        <i class="fas fa-check"></i>Вернуть в работу
                     </a>
+                    
+                    {% else %}
+                    <div class="btn btn-green" id="btn-finish">
+                        <i class="fas fa-trash-alt"></i>Завершить курс
+                    </div>
                    
-                    {% endif %}
-
+                    {% endif %} 
 
                     <a class="btn btn-white" href="{% url 'tasks:add_task' course.id %}">
                         <i class="fas fa-plus-circle"></i>Добавить задачу
                     </a>
 
-                    <a class="btn btn-white" href="profile-edit.html">
+                    <a class="btn btn-white" href="{% url 'course:additional_add' course.id %}">
                         <i class="fas fa-plus-circle"></i>Добавить доп. матерьялы
                      </a>
 
@@ -42,7 +46,8 @@
                 </div>
                 
                 <div class="main-wrap">
-                    <h1>{{ course.name }}</h1>
+                    <h1>{{ course.name }}     
+                   </h1>
                           
                     <div class="prof-wrap">
                         <i class="fas fa-project-diagram"></i><span class="b">Профессия: </span> {{ course.profession }}
@@ -66,7 +71,7 @@
                         <i class="fas fa-tasks"></i><span class="b">Прогресс: </span>
 
                         <div class="bar">
-                            <div class="bar-blue"></div>
+                            <div class="bar-blue w{{ rate }}"></div>
                         </div>
 
                     </div>
@@ -76,9 +81,25 @@
                             <span class="rate b">{{ course.rate }}</span>
                         </span>
                     </div>
+                    {% if course.add_report %}
+                     <div class="prof-wrap">
+                     <i class="far fa-flag"></i><span class="b">Добавить в отчет: </span>
+                       <input type="checkbox"  id ={{course.pk}} value = 'False'  name="add_report" class="report"  checked>
+                    </div>
+                    {% else %}
+                     <div class="prof-wrap">
+                    <i class="far fa-flag"></i><span class="b">Добавить в отчет: </span>
+                       <input type="checkbox" id ={{course.pk}} value = 'True' name ="add_report" class="report" >
+                    </div>
+                    {% endif%}
 
+                     {% if  course.status == 'COMPLETED' %}
+                     <div class="prof-wrap">
+                        <i class="fas fa-graduation-cap"></i><span class="b">Уровень знаний: </span> {{ course.get_level_display }}
+                    </div>
+                    {% endif %}
                     <div class="extra-wrap"> 
-                    {% if additionals %}
+                    {% if course.addinfo %}
                         <i class="fas fa-file"></i>
                         <span class="b extra-title">Доп. матерьялы: </span>
                     {% endif %}
@@ -86,7 +107,7 @@
                      
                         <table class ="fixed" > 
 
-                            {% for aditional in additionals %}
+                            {% for aditional in course.addinfo.all %}
                             {% if aditional.type_info == 'URL'%}  
                             <tr>
                                 <td>{{ aditional.name }}</td>
@@ -96,19 +117,22 @@
                             {% elif aditional.type_info == 'FILE' %}
                             <tr>
                                 <td> {{ aditional.name }}</td>
-                                <td><a href="#">Разнообразный и богатый опыт новая модель организационной деятельности представляет собой интересный эксперимент проверки модели развития. </a></td>
+                                <td>
+                                 {% for file in aditional.files.all %}
+                                <a href="{{ file.file.url }}">  {{ file.name }} </a> <br>
+                                {% endfor %}
+                                </td>
                                <td><a class="del" href="{% url 'course:additional_delete' course.pk aditional.pk %}"><i class="fas fa-trash-alt"></i></a></td>
                             </tr>
                             {% else %}
                             <tr>
                                 <td> {{ aditional.name }}</td>
-                                <td> {{ aditional.description}}</td>
+                                <td> {{ aditional.note}}</td>
                               <td><a class="del" href="{% url 'course:additional_delete' course.pk aditional.pk %}"><i class="fas fa-trash-alt"></i></a></td>
                             </tr>
                                 {% endif %}
                               {% endfor %}
                         </table>
-
 
                         </div>
                     </div>
@@ -138,7 +162,8 @@
                        </div>
                    </div>
                     <div class ="task-sort">
-                   {% for task in tasks %}
+                   {% for task in course.tasks.all %}
+                 
                    {% if task.status == 'COMPLETED' %} 
                    <a href="{% url 'tasks:task' pk=course.id task_id=task.id  %}" class="task-wrap" date-start={{ task.start_date|date:"d.m.y" }} date-end = {{ task.end_date|date:"d.m.y" }} >
                        <div class="task-title task-complete b">
@@ -150,8 +175,10 @@
                              <span class="b">Дата окончания: </span><span class="task-date">{{ task.end_date|date:"d.m.y" }}</span>
                             </div>
                             <div class="task-r">
-                                <i class="fas fa-comment"></i><span class="task-number">10</span>
-                                <i class="fas fa-file"></i>3
+                                <i class="fas fa-comment"></i><span class="task-number">{{ task.cnt }}</span>
+                                 
+                                <i class="fas fa-file"></i>{{ task.file_task }} 
+                                    
                             </div>
                        </div>
                    </a>
@@ -166,8 +193,9 @@
                              <span class="b">Дата окончания: </span><span class="task-date">{{ task.end_date|date:"d.m.y" }}</span>
                          </div>
                          <div class="task-r">
-                             <i class="fas fa-comment"></i><span class="task-number">10</span>
-                             <i class="fas fa-file"></i>3
+                              <i class="fas fa-comment"></i><span class="task-number">{{ task.cnt }}</span>
+                                 
+                                <i class="fas fa-file"></i>{{ task.file_task }} 
                          </div>
                     </div>
                 </a>
@@ -182,8 +210,9 @@
                              <span class="b">Дата окончания: </span><span class="task-date">{{ task.end_date|date:"d.m.y" }}</span>
                          </div>
                          <div class="task-r">
-                             <i class="fas fa-comment"></i><span class="task-number">10</span>
-                             <i class="fas fa-file"></i>3
+                               <i class="fas fa-comment"></i><span class="task-number">{{ task.cnt }}</span>
+                                 
+                                <i class="fas fa-file"></i>{{ task.file_task }} 
                          </div>
                     </div>
                 </a>
@@ -199,8 +228,9 @@
                              <span class="b">Дата окончания: </span><span class="task-date">{{ task.end_date|date:"d.m.y" }}</span>
                          </div>
                          <div class="task-r">
-                             <i class="fas fa-comment"></i><span class="task-number">10</span>
-                             <i class="fas fa-file"></i>3
+                               <i class="fas fa-comment"></i><span class="task-number">{{ task.cnt }}</span>
+                                 
+                                <i class="fas fa-file"></i>{{ task.file_task }} 
                          </div>
                     </div>
                 </a>
@@ -233,9 +263,54 @@
             </div>
             </form>
         </div>
+</div>
+
+
+<div class="modal" id="modal-finish">
+        <div class="modal-contentt">
+            <div class="modal-text">
+                Укажите свой уровень освоения курса
+            </div>
+            <form action="{% url 'course:course_complete' course.id %}" method="post">
+              {% csrf_token %}
+            <div class="modal-body modal-finish">
+                <div class="wrap-field">
+                    <i class="fas fa-sort-down i-sort-2"></i> 
+                       
+                    {{ form.level}}
+                            
+                </div>
+                <div class="wrap-finish">
+                     
+                {% if count_task_work == 0 %}
+                <div class="btn btn-blue" >
+                        <i class="fas fa-save"></i>
+                        <input type="submit" value="Сохранить" class = "button-blue">
+                </div>
+
+                <div class="btn btn-white" id="close-finish" > 
+                    <i class="fas fa-ban"></i>Отмена
+                </div>
+                {% else %}
+                <div class="btn btn-blue" >
+                        <i class="fas fa-save"></i>
+                        <input type="submit" value="Сохранить" class = "button-blue" disabled>
+                </div>
+                    
+                    <div class="btn btn-white" id="close-finish" > 
+                        <i class="fas fa-ban"></i>Отмена
+                    </div>
+                </div>
+                <div> У вас есть не завершенные задачи! </div>
+                {% endif %}
+            </div>
+        </div>
+        </form>
     </div>
+<script src="{% static 'js/script.js' %}"></script>  
 <script src="{% static 'js/sort_task.js' %}"></script>
 <script src="{% static 'js/search_task.js' %}"></script>
+<script src="{% static 'js/report_add.js' %}"></script>
 
 
 {% endblock %}

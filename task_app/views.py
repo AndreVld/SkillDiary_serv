@@ -16,7 +16,7 @@ class TaskView(DetailView):
     context_object_name = 'task'
 
     def get_object(self, queryset=None):
-        comments = Prefetch('comments', Comment.objects.order_by('-create_at'))
+        comments = Prefetch('comments', Comment.objects.filter(is_active=True).order_by('-create_at'))
         task_id = self.kwargs.get('task_id')
         return Task.objects.prefetch_related(comments, 'files').get(id=task_id, is_active=True)
 

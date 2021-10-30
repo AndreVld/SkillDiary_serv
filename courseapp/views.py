@@ -1,18 +1,20 @@
+from django.db.models import Prefetch
+import math
 from datetime import date
 from django.db.models import Q
-from django.views.generic import CreateView, DeleteView, ListView, UpdateView
+from django.db.models import Count
+from django.views.generic import CreateView, ListView, UpdateView
 from django.views.generic.detail import DetailView
-
 from django.contrib.messages.views import SuccessMessageMixin
 from courseapp.models import Course, AdditionalInfo
 from task_app.models import Task, File
-from django.urls import reverse_lazy
-from courseapp.forms import CourseEditForm, AddCourseForm, AddAdditionalInfoForm
+from django.urls import reverse_lazy, reverse
+from courseapp.forms import CourseEditForm, AddCourseForm, AddAdditionalInfoForm, LavelForm
 
 from django.http import request
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, HttpResponseRedirect 
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 
 class CourseList(ListView):
     model = Course
@@ -21,21 +23,26 @@ class CourseList(ListView):
     def get_queryset(self):
         return Course.objects.filter(person=self.request.user, is_active=True)
 
-
 class CourseDetailView(DetailView):
     model = Course
     template_name = 'courseapp/course.html'
 
-    def get_context_data(self, **kwargs):
-        tasks = Task.objects.filter(is_active=True, course=(self.get_object()).pk)
-        for task in tasks:
+    def get_object(self, queryset=None): 
+        comment=Count('comments', distinct=True, filter=Q(comments__is_active=True))
+        tasks = Prefetch('tasks', Task.objects.filter(is_active=True).annotate(file_task = Count('files', distinct=True), cnt=comment)) 
+        addinfo = Prefetch('addinfo', AdditionalInfo.objects.filter(is_active=True).order_by('-create_at'))
+        course = Course.objects.prefetch_related(tasks, addinfo).get(id=self.kwargs['pk'])
+        for task in course.tasks.all():
             task.check_status()
+        return course
 
-        context = super(CourseDetailView, self).get_context_data(**kwargs)
-        context["title"] = "курс/просмотр"
-        context["additionals"] = AdditionalInfo.objects.filter(is_active=True, course=(self.get_object()).pk)
-        context["tasks"] = tasks
-        return context
+    def get_context_data(self, **kwargs):
+        context = super(CourseDetailView, self).get_context_data(**kwargs) 
+        context['today'] = date.today()
+        context['count_task_work'] = Task.objects.filter(Q(status = 'WORK') | Q(status = 'PLAN') | Q(status = 'OVERDUE'), is_active=True, course=(self.get_object()).pk).count()
+        context['rate'] = round_rate(self.object.rate)
+        context['form'] = LavelForm(initial={'post': self.object}) 
+        return context 
 
 
 class EditCourseView(SuccessMessageMixin, UpdateView):
@@ -59,21 +66,50 @@ def update_additional_active(request, pk_course, pk):
     AdditionalInfo.objects.filter(pk=pk).update(is_active='False')
     return redirect('course:course_detail', course.pk)
 
+def report_course(request, pk):
+    if request.method == 'GET':
+        add_report = request.GET.get('add_report')
+        Course.objects.filter(pk=pk).update(add_report = add_report)
+        return HttpResponse("Success!") 
+    else:
+        return HttpResponse("Request method is not a GET")
+
+def complete_course(request, pk):
+    course = get_object_or_404(Course, pk=pk)
+    if request.method == 'POST':
+        form = LavelForm(request.POST)
+
+    if form.is_valid():
+        answer = form.cleaned_data['level']
+        Course.objects.filter(pk=pk).update(level=answer)
+
+        task_count = Task.objects.filter(is_active='True', status ='OVERDUE', course = course.pk).count()
+       
+        if task_count == 0:
+            Course.objects.filter(pk=pk).update(status='COMPLETED')
+        else:
+            Course.objects.filter(pk=pk).update(status='OVERDUE')
+    return HttpResponseRedirect(reverse_lazy('course:course_detail', args=(pk,)))
+
 
 def update_course_status(request, pk):
+    
     course = get_object_or_404(Course, pk=pk)
+    today = date.today()
 
-    if (course.status == 'COMPLETED'):
-        today = date.today()
-        if (today > course.end_date):
-            Course.objects.filter(pk=pk).update(status='OVERDUE')
-        elif (today <= course.end_date and today >= course.start_date):
-            Course.objects.filter(pk=pk).update(status='WORK')
-        else:
-            Course.objects.filter(pk=pk).update(status='PLAN')
+    if (today <= course.end_date and today >= course.start_date):
+        Course.objects.filter(pk=pk).update(status='WORK')
     else:
-        Course.objects.filter(pk=pk).update(status='COMPLETED')
+        Course.objects.filter(pk=pk).update(status='PLAN')
+        
     return redirect('course:course_detail', course.pk)
+
+def round_rate(rate):
+    if rate < 10:
+        return 0 
+    else: 
+        return (int(math.floor(rate / 10)) *10)
+
 
 
 def course_add(request):
@@ -110,8 +146,12 @@ class AddAdditionalInfoCreateView(CreateView):
         course = get_object_or_404(Course, id=self.kwargs['pk'])
         form.instance.course = course
         form_valid = super(AddAdditionalInfoCreateView, self).form_valid(form)
-        File.objects.create(name=form.cleaned_data['name'],
+        files = form.files.getlist('file')
+        for file in files:
+            File.objects.create(name=file.name,
                             description=form.cleaned_data['name'],
-                            file=form.cleaned_data['file'],
+                            file=file,
                             additional_info=self.object)
         return form_valid
+
+ 
