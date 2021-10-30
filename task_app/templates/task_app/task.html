@@ -52,9 +52,9 @@
 
                     <div class="files-wrap">
                         <i class="fas fa-file"></i>
+                         {% if  task.files %}
                         <span class="b file-title">Файлы: </span>
                         <div class="files">
-                            {% if  task.files %}
                             {% for file in task.files.all%}
    <a href="{{file.file.url}}"><p class="p-file">{{file }}<i class="fas fa-download"></i></p></a>
                        {% endfor %}
@@ -63,8 +63,9 @@
 
 
                     </div>
+                     {% if  task.comments %}
                     <h2>Комментарии</h2>
-                    {% if  task.comments %}
+                   
                     {% for comment in task.comments.all %}
                     <div class="comment-wrap">
                         <div class="comment-date b">

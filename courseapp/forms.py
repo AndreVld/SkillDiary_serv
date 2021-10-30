@@ -43,8 +43,21 @@ class AddAdditionalInfoForm(forms.ModelForm):
         'cols': 40,
         'rows': 5
     }), required=False)
-    file = forms.FileField(widget=forms.FileInput, required=False)
+    file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
 
     class Meta:
         model = AdditionalInfo
         fields = ('name', 'description', 'type_info', 'url', 'note', 'file')
+
+class LavelForm(forms.Form):
+    
+    LEVEL_CHOICES = (
+        ('1', 'Низкий'),
+        ('2', 'Средний'),
+        ('3', 'Высокий'),
+    ) 
+    level = forms.ChoiceField(choices=Course.LEVEL_CHOICES, widget=forms.Select(attrs={
+        'class': 'field select'
+    }))
+  
+
