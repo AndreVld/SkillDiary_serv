@@ -1,9 +1,12 @@
 from datetime import date
 
+from django.db.models import Count
+from django.db.models import Q
 from django.db.models import Prefetch
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, resolve
-from django.views.generic import DetailView, CreateView, UpdateView
+from django.views.generic import DetailView, CreateView, UpdateView, ListView
+from django.shortcuts import get_object_or_404
 
 from courseapp.models import Course
 from task_app.forms import TaskAddForm, CommentAddForm, FileAddForm
@@ -109,3 +112,18 @@ def delete_task(request, pk, task_id):
 def complete_task(request, pk, task_id):
     Task.objects.filter(id=task_id).update(status='COMPLETED')
     return HttpResponseRedirect(reverse_lazy('course:course_detail', args=(pk,)))
+
+
+class TaskList(ListView):
+    template_name = 'task_app/task-daily.html'
+
+    def get_queryset(self):
+        comment=Count('comments', distinct=True, filter=Q(comments__is_active=True))
+        return Task.objects.filter(user=self.request.user, is_active=True, end_date=date.today(), status = 'WORK').annotate(file_task = Count('files', distinct=True), cnt=comment)
+
+def delete_comment(request, pk, task_id, comment_id):
+    task = get_object_or_404(Task, pk=task_id)
+    Comment.objects.filter(pk=comment_id).update(is_active='False')
+    return HttpResponseRedirect(reverse_lazy('tasks:task', args=(pk,task.pk, )))
+
+    

@@ -28,6 +28,7 @@ class Task(models.Model):
     update_at = models.DateTimeField(auto_now=True)
     course = models.ForeignKey(Course, on_delete=models.PROTECT, related_name='tasks')
     user = models.ForeignKey(Person, on_delete=models.PROTECT, related_name='tasks')
+    done = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

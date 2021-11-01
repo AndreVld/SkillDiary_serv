@@ -1,18 +1,21 @@
 {% extends "base.html" %}
 {% load static %}
 
-
 {% block content %}
 
                 <div class="main-menu-wrap margin-menu">
                     <a class="btn btn-blue" href="{% url 'tasks:edit_task'  pk=request.resolver_match.kwargs.pk task_id=task.id %}">
                         <i class="fas fa-edit"></i>Редактировать
                     </a>
-
+                     {% if  task.status == 'COMPLETED' %}
+                     <a class="btn btn-green" href="{">
+                        <i class="fas fa-check"></i>Вернуть в работу
+                    </a>
+                    {% else %}
                     <a class="btn btn-green" href="{% url 'tasks:complete_task' pk=request.resolver_match.kwargs.pk task_id=task.id %}">
                         <i class="fas fa-check"></i>Завершить
                     </a>
-
+                    {% endif %}
                     <a class="btn btn-white" href="
                     {% url 'tasks:add_file' pk=request.resolver_match.kwargs.pk task_id=task.id %}">
                         <i class="fas fa-plus-circle"></i>Добавить файл
@@ -51,29 +54,46 @@
                     </div>
 
                     <div class="files-wrap">
+                      {% if task.files.all %}
                         <i class="fas fa-file"></i>
-                         {% if  task.files %}
-                        <span class="b file-title">Файлы: </span>
+                       <span class="b file-title">Файлы: </span> 
+                     
                         <div class="files">
                             {% for file in task.files.all%}
-   <a href="{{file.file.url}}"><p class="p-file">{{file }}<i class="fas fa-download"></i></p></a>
+  <p class="p-file"> <a href="{{file.file.url}}">{{file }}<i class="fas fa-download"></i></a>
+ 
+   <a href=""><span class="del-file"><i class="fas fa-trash-alt"></i></span></a></p>
+    
                        {% endfor %}
-                       {% endif %}
+                    {% endif %}
                    </div>
 
-
                     </div>
-                     {% if  task.comments %}
-                    <h2>Комментарии</h2>
-                   
+
+                     {% if  task.comments.all %}
+                          <h2>Комментарии</h2>
+                  
                     {% for comment in task.comments.all %}
-                    <div class="comment-wrap">
+                         <div class ="block-comment" id = "parent">
+                     <div class="comment-wrap" id = "{{ comment.id }}">
                         <div class="comment-date b">
+                          <div class="commnet-date-title">
                             {{comment.update_at|date:"d.m.y"}}
                         </div>
+
+                        <div class="commet-buttons">
+                                <a href="" id ="a{{ comment.id }}" class ="a-edit"> <i class="fas fa-edit"></i></a>
+                                <a href="{% url 'tasks:delete_comment' pk=task.course.id task_id=task.id  comment_id=comment.id %}"><i class="fas fa-trash-alt"></i></a>
+                            </div>
+                            </div>
                         <div class="comment-text">
+                        
                             {{comment.text}}
                         </div>
+                         </div>
+                        <input type="text" name="valuer">
+
+                   
                     </div>
                     {% endfor %}
                     {% endif %}
@@ -98,4 +118,5 @@
             </form>
         </div>
     </div>
+    <script src="{% static 'js/comment_edit.js' %}"></script>
 {% endblock %}

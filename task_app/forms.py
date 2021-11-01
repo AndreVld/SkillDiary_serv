@@ -4,6 +4,10 @@ from task_app.models import Task, Comment, File
 
 
 class TaskAddForm(forms.ModelForm):
+    
+    start_date = forms.DateField(widget=forms.DateInput(attrs={ 'type': 'date'}))
+    end_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+
     class Meta:
         model = Task
         fields = ('name', 'start_date', 'end_date',)
@@ -12,6 +16,7 @@ class TaskAddForm(forms.ModelForm):
         super(TaskAddForm, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'field'
+     
 
 
 class CommentAddForm(forms.ModelForm):

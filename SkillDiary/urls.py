@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from task_app.views import TaskList
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,9 +26,11 @@ urlpatterns = [
     path('', include('courseapp.urls', namespace='course')),
     path('api/', include('api_app.urls')),
     path('course/<int:pk>/', include('task_app.urls', namespace='tasks')),
+    path('task_daily/', TaskList.as_view(), name='task_daily' ),
     path('accounts/', include('allauth.urls')),
-
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+

@@ -1,16 +1,15 @@
 {% extends "base.html" %}
-{% load static %}ы
+{% load static %}
 {% block content %}
 <form action="
 {% url  current_url.view_name pk=current_url.kwargs.pk  task_id=current_url.kwargs.task_id  %}"
       method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="main-menu-wrap margin-menu">
-
-         <div class="btn btn-blue" >
-                        <i class="fas fa-save"></i>
-                        <input type="submit" value="Сохранить" class = "button-blue">
-                    </div>
+  
+  <button type="submit" class="btn btn-blue">
+                <i class="fas fa-save"></i>Сохранить
+            </button>
 
                      <div class="btn btn-white" >
                         <i class="fas fa-ban"></i>
@@ -48,11 +47,16 @@
 
             <div class="date-wrap">
                 <div class="file-l">
-                    <div class="title-field">
-                        <i class="fas fa-file"></i>Файл:
-                        {{form.file}}
-                    </div>
-                </div>
+                                <label class="title-field" for="{{ form.file.id_for_label }}">
+                                    <i class="fas fa-file"></i>Файл:
+                                </label>
+                            </div>
+                            <div class="file-r">
+                                {{ form.file }}
+                                <a class="btn btn-white">
+                                    <i class="fas fa-upload"></i> Выберите файл
+                                </a>
+                            </div>
 
             </div>
 

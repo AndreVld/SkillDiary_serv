@@ -6,15 +6,13 @@
 {% url  current_url.view_name pk=current_url.kwargs.pk  task_id=current_url.kwargs.task_id  %}" method="post">
     {% csrf_token %}
     <div class="main-menu-wrap margin-menu">
-        <div class="btn btn-blue" >
-                        <i class="fas fa-save"></i>
-                        <input type="submit" value="Сохранить" class = "button-blue">
-                    </div>
+          <button type="submit" class="btn btn-blue">
+                <i class="fas fa-save"></i>Сохранить
+         </button>
 
-                     <div class="btn btn-white" >
-                        <i class="fas fa-ban"></i>
-                        <input type="reset" value="Отменить" class = "button-white">
-                    </div>
+                     <a class="btn btn-white" href="{% url 'tasks:task' pk=task.course.id task_id=task.id  %}">
+                        <i class="fas fa-ban"></i>Отменить
+                    </a>
     </div>
     </div>
     <div class="col-sm-12 col-md-9">
