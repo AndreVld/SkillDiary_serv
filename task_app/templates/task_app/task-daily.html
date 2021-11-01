@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+             
+            </div>
+            <div class="col-sm-12 col-md-9">
+                   
+              <div class="main-wrap">
+              {% if task_list %}
+                    <h2>Задачи на сегодня</h2>
+                       <div class ="task-sort">
+                    
+            {% for task in task_list %}
+                   
+                <a href="{% url 'tasks:task' pk=task.course.id task_id=task.id  %}" class="task-wrap" date-start={{ task.start_date|date:"d.m.y" }} date-end = {{ task.end_date|date:"d.m.y" }} >
+                    <div class="task-title b">
+                        {{ task.name }}
+                    </div>
+                    <div class="task">
+                         <div class="task-l">
+                              <span class="b">Дата начала: </span><span class="task-date">{{ task.start_date|date:"d.m.y" }}</span> 
+                             <span class="b">Дата окончания: </span><span class="task-date">{{ task.end_date|date:"d.m.y" }}</span>
+                         </div>
+                         <div class="task-r">
+                              <i class="fas fa-comment"></i><span class="task-number">{{ task.cnt }}</span>
+                                 
+                                <i class="fas fa-file"></i>{{ task.file_task }} 
+                         </div>
+                    </div>
+                </a>
+                {% endfor %}
+               {% else %}
+                <h2>На сегодня нет задач</h2>
+               {% endif %}
+                
+                </div>
+                </div>
+        
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

@@ -1,4 +1,3 @@
-
 @font-face {
     font-family: 'Poiret One';
     src: url('fonts/PoiretOne-Regular.eot');
@@ -904,4 +903,20 @@ margin-bottom: 30px;
 }
 .w100 {
     width: 100%;
+}
+.del-file i {
+    color: #DE6666;
+    margin-left: 10px;
+}
+
+.comment-date {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.commet-buttons .fa-edit {
+    color: #333;
+}
+.commet-buttons .fa-trash-alt {
+    color: #DE6666;
 }

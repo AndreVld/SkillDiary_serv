@@ -14,8 +14,7 @@
                      {% elif  course.status == 'COMPLETED' and today > course.end_date %}
                      <a class="btn btn-green disabled" href="{% url 'course:course_update_status' course.id %}">
                         <i class="fas fa-check"></i>Вернуть в работу
-                    </a>
-                    
+                    </a>     
                     {% else %}
                     <div class="btn btn-green" id="btn-finish">
                         <i class="fas fa-trash-alt"></i>Завершить курс
@@ -99,7 +98,8 @@
                     </div>
                     {% endif %}
                     <div class="extra-wrap"> 
-                    {% if course.addinfo %}
+                    {% if course.addinfo.all %}
+
                         <i class="fas fa-file"></i>
                         <span class="b extra-title">Доп. матерьялы: </span>
                     {% endif %}
@@ -131,6 +131,7 @@
                               <td><a class="del" href="{% url 'course:additional_delete' course.pk aditional.pk %}"><i class="fas fa-trash-alt"></i></a></td>
                             </tr>
                                 {% endif %}
+
                               {% endfor %}
                         </table>
 
@@ -201,7 +202,7 @@
                 </a>
                 {% elif task.status == 'PLAN' %} 
                  <a href="{% url 'tasks:task' pk=course.id task_id=task.id  %}" class="task-wrap" date-start={{ task.start_date|date:"d.m.y" }} date-end = {{ task.end_date|date:"d.m.y" }} >
-                    <div class="task-title b">
+                    <div class="task-title task-plan b ">
                          {{ task.name }}
                     </div>
                     <div class="task">
@@ -283,19 +284,17 @@
                 <div class="wrap-finish">
                      
                 {% if count_task_work == 0 %}
-                <div class="btn btn-blue" >
-                        <i class="fas fa-save"></i>
-                        <input type="submit" value="Сохранить" class = "button-blue">
-                </div>
+                  <button type="submit" class="btn btn-blue">
+                <i class="fas fa-save"></i>Сохранить
+            </button>
 
                 <div class="btn btn-white" id="close-finish" > 
                     <i class="fas fa-ban"></i>Отмена
                 </div>
                 {% else %}
-                <div class="btn btn-blue" >
-                        <i class="fas fa-save"></i>
-                        <input type="submit" value="Сохранить" class = "button-blue" disabled>
-                </div>
+                  <button type="submit" class="btn btn-blue">
+                <i class="fas fa-save"></i>Сохранить
+            </button>
                     
                     <div class="btn btn-white" id="close-finish" > 
                         <i class="fas fa-ban"></i>Отмена

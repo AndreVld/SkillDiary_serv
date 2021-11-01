@@ -30,7 +30,8 @@ class CourseDetailView(DetailView):
     def get_object(self, queryset=None): 
         comment=Count('comments', distinct=True, filter=Q(comments__is_active=True))
         tasks = Prefetch('tasks', Task.objects.filter(is_active=True).annotate(file_task = Count('files', distinct=True), cnt=comment)) 
-        addinfo = Prefetch('addinfo', AdditionalInfo.objects.filter(is_active=True).order_by('-create_at'))
+        
+        addinfo = Prefetch('addinfo', AdditionalInfo.objects.filter(is_active=True).prefetch_related('files').order_by('-create_at'))
         course = Course.objects.prefetch_related(tasks, addinfo).get(id=self.kwargs['pk'])
         for task in course.tasks.all():
             task.check_status()
@@ -53,7 +54,7 @@ class EditCourseView(SuccessMessageMixin, UpdateView):
     success_message = 'Все изменения сохранены!'
 
     def get_success_url(self):
-        return reverse_lazy('course:course_edit', args=(self.object.id,))
+        return reverse_lazy('course:course_detail', kwargs=self.kwargs)
 
 
 def update_course_active(request, pk):
@@ -111,7 +112,6 @@ def round_rate(rate):
         return (int(math.floor(rate / 10)) *10)
 
 
-
 def course_add(request):
     if request.method == "POST":
         form = AddCourseForm(request.POST)
@@ -129,7 +129,7 @@ class AddAdditionalInfoCreateView(CreateView):
     model = AdditionalInfo
     template_name = 'courseapp/additional-add.html'
     form_class = AddAdditionalInfoForm
-    success_url = reverse_lazy('course:course_list')
+  
 
     def get_context_data(self, **kwargs):
         context = super(AddAdditionalInfoCreateView, self).get_context_data(**kwargs)
@@ -154,4 +154,7 @@ class AddAdditionalInfoCreateView(CreateView):
                             additional_info=self.object)
         return form_valid
 
- 
+    def get_success_url(self):
+        return reverse_lazy('course:course_detail', kwargs=self.kwargs)
+
+

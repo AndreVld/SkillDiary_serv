@@ -9,10 +9,9 @@
                  {% csrf_token %}
                 <div class="main-menu-wrap add-course-menu">
    
-                      <div class="btn btn-blue" >
-                        <i class="fas fa-save"></i>
-                        <input type="submit" value="Сохранить" class = "button-blue">
-                    </div>
+                       <button type="submit" class="btn btn-blue">
+                <i class="fas fa-save"></i>Сохранить
+            </button>
 
                     <a class="btn btn-white" href="{% url 'course:course_detail' course.id %}">
                         <i class="fas fa-ban"></i>Отменить
@@ -81,18 +80,18 @@
                     {{ form.target}}
                         
                     </div>
+
+           
                         
         </div>
+
+                
         </div>
-        </div>         
+          
+        </div>     
+          
                 </div>
-                 {% if form.errors %}
-                {{ form.errors }}
-                {% endif %}
-                </form>
-                {% for message in messages %}
-                {{ message }}
-                {% endfor %}
+              
 
         
       {% endblock %}
