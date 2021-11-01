@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'allauth',
     'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
     'dj_rest_auth.registration',
     'courseapp',
     'users_app',
@@ -160,15 +162,27 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 }
 AUTHENTICATION_BACKENDS = [
     # allauth specific authentication methods, such as login by e-mail
+    'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
     # Needed to login by username in Django admin, regardless of allauth
-    'django.contrib.auth.backends.ModelBackend',
+
 ]
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
+
 
 ACCOUNT_EMAIL_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
 ACCOUNT_EMAIL_VERIFICATION = 'optional'
-
 
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = '25'
@@ -180,4 +194,3 @@ DOMAIN_NAME = 'http://localhost:8000'
 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "tmp/email-messages/")
-
