@@ -27,6 +27,7 @@ urlpatterns = [
     path('api/', include('api_app.urls')),
     path('course/<int:pk>/', include('task_app.urls', namespace='tasks')),
     path('task_daily/', TaskList.as_view(), name='task_daily' ),
+    path('accounts/', include('allauth.urls')),
 ]
 
 if settings.DEBUG:

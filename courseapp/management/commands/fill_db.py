@@ -1,6 +1,7 @@
 import json
 from random import randrange
 import lorem
+from django.contrib.sites.models import Site
 from django.core.management.base import BaseCommand
 from SkillDiary.settings import BASE_DIR
 from courseapp.models import Profession, Course
@@ -57,3 +58,10 @@ class Command(BaseCommand):
     # Create superuser
     print('Create superuser: skilldiary')
     super_user = Person.objects.create_superuser('skilldiary', 'root@localhost.local', input('Enter password for super user: '),city='Moscow',first_name='Alex',last_name='Ivanov')
+
+    #Create site
+
+    site = Site.objects.get(id=1)
+    site.name = '127.0.0.1:8000'
+    site.domain = '127.0.0.1:8000'
+    site.save()
