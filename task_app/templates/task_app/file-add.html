@@ -11,10 +11,9 @@
                 <i class="fas fa-save"></i>Сохранить
             </button>
 
-                     <div class="btn btn-white" >
-                        <i class="fas fa-ban"></i>
-                        <input type="reset" value="Отменить" class = "button-white">
-                    </div>
+                        <a class="btn btn-white" href="{% url 'tasks:task' pk=current_url.kwargs.pk  task_id=current_url.kwargs.task_id %}">
+                        <i class="fas fa-ban"></i>Отменить
+                    </a>
 
     </div>
     </div>

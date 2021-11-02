@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-<form action="{% url current_url.view_name pk=current_url.kwargs.pk task_id=current_url.kwargs.task_id  %}"
+<form action="{% url current_url.view_name pk=current_url.kwargs.pk task_id=current_url.kwargs.task_id comment_id=comment.id %}"
       method="post">{% csrf_token %}
     <div class="main-menu-wrap margin-menu">
 
@@ -27,7 +27,7 @@
                 <a href="{% url 'tasks:task' pk=current_url.kwargs.pk  task_id=current_url.kwargs.task_id %}">
                 {{task.name}}</a></div>
             <div class="separator">></div>
-            <div class="breadcrumbs-item">Дополнительние комментария</div>
+            <div class="breadcrumbs-item">Добавление комментария</div>
         </div>
         <div class="main-wrap">
             <h1>Добавление кoмментария</h1>
