@@ -51,11 +51,6 @@ class AddAdditionalInfoForm(forms.ModelForm):
 
 class LavelForm(forms.Form):
     
-    LEVEL_CHOICES = (
-        ('1', 'Низкий'),
-        ('2', 'Средний'),
-        ('3', 'Высокий'),
-    ) 
     level = forms.ChoiceField(choices=Course.LEVEL_CHOICES, widget=forms.Select(attrs={
         'class': 'field select'
     }))

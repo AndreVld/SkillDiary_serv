@@ -8,13 +8,13 @@
                         <i class="fas fa-edit"></i>Редактировать
                     </a>
                      {% if  task.status == 'COMPLETED' %}
-                     <a class="btn btn-green" href="{">
+                     <a class="btn btn-green" href="{% url 'tasks:work_task' pk=request.resolver_match.kwargs.pk task_id=task.id %}">
                         <i class="fas fa-check"></i>Вернуть в работу
                     </a>
                     {% else %}
-                    <a class="btn btn-green" href="{% url 'tasks:complete_task' pk=request.resolver_match.kwargs.pk task_id=task.id %}">
-                        <i class="fas fa-check"></i>Завершить
-                    </a>
+                    <div class="btn btn-green" id="btn-finish">
+                        <i class="fas fa-check"></i>Завершить 
+                    </div>
                     {% endif %}
                     <a class="btn btn-white" href="
                     {% url 'tasks:add_file' pk=request.resolver_match.kwargs.pk task_id=task.id %}">
@@ -44,7 +44,16 @@
                 <div class="main-wrap">
                     <h1>{{ task.name }}</h1>
                     <div class="prof-wrap">
-                        <i class="fas fa-project-diagram"></i><span class="b">Статус: </span>{{ task.get_status_display }}
+                        <i class="fas fa-project-diagram"></i><span class="b">Статус: </span>{{ task.get_status_display }} 
+                        {% if task.status == "COMPLETED" %}       
+                        {% if task.done == True %}
+                        (Выполнена)
+                        {% else %}
+                        (Не выполнена)
+                        {% endif %}
+                        {% endif %}
+
+
                     </div>
                     <div class="date-start-wrap">
                         <i class="fas fa-calendar-day"></i><span class="b">Дата начала: </span>{{ task.start_date|date:"d.m.y" }}
@@ -123,5 +132,37 @@
         </div>
     </div>
 
+
+<div class="modal" id="modal-finish">
+        <div class="modal-contentt">
+            <div class="modal-text">
+              Задача выполнена   
+            </div>
+            <form action="{% url 'tasks:complete_task' pk=request.resolver_match.kwargs.pk task_id=task.id %}" method="post">
+              {% csrf_token %}
+            <div class="modal-body modal-finish">
+                <div class="wrap-field">
+                    <i class="fas fa-sort-down i-sort-2"></i> 
+                       
+                    {{ form.done}}
+                            
+                </div>
+                <div class="wrap-finish">
+                     
+                  <button type="submit" class="btn btn-blue">
+                <i class="fas fa-save"></i>Сохранить
+            </button>
+                <div class="btn btn-white" id="close-finish" > 
+                    <i class="fas fa-ban"></i>Отмена
+                </div>
+               
+                </div>
+              
+               
+            </div>
+        </div>
+        </form>
+    </div>
+    <script src="{% static 'js/modal_completed.js' %}"></script>
     <script src="{% static 'js/script.js' %}"></script>
 {% endblock %}
