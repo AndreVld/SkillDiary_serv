@@ -60,9 +60,15 @@
                      
                         <div class="files">
                             {% for file in task.files.all%}
+                             <form action="{% url 'tasks:delete_file' pk=task.course.id task_id=task.id  file_id=file.id %}" method="post">
+    {% csrf_token %}
   <p class="p-file"> <a href="{{file.file.url}}">{{file }}<i class="fas fa-download"></i></a>
  
-   <a href=""><span class="del-file"><i class="fas fa-trash-alt"></i></span></a></p>
+
+    <button class="del-file del-f" type="submit"><i class="fas fa-trash-alt"></i></button>
+</form>
+
+
     
                        {% endfor %}
                     {% endif %}
@@ -74,7 +80,7 @@
                           <h2>Комментарии</h2>
                   
                     {% for comment in task.comments.all %}
-                         <div class ="block-comment" id = "parent">
+                      
                      <div class="comment-wrap" id = "{{ comment.id }}">
                         <div class="comment-date b">
                           <div class="commnet-date-title">
@@ -82,7 +88,7 @@
                         </div>
 
                         <div class="commet-buttons">
-                                <a href="" id ="a{{ comment.id }}" class ="a-edit"> <i class="fas fa-edit"></i></a>
+                                <a href="{% url 'tasks:edit_comment' pk=task.course.id  task_id=task.id comment_id=comment.id %}" id ="a{{ comment.id }}" class ="a-edit"> <i class="fas fa-edit"></i></a>
                                 <a href="{% url 'tasks:delete_comment' pk=task.course.id task_id=task.id  comment_id=comment.id %}"><i class="fas fa-trash-alt"></i></a>
                             </div>
                             </div>
@@ -90,10 +96,8 @@
                         
                             {{comment.text}}
                         </div>
-                         </div>
-                        <input type="text" name="valuer">
-
-                   
+                        
+       
                     </div>
                     {% endfor %}
                     {% endif %}
@@ -118,5 +122,6 @@
             </form>
         </div>
     </div>
-    <script src="{% static 'js/comment_edit.js' %}"></script>
+
+    <script src="{% static 'js/script.js' %}"></script>
 {% endblock %}

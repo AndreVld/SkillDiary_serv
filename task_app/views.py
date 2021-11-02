@@ -5,12 +5,12 @@ from django.db.models import Q
 from django.db.models import Prefetch
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, resolve
-from django.views.generic import DetailView, CreateView, UpdateView, ListView
+from django.views.generic import DetailView, CreateView, UpdateView, ListView, DeleteView
 from django.shortcuts import get_object_or_404
 
 from courseapp.models import Course
 from task_app.forms import TaskAddForm, CommentAddForm, FileAddForm
-from task_app.models import Task, Comment
+from task_app.models import Task, Comment, File
 
 
 class TaskView(DetailView):
@@ -127,3 +127,31 @@ def delete_comment(request, pk, task_id, comment_id):
     return HttpResponseRedirect(reverse_lazy('tasks:task', args=(pk,task.pk, )))
 
     
+class CommentEditView(UpdateView):
+    form_class = CommentAddForm
+    template_name = 'task_app/comment-edit.html'
+    extra_context = {'title': 'SkillDiary -'}
+
+    def get_context_data(self, **kwargs):
+        context = super(CommentEditView, self).get_context_data()
+        context['current_url'] = resolve(self.request.path_info)
+        context['task'] = Task.objects.values('name').get(id=self.kwargs.get('task_id'))
+        context['course'] = Course.objects.values('name').get(id=self.kwargs.get('pk'))
+        return context
+    
+    def get_object(self, queryset=None):
+        return Comment.objects.get(id=self.kwargs['comment_id'])
+
+    def get_success_url(self):
+        return reverse_lazy('tasks:task', kwargs={'pk': self.kwargs.get('pk'),'task_id':self.kwargs.get('task_id')} )
+
+
+class FileDelete(DeleteView):
+    model = File
+    
+
+    def get_object(self, queryset=None):
+        return File.objects.get(id=self.kwargs['file_id'])
+
+    def get_success_url(self):
+        return reverse_lazy('tasks:task', kwargs={'pk': self.kwargs.get('pk'),'task_id':self.kwargs.get('task_id')} )
