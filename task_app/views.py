@@ -1,4 +1,5 @@
 from datetime import date
+from django import forms
 
 from django.db.models import Count
 from django.db.models import Q
@@ -9,7 +10,7 @@ from django.views.generic import DetailView, CreateView, UpdateView, ListView, D
 from django.shortcuts import get_object_or_404
 
 from courseapp.models import Course
-from task_app.forms import TaskAddForm, CommentAddForm, FileAddForm
+from task_app.forms import TaskAddForm, CommentAddForm, FileAddForm, CompletedForm
 from task_app.models import Task, Comment, File
 
 
@@ -23,6 +24,10 @@ class TaskView(DetailView):
         task_id = self.kwargs.get('task_id')
         return Task.objects.prefetch_related(comments, 'files').get(id=task_id, is_active=True)
 
+    def get_context_data(self, **kwargs):
+        context = super(TaskView, self).get_context_data(**kwargs) 
+        context['form'] = CompletedForm(initial={'post': self.object}) 
+        return context 
 
 class TaskAddView(CreateView):
     form_class = TaskAddForm
@@ -110,7 +115,13 @@ def delete_task(request, pk, task_id):
 
 
 def complete_task(request, pk, task_id):
-    Task.objects.filter(id=task_id).update(status='COMPLETED')
+    if request.method == 'POST':
+        form = CompletedForm(request.POST)
+
+    if form.is_valid():
+        answer = form.cleaned_data['done']
+        Task.objects.filter(id=task_id).update(done=answer)
+        Task.objects.filter(id=task_id).update(status='COMPLETED')
     return HttpResponseRedirect(reverse_lazy('course:course_detail', args=(pk,)))
 
 
@@ -155,3 +166,9 @@ class FileDelete(DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('tasks:task', kwargs={'pk': self.kwargs.get('pk'),'task_id':self.kwargs.get('task_id')} )
+
+
+def work_task(request, pk, task_id):
+    Task.objects.filter(id=task_id).update(status='WORK')
+    Task.objects.filter(id=task_id).update(done='False')
+    return HttpResponseRedirect(reverse_lazy('course:course_detail', args=(pk,)))

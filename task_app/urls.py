@@ -1,7 +1,7 @@
 from django.urls import path
 from django.views.generic.edit import DeleteView
 
-from task_app.views import   CommentEditView, FileDelete, TaskView, TaskAddView, CommentAddView, TaskEditView, FileAddView, delete_task, complete_task, delete_comment
+from task_app.views import   CommentEditView, FileDelete, TaskView, TaskAddView, CommentAddView, TaskEditView, FileAddView, delete_task, complete_task, delete_comment, work_task
 
 app_name = 'task_app'
 
@@ -16,4 +16,5 @@ urlpatterns = [
     path('task/<int:task_id>/delete_comment/<int:comment_id>/', delete_comment, name='delete_comment'),
     path('task/<int:task_id>/edit_comment/<int:comment_id>/', CommentEditView.as_view(), name='edit_comment'),
     path('task/<int:task_id>/delete_file/<int:file_id>/', FileDelete.as_view(), name='delete_file'),
+    path('task/<int:task_id>/work_task/', work_task, name='work_task'),
 ]

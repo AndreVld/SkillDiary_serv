@@ -18,7 +18,6 @@ class TaskAddForm(forms.ModelForm):
             field.widget.attrs['class'] = 'field'
      
 
-
 class CommentAddForm(forms.ModelForm):
     text = forms.CharField(widget=forms.Textarea(attrs={'class': 'field textarea'}))
 
@@ -35,3 +34,13 @@ class FileAddForm(forms.ModelForm):
     class Meta:
         model = File
         fields = ('name', 'description', 'file',)
+
+class CompletedForm(forms.Form):
+    
+    DONE_CHOICES = (
+        ('True', 'Да'),
+        ('False', 'Нет'),       
+    ) 
+    done = forms.ChoiceField(choices = DONE_CHOICES,  initial='', widget=forms.Select(attrs={
+        'class': 'field select'
+    }))

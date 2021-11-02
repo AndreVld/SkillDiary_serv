@@ -17,7 +17,7 @@
                     </a>     
                     {% else %}
                     <div class="btn btn-green" id="btn-finish">
-                        <i class="fas fa-trash-alt"></i>Завершить курс
+                        <i class="fas fa-check"></i>Завершить курс
                     </div>
                    
                     {% endif %} 
@@ -292,7 +292,7 @@
                     <i class="fas fa-ban"></i>Отмена
                 </div>
                 {% else %}
-                  <button type="submit" class="btn btn-blue">
+                  <button type="submit" class="btn btn-blue" disabled="disabled">
                 <i class="fas fa-save"></i>Сохранить
             </button>
                     
@@ -306,7 +306,7 @@
         </div>
         </form>
     </div>
-<script src="{% static 'js/comp_course.js' %}"></script>  
+<script src="{% static 'js/modal_completed.js' %}"></script>  
 <script src="{% static 'js/script.js' %}"></script>  
 <script src="{% static 'js/sort_task.js' %}"></script>
 <script src="{% static 'js/search_task.js' %}"></script>
