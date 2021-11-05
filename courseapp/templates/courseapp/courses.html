@@ -3,40 +3,35 @@
 {% block title %} {% endblock %}
 
 {% block content %}
-                <div class="main-menu-wrap">
-                    <a class="btn btn-blue" href="{% url 'course:course_add' %}">
-                        <i class="fas fa-plus-circle"></i>Добавить курс
-                    </a>
-                    
-                    <div class="radio-select">
- 
-                        <div>
-                            <input class="custom-radio" type="radio" id="1" name="radio-select" value="1" checked>
-                            <label for="1">Все курсы</label>
-                        </div>
-                      
-                      <div>
-                        <input class="custom-radio" type="radio" id="2" name="radio-select" value="2">
+            <div class="main-menu-wrap">
+                <a class="btn btn-blue" href="{% url 'course:course_add' %}">
+                    <i class="fas fa-plus-circle"></i>Добавить курс
+                </a>
+
+                <form class="radio-select" id="form-status-select" method="get">
+                    <div>
+                        <input class="custom-radio" type="radio" id="1" name="status" value="all" onclick='$("#form-status-select").submit();'>
+                        <label for="1">Все курсы</label>
+                    </div>
+                    <div>
+                        <input class="custom-radio" type="radio" id="2" name="status" value="completed" onclick='$("#form-status-select").submit();'>
                         <label for="2">Пройденые курсы</label>
-                      </div>
-                      
-                      <div>
-                        <input class="custom-radio" type="radio" id="3" name="radio-select" value="3">
+                    </div>
+                    <div>
+                        <input class="custom-radio" type="radio" id="3" name="status" value="overdue" onclick='$("#form-status-select").submit();'>
                         <label for="3">Просроченые курсы</label>
-                      </div>
-                      <div>
-                        <input class="custom-radio" type="radio" id="4" name="radio-select" value="4">
+                    </div>
+                    <div>
+                        <input class="custom-radio" type="radio" id="4" name="status" value="plan" onclick='$("#form-status-select").submit();'>
                         <label for="4">Не пройденные курсы</label>
-                      </div>
+                    </div>
+                </form>
 
-                    </div>    
-
-
-                    <a class="btn btn-blue" href="#">
-                        <i class="fas fa-file-alt"></i>Отчет
-                    </a>
-                       
-                </div>
+                <a class="btn btn-blue" href="#">
+                    <i class="fas fa-file-alt"></i>Отчет
+                </a>
+                    
+            </div>
             </div>
             <div class="col-sm-12 col-md-9">
                 <div class="sorts-wrap">
@@ -67,6 +62,7 @@
                        
                     </div>
                 </div>
+
 {% for course in course_list %}
                 <a href="{% url 'course:course_detail' course.id %}" class="course-wrap">
                     <div class="container mycontainer">
