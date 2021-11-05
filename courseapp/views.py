@@ -16,12 +16,24 @@ from django.shortcuts import get_object_or_404, redirect, HttpResponseRedirect
 
 from django.shortcuts import render, redirect, HttpResponse
 
+
 class CourseList(ListView):
     model = Course
     template_name = 'courseapp/courses.html'
 
     def get_queryset(self):
-        return Course.objects.filter(person=self.request.user, is_active=True)
+        query = self.request.GET.get('status')
+        if query == 'completed':
+            return Course.objects.filter(person=self.request.user, is_active=True, status='COMPLETED')
+        elif query == 'overdue':
+            return Course.objects.filter(person=self.request.user, is_active=True, status='OVERDUE')|\
+                   Course.objects.filter(person=self.request.user, is_active=True, end_date__lt=date.today()).exclude(status='COMPLETED')
+        elif query == 'plan':
+            return Course.objects.filter(person=self.request.user, is_active=True, status='WORK')|\
+                   Course.objects.filter(person=self.request.user, is_active=True, status='PLAN')
+        else:
+            return Course.objects.filter(person=self.request.user, is_active=True)
+
 
 class CourseDetailView(DetailView):
     model = Course
@@ -119,7 +131,7 @@ def course_add(request):
             course = form.save(commit=False)
             course.person = request.user
             course.save()
-            # return redirect('course_list')
+            return redirect('course:course_detail', course.pk)
     else:
         form = AddCourseForm()
     return render(request, 'courseapp/course-add.html', {'form': form})
