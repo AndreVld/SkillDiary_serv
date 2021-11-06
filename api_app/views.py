@@ -79,8 +79,8 @@ def ProfessionTaskList(request):
                                 task_list.append({'id': task[0], 'name': task[1]})
 
                             data_list[i]['tasks'] = task_list
-
-        return HttpResponse(json.dumps(data_list), content_type="application/json")
+        json_string = json.dumps(data_list, ensure_ascii=False).encode('utf8')
+        return HttpResponse(json_string.decode(), content_type="application/json")
     else:
         return Http404
 
