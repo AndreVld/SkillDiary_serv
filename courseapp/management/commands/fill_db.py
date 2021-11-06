@@ -45,8 +45,8 @@ class Command(BaseCommand):
         # adding tasks
         courses = Course.objects.all()
         for course in courses:
-            for i in range(randrange(10)):
-                Task.objects.get_or_create(name=f'Task {i}', start_date="2021-10-14", end_date="2021-10-30",
+            for i in range(randrange(5)):
+                Task.objects.get_or_create(name=f'Задача #{i}', start_date="2021-10-14", end_date="2021-11-30",
                                            course=course, status="WORK",user=course.person)
 
         # adding comments
