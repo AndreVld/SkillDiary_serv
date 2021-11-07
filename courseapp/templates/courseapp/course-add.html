@@ -67,7 +67,7 @@
                 <div class="wrap-field">
                     {{ form.target }}
                 </div>
-                            
+                {{ form.id }}     
         </div>
         {% if form.errors %}
             {{ form.errors }}
@@ -78,4 +78,5 @@
 </div>
 
 </form>
+  <script src="{% static 'js/remove_error.js' %}"></script> 
 {% endblock %}

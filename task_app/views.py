@@ -1,5 +1,7 @@
 from datetime import date
-from django import forms
+from datetime import datetime
+
+from django.http import JsonResponse
 
 from django.db.models import Count
 from django.db.models import Q
@@ -22,10 +24,12 @@ class TaskView(DetailView):
     def get_object(self, queryset=None):
         comments = Prefetch('comments', Comment.objects.filter(is_active=True).order_by('-create_at'))
         task_id = self.kwargs.get('task_id')
-        return Task.objects.prefetch_related(comments, 'files').get(id=task_id, is_active=True)
+
+        return Task.objects.prefetch_related(comments, 'files','course').get(id=task_id, is_active=True)
 
     def get_context_data(self, **kwargs):
-        context = super(TaskView, self).get_context_data(**kwargs) 
+        context = super(TaskView, self).get_context_data(**kwargs)
+        context['today'] = date.today() 
         context['form'] = CompletedForm(initial={'post': self.object}) 
         return context 
 
@@ -45,6 +49,7 @@ class TaskAddView(CreateView):
         context = super(TaskAddView, self).get_context_data()
         context['current_url'] = resolve(self.request.path_info)
         context['course'] = Course.objects.values('name').get(id=self.kwargs.get('pk'))
+
         return context
 
     def get_success_url(self):
@@ -58,6 +63,12 @@ class TaskEditView(UpdateView):
 
     def get_object(self, queryset=None):
         return Task.objects.get(id=self.kwargs['task_id'])
+
+    def form_valid(self, form):
+        if form.cleaned_data['start_date'] > date.today():
+            form.instance.status = 'PLAN'
+      
+        return super(TaskEditView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super(TaskEditView, self).get_context_data()
@@ -115,13 +126,17 @@ def delete_task(request, pk, task_id):
 
 
 def complete_task(request, pk, task_id):
+    
+    
     if request.method == 'POST':
         form = CompletedForm(request.POST)
 
     if form.is_valid():
+        task =  get_object_or_404(Task, id=task_id)
         answer = form.cleaned_data['done']
         Task.objects.filter(id=task_id).update(done=answer)
-        Task.objects.filter(id=task_id).update(status='COMPLETED')
+        if task.status == 'PLAN' or task.status == 'WORK':
+            Task.objects.filter(id=task_id).update(status='COMPLETED')
     return HttpResponseRedirect(reverse_lazy('course:course_detail', args=(pk,)))
 
 
@@ -172,3 +187,38 @@ def work_task(request, pk, task_id):
     Task.objects.filter(id=task_id).update(status='WORK')
     Task.objects.filter(id=task_id).update(done='False')
     return HttpResponseRedirect(reverse_lazy('course:course_detail', args=(pk,)))
+
+
+
+def validate_startdate(request, pk):
+    course =  get_object_or_404(Course, pk=pk)  
+    start_data = datetime.strptime(request.GET.get('start_date', None), "%Y-%m-%d")
+    if course.start_date > start_data.date() or course.end_date < start_data.date():
+      
+        response = {
+        'is_taken': 'True'
+    }
+    else:
+        response = {
+        'is_taken': 'False'
+    } 
+    
+    return JsonResponse(response)        
+
+def validate_enddate(request, pk):
+    course =  get_object_or_404(Course, pk=pk)
+    
+    end_data = datetime.strptime(request.GET.get('end_date', None), "%Y-%m-%d")
+    if course.end_date < end_data.date() or course.start_date > end_data.date():
+     
+        response = {
+        'is_taken': 'True'
+    }
+    else:
+        response = {
+        'is_taken': 'False'
+    } 
+    
+    return JsonResponse(response)  
+
+

@@ -10,7 +10,9 @@ from django.conf import settings
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib import auth, messages
 from django.urls import reverse
-from django.shortcuts import render, HttpResponseRedirect
+from django.shortcuts import render, HttpResponseRedirect, get_object_or_404
+from courseapp.models import Course
+from django.http import request
 
 
 def send_verify_mail(user):
@@ -82,8 +84,22 @@ def register(request):
 class ProfileView(TemplateView):
     model = Person
     template_name = 'users_app/profile.html'
-    extra_context = {'title': 'SkillDiary - Профиль', "media_url": settings.MEDIA_URL}
 
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'SkillDiary - Профиль'
+        context['media_url'] = settings.MEDIA_URL
+        rate_sum = 0
+        courses = Course.objects.filter(is_active=True, person=self.request.user)
+        for course in courses:
+            rate_sum += course.rate  
+        rate = int(rate_sum / len(courses))
+        self.request.user.rate = rate
+   
+        return context
+   
+ 
 
 class EditProfileUserView(SuccessMessageMixin, UserPassesTestMixin, UpdateView):
     form_class = UserProfileForm
