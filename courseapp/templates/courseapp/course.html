@@ -11,15 +11,28 @@
                      <a class="btn btn-green" href="{% url 'course:course_update_status' course.id %}">
                         <i class="fas fa-check"></i>Вернуть в работу
                     </a>
-                     {% elif  course.status == 'COMPLETED' and today > course.end_date %}
-                     <a class="btn btn-green disabled" href="{% url 'course:course_update_status' course.id %}">
+                    {% elif  course.status == 'OVERDUE' and today <= course.end_date  %}
+                     <a class="btn btn-green" href="{% url 'course:course_update_status' course.id %}">
                         <i class="fas fa-check"></i>Вернуть в работу
-                    </a>     
-                    {% else %}
+                    </a>
+
+                     {% elif  course.status == 'COMPLETED' and today > course.end_date %}
+                     <div class="btn btn-green" id="btn-return">
+                        <i class="fas fa-check"></i> Вернуть в работу
+                    </div>    
+
+                       {% elif  course.status == 'OVERDUE' and today > course.end_date %}
+                     <div class="btn btn-green" id="btn-return">
+                        <i class="fas fa-check"></i> Вернуть в работу
+                    </div> 
+                    {% elif count_task_work == 0  %}
                     <div class="btn btn-green" id="btn-finish">
                         <i class="fas fa-check"></i>Завершить курс
                     </div>
-                   
+                    {% else %}
+                    <div class="btn btn-green" id="btn-finish-t">
+                        <i class="fas fa-check"></i>Завершить курс
+                    </div>
                     {% endif %} 
 
                     <a class="btn btn-white" href="{% url 'tasks:add_task' course.id %}">
@@ -219,7 +232,7 @@
                 </a>
 
                 {% else %}
-                 <a href="{% url 'tasks:task' pk=course.id task_id=task.id  %}" class="task-wrap" date-start={{ task.start_date|date:"d.m.y" }} date-end = {{ task.end_date|date:"d.m.y" }} >
+                <a href="{% url 'tasks:task' pk=course.id task_id=task.id  %}" class="task-wrap" date-start={{ task.start_date|date:"d.m.y" }} date-end = {{ task.end_date|date:"d.m.y" }} >
                     <div class="task-title task-unfinished b">
                         {{ task.name }}
                     </div>
@@ -246,6 +259,19 @@
     </div>
 
     
+<div class="modal" id="modal-return">
+        <div class="modal-contentt">
+            <div class="modal-text">
+               Срок окончания истек
+            </div>
+            <div class="modal-body">  
+                <div class="btn btn-white" id="close-return" >
+                    <i class="fas fa-ban"></i>Закрыть
+                </div>
+            </div>
+           
+        </div>
+    </div>
 
 
 
@@ -283,7 +309,7 @@
                 </div>
                 <div class="wrap-finish">
                      
-                {% if count_task_work == 0 %}
+              
                   <button type="submit" class="btn btn-blue">
                 <i class="fas fa-save"></i>Сохранить
             </button>
@@ -291,21 +317,30 @@
                 <div class="btn btn-white" id="close-finish" > 
                     <i class="fas fa-ban"></i>Отмена
                 </div>
-                {% else %}
-                  <button type="submit" class="btn btn-blue" disabled="disabled">
-                <i class="fas fa-save"></i>Сохранить
-            </button>
-                    
-                    <div class="btn btn-white" id="close-finish" > 
-                        <i class="fas fa-ban"></i>Отмена
-                    </div>
-                </div>
-                <div> У вас есть не завершенные задачи! </div>
-                {% endif %}
+              
             </div>
         </div>
         </form>
     </div>
+    </div>
+
+
+    <div class="modal" id="modal-finish-t">
+        <div class="modal-contentt">
+            <div class="modal-text">
+               У вас есть не завершенные задачи
+            </div>
+            <div class="modal-body">  
+                <div class="btn btn-white" id="close-finish-t" >
+                    <i class="fas fa-ban"></i>Закрыть
+                </div>
+            </div>
+           
+        </div>
+    </div>
+    
+<script src="{% static 'js/task-block.js' %}"></script>
+<script src="{% static 'js/course-c.js' %}"></script> 
 <script src="{% static 'js/modal_completed.js' %}"></script>  
 <script src="{% static 'js/script.js' %}"></script>  
 <script src="{% static 'js/sort_task.js' %}"></script>

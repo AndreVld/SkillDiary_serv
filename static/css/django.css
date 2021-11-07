@@ -114,3 +114,17 @@ button {
 .del-f {
     background-color: #fff;
 }
+li {
+    list-style-type: none; 
+    color: red;
+   }
+
+.invalid-startdate, .invalid-enddate  {
+    color: red;
+
+}
+
+.task-done {
+    background-color: #530e7a;
+
+}

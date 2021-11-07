@@ -7,14 +7,31 @@
                     <a class="btn btn-blue" href="{% url 'tasks:edit_task'  pk=request.resolver_match.kwargs.pk task_id=task.id %}">
                         <i class="fas fa-edit"></i>Редактировать
                     </a>
-                     {% if  task.status == 'COMPLETED' %}
-                     <a class="btn btn-green" href="{% url 'tasks:work_task' pk=request.resolver_match.kwargs.pk task_id=task.id %}">
+                   
+                    {% if  task.course.status != 'COMPLETED' and  task.course.status != 'OVERDUE'%}
+
+                    {% if  today <= task.end_date and  task.status == 'COMPLETED' %}
+                    <a class="btn btn-green" href="{% url 'tasks:work_task' pk=request.resolver_match.kwargs.pk task_id=task.id %}">
                         <i class="fas fa-check"></i>Вернуть в работу
                     </a>
+                     {% elif  today <= task.end_date and  task.status == 'OVERDUE' %}
+                    <a class="btn btn-green" href="{% url 'tasks:work_task' pk=request.resolver_match.kwargs.pk task_id=task.id %}">
+                        <i class="fas fa-check"></i>Вернуть в работу
+                    </a>
+                    {% elif today > task.end_date and task.status == 'COMPLETED' %}
+                       <div class="btn btn-green" id="btn-return">
+                        <i class="fas fa-check"></i> Вернуть в работу
+                    </div>
+                 
+                    {% elif today > task.end_date and  task.status == 'OVERDUE'   %}
+                       <div class="btn btn-green" id="btn-return">
+                        <i class="fas fa-check"></i> Вернуть в работу
+                    </div>
                     {% else %}
                     <div class="btn btn-green" id="btn-finish">
                         <i class="fas fa-check"></i>Завершить 
                     </div>
+                    {% endif %}
                     {% endif %}
                     <a class="btn btn-white" href="
                     {% url 'tasks:add_file' pk=request.resolver_match.kwargs.pk task_id=task.id %}">
@@ -73,18 +90,13 @@
     {% csrf_token %}
   <p class="p-file"> <a href="{{file.file.url}}">{{file }}<i class="fas fa-download"></i></a>
  
-
     <button class="del-file del-f" type="submit"><i class="fas fa-trash-alt"></i></button>
 </form>
-
-
     
                        {% endfor %}
                     {% endif %}
                    </div>
-
                     </div>
-
                      {% if  task.comments.all %}
                           <h2>Комментарии</h2>
                   
@@ -128,7 +140,7 @@
                     <i class="fas fa-ban"></i>Отмена
                 </div>
             </div>
-            </form>
+        
         </div>
     </div>
 
@@ -163,6 +175,22 @@
         </div>
         </form>
     </div>
+
+
+    <div class="modal" id="modal-return">
+        <div class="modal-contentt">
+            <div class="modal-text">
+               Срок окончания истек
+            </div>
+            <div class="modal-body">  
+                <div class="btn btn-white" id="close-return" >
+                    <i class="fas fa-ban"></i>Закрыть
+                </div>
+            </div>
+           
+        </div>
+    </div>
+    <script src="{% static 'js/task-block.js' %}"></script>
     <script src="{% static 'js/modal_completed.js' %}"></script>
     <script src="{% static 'js/script.js' %}"></script>
 {% endblock %}
