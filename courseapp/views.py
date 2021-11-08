@@ -88,7 +88,6 @@ class CourseDetailView(DetailView):
         context = super(CourseDetailView, self).get_context_data(**kwargs) 
         context['today'] = date.today()
         context['count_task_work'] = Task.objects.filter(Q(status = 'WORK') | Q(status = 'PLAN'), is_active=True, course=(self.get_object()).pk).count()
-        context['rate'] = round_rate(self.object.rate)
         context['form'] = LavelForm(initial={'post': self.object}) 
         return context 
 

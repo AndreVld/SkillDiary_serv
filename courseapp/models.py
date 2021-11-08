@@ -1,5 +1,6 @@
 from django.db import models
 from users_app.models import Person
+import math
 
 
 class Profession(models.Model):
@@ -56,6 +57,12 @@ class Course(models.Model):
 
     def __str__(self):
         return self.name
+
+    def round_rate(self):
+        if self.rate < 10:
+            return 0 
+        else: 
+            return (int(math.floor(self.rate / 10)) *10)
 
 
 class AdditionalInfo(models.Model):

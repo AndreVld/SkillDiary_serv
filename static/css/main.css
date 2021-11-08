@@ -527,7 +527,7 @@ border: none;
 }
 
 .complete .bar-blue {
-    width: 100%;
+  
     background-color: #66DE87;
 }
 .complete .course-rate {
@@ -542,7 +542,6 @@ border: none;
 .unfinished .coures-end-date {
     color: #DE6666;
 }
-
 
 .course-rate {
     display: flex;
