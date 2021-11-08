@@ -919,3 +919,28 @@ margin-bottom: 30px;
 .commet-buttons .fa-trash-alt {
     color: #DE6666;
 }
+
+.report-course-wrap {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.report-course-title {
+    background-color: #66C1DE;
+    border-top-left-radius: 19px;
+    border-top-right-radius: 19px;
+    color: #fff;
+    padding: 14px 30px 14px 30px;
+}
+.report-course-body {
+    display: flex;
+    flex-direction: column;
+    padding: 14px 30px 14px 30px;
+    border-bottom-left-radius: 19px;
+    border-bottom-right-radius: 19px;
+    background-color: #FAFAFA;
+    margin-bottom: 30px;
+}
+.report-course-body-item {
+    padding-bottom: 10px;
+}
