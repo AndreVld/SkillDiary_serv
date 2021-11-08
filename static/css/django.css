@@ -128,3 +128,23 @@ li {
     background-color: #530e7a;
 
 }
+
+#id_profession, .select2-selection--single, .select2-selection {
+    width: 100%;
+    color: black;
+   
+}
+
+.select2-container--default, .select2-container {
+    color: black;
+    border: solid 1px;
+    border-color: #66C1DE;
+    height: 30px;
+    border-radius: 20px;
+    padding-left: 42px;
+}
+
+ 
+.select2-results__option,.select2-results__option--selectable, .select2-results__option--highlighted {
+    color: black;
+}
