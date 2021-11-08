@@ -1,0 +1,64 @@
+{% extends 'users_app/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="main-menu-wrap">
+        <div class="avatar">
+            <img src="{% if user.avatar %} {{ user.avatar.url }}
+            {% else %} {% static 'img/default_ava.jpg' %}{% endif %}" alt="Аватарка">
+        </div>
+    </div>
+    </div>
+    <div class="col-sm-12 col-md-9">
+        <div class="main-wrap">
+            <h1>Отчет</h1>
+            <div class="email-wrap">
+                <i class="fas fa-user"></i><span class="b">ФИО: </span>
+                {{ user.surname }} {{ user.first_name }} {{ user.last_name }}
+            </div>
+            <div class="email-wrap">
+                <i class="fas fa-calendar-week"></i><span class="b">Возраст: </span>
+                {{ user.age }}
+            </div>
+            <div class="email-wrap">
+                <i class="fas fa-map-marker"></i><span class="b">Адрес: </span>
+                {{ user.city }}
+            </div>
+            <div class="email-wrap">
+                <i class="fas fa-envelope"></i><span class="b">E-mail: </span>
+                {{ user.email }}
+            </div>
+
+            <h1>Пройденные курсы:</h1>
+            {% for course in course_list %}
+                <div class="report-course-wrap">
+                    <div class="report-course-title b">
+                        {{ course.name }}
+                    </div>
+                    <div class="report-course-body">
+                        <div class="report-course-body-item">
+                            <span class="b">Место прохождения: </span><span
+                                class="task-date">{{ course.location }}</span>
+                        </div>
+                        <div class="report-course-body-item">
+                            <span class="b">Уровень знаний: </span><span
+                                class="task-date">{{ course.get_level_display }}</span>
+                        </div>
+                        <div class="report-course-body-item">
+                            <span class="b">Професия: </span><span class="task-date">{{ course.profession }}</span>
+                        </div>
+                        <div class="report-course-body-item">
+                            <span class="b">Дата начала: </span><span
+                                class="task-date">{{ course.start_date|date:'d.m.y' }}</span>
+                        </div>
+                        <div class="report-course-body-item">
+                            <span class="b">Дата окончания: </span><span
+                                class="task-date">{{ course.end_date|date:'d.m.y' }}</span>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    </div>
+{% endblock %}

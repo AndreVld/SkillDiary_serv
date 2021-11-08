@@ -7,7 +7,7 @@ app_name = CourseappConfig.name
 
 urlpatterns = [
 
-    path('courses/', courseapp.CourseList.as_view(),  name='course_list'),
+    path('courses/', courseapp.CourseList.as_view(), name='course_list'),
     path('course/<int:pk>/', courseapp.CourseDetailView.as_view(), name='course_detail'),
     path('course_edit/<int:pk>/', courseapp.EditCourseView.as_view(), name='course_edit'),
     path('course_delete/<int:pk>/', courseapp.update_course_active, name='course_delete'),
@@ -19,4 +19,5 @@ urlpatterns = [
     path("courses/add/", courseapp.course_add, name='course_add'),
 
     path('add-additional/<int:pk>/', courseapp.AddAdditionalInfoCreateView.as_view(), name='additional_add'),
+    path('get-report/', courseapp.ReportView.as_view(), name='report'),
 ]
