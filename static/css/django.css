@@ -148,3 +148,11 @@ li {
 .select2-results__option,.select2-results__option--selectable, .select2-results__option--highlighted {
     color: black;
 }
+
+.course-plan .bar-blue {
+    width: 100%;
+    background-color: #BEBEBE;
+}
+.course-plan .course-rate {
+    background-color: #BEBEBE;
+}

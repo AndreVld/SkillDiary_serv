@@ -64,6 +64,7 @@
                 </div>
 
 {% for course in course_list %}
+{% if course.status == 'WORK'%}
                 <a href="{% url 'course:course_detail' course.id %}" class="course-wrap">
                     <div class="container mycontainer">
                         <div class="row myrow">
@@ -102,6 +103,124 @@
                         </div>          
                     </div>
                 </a>
+{% elif course.status == 'PLAN' %}
+                 <a href="{% url 'course:course_detail' course.id %}" class="course-wrap course-plan ">
+                    <div class="container mycontainer">
+                        <div class="row myrow">
+                            <div class="col-11 mycol">
+                                <div class="course-main">
+                                    <div class="course-title">
+                                        {{ course.name }}
+                                    </div>
+                                    <div class="course-location">
+                                       {{ course.location }}
+                                    </div>
+                                    <div class="course-progress">
+                                        Прогрес
+                                    </div>
+                                    <div class="course-bar">
+                                        <div class="coures-start-date">
+                                           {{ course.start_date|date:"d.m.y" }}
+                                        </div>
+                                        <div class="bar">
+                                           <div class="bar-blue w{{  course.rate  }}"></div>
+                                        </div>
+                                        <div class="coures-end-date">
+                                            {{ course.end_date|date:"d.m.y" }}
+                                        </div>
+                                    </div>
+                                    <div class="course-description">
+                                    {{ course.target }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1 mycol">
+                                <div class="course-rate">
+                                    {{ course.rate }}
+                                </div>
+                            </div>
+                        </div>          
+                    </div>
+                </a>
+{% elif course.status == 'COMPLETED' %}
+         <a href="{% url 'course:course_detail' course.id %}" class="course-wrap  complete">
+                    <div class="container mycontainer">
+                        <div class="row myrow">
+                            <div class="col-11 mycol">
+                                <div class="course-main">
+                                    <div class="course-title">
+                                        {{ course.name }}
+                                    </div>
+                                    <div class="course-location">
+                                       {{ course.location }}
+                                    </div>
+                                    <div class="course-progress">
+                                        Прогрес
+                                    </div>
+                                    <div class="course-bar">
+                                        <div class="coures-start-date">
+                                           {{ course.start_date|date:"d.m.y" }}
+                                        </div>
+                                        <div class="bar">
+                                           <div class="bar-blue w{{  course.rate  }}"></div>
+                                        </div>
+                                        <div class="coures-end-date">
+                                            {{ course.end_date|date:"d.m.y" }}
+                                        </div>
+                                    </div>
+                                    <div class="course-description">
+                                    {{ course.target }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1 mycol">
+                                <div class="course-rate">
+                                    {{ course.rate }}
+                                </div>
+                            </div>
+                        </div>          
+                    </div>
+                </a>
+    {% else %}
+     <a href="{% url 'course:course_detail' course.id %}" class="course-wrap unfinished">
+                    <div class="container mycontainer">
+                        <div class="row myrow">
+                            <div class="col-11 mycol">
+                                <div class="course-main">
+                                    <div class="course-title">
+                                        {{ course.name }}
+                                    </div>
+                                    <div class="course-location">
+                                       {{ course.location }}
+                                    </div>
+                                    <div class="course-progress">
+                                        Прогрес
+                                    </div>
+                                    <div class="course-bar">
+                                        <div class="coures-start-date">
+                                           {{ course.start_date|date:"d.m.y" }}
+                                        </div>
+                                        <div class="bar">
+                                           <div class="bar-blue w{{  course.rate  }}"></div>
+                                        </div>
+                                        <div class="coures-end-date">
+                                            {{ course.end_date|date:"d.m.y" }}
+                                        </div>
+                                    </div>
+                                    <div class="course-description">
+                                    {{ course.target }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1 mycol">
+                                <div class="course-rate">
+                                    {{ course.rate }}
+                                </div>
+                            </div>
+                        </div>          
+                    </div>
+                </a>
+{% endif%}
 {% endfor %}
 
                 <div class="pagination">
