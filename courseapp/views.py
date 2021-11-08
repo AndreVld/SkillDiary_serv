@@ -20,6 +20,14 @@ class CourseList(ListView):
     model = Course
     template_name = 'courseapp/courses.html'
 
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        query = self.request.GET.get('status')
+
+        context['status'] = query
+        return context
+
     def get_queryset(self):
         query = self.request.GET.get('status')
         if query == 'completed':

@@ -10,19 +10,19 @@
 
                 <form class="radio-select" id="form-status-select" method="get">
                     <div>
-                        <input class="custom-radio" type="radio" id="1" name="status" value="all" onclick='$("#form-status-select").submit();'>
+                        <input class="custom-radio" type="radio" id="1" name="status" value="all" {% if status == 'all' or not status %} checked {% endif %} onclick='$("#form-status-select").submit();'>
                         <label for="1">Все курсы</label>
                     </div>
                     <div>
-                        <input class="custom-radio" type="radio" id="2" name="status" value="completed" onclick='$("#form-status-select").submit();'>
+                        <input class="custom-radio" type="radio" id="2" name="status" value="completed"  {% if status == 'completed' %} checked {% endif %} onclick='$("#form-status-select").submit();'>
                         <label for="2">Пройденые курсы</label>
                     </div>
                     <div>
-                        <input class="custom-radio" type="radio" id="3" name="status" value="overdue" onclick='$("#form-status-select").submit();'>
+                        <input class="custom-radio" type="radio" id="3" name="status" value="overdue" {% if status == 'overdue' %} checked {% endif %} onclick='$("#form-status-select").submit();'>
                         <label for="3">Просроченые курсы</label>
                     </div>
                     <div>
-                        <input class="custom-radio" type="radio" id="4" name="status" value="plan" onclick='$("#form-status-select").submit();'>
+                        <input class="custom-radio" type="radio" id="4" name="status" value="plan" {% if status == 'plan' %} checked {% endif %} onclick='$("#form-status-select").submit();'>
                         <label for="4">Не пройденные курсы</label>
                     </div>
                 </form>
@@ -83,7 +83,7 @@
                                            {{ course.start_date|date:"d.m.y" }}
                                         </div>
                                         <div class="bar">
-                                            <div class="bar-blue"></div>
+                                           <div class="bar-blue w{{  course.rate  }}"></div>
                                         </div>
                                         <div class="coures-end-date">
                                             {{ course.end_date|date:"d.m.y" }}
