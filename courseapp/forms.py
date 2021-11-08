@@ -10,21 +10,26 @@ class CourseEditForm(forms.ModelForm):
     target = forms.CharField(widget=forms.Textarea(attrs={'class': 'field textarea', 'cols': '40', 'rows': '5'}))
     start_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date', 'class': 'field'}))
     end_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date', 'class': 'field'}))
-    profession = forms.ModelChoiceField(queryset=Profession.objects.all(), label='name', to_field_name="name",
-                                        widget=forms.Select(attrs={'class': 'field select select-width'}))
-
+   
     class Meta:
         model = Course
         fields = ('id', 'name', 'location', 'target', 'start_date', 'end_date', 'profession')
 
     def __init__(self, *args, **kwargs):    
-        super(CourseEditForm, self).__init__(*args, **kwargs) 
+        super().__init__(*args, **kwargs)
+       
+        self.fields['profession'].queryset = Profession.objects.all()
         if self.data.get('id') == None: 
             try: 
                 course_id = Course.objects.last().id 
                 self.fields['id'].initial = course_id + 1
             except AttributeError: 
                  self.fields['id'].initial = 1
+        if self.data.get('profession') == None:
+            self.fields['profession'].queryset = Profession.objects.all()
+     
+
+
               
     def clean(self):
         

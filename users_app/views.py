@@ -93,8 +93,11 @@ class ProfileView(TemplateView):
         rate_sum = 0
         courses = Course.objects.filter(is_active=True, person=self.request.user)
         for course in courses:
-            rate_sum += course.rate  
-        rate = int(rate_sum / len(courses))
+            rate_sum += course.rate 
+        if len(courses) > 0:
+            rate = int(rate_sum / len(courses))
+        else:
+            rate = 0 
         self.request.user.rate = rate
    
         return context
