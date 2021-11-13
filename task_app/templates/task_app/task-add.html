@@ -2,11 +2,11 @@
 {% load static %}
 
 {% block content %}
-<form action="
+<form id ="{{current_url.kwargs.pk }}" class="form-task" action="
 {% url  current_url.view_name pk=current_url.kwargs.pk  %}" method="post">
     {% csrf_token %}
     <div class="main-menu-wrap margin-menu">
-         <button type="submit" class="btn btn-blue">
+         <button type="submit" class="btn btn-blue" id='button'>
                 <i class="fas fa-save"></i>Сохранить
             </button>
 
@@ -55,7 +55,14 @@
                         {{form.end_date}}
                     </div>
                 </div>
-
+  
             </div>
 </form>
+
+   {% if form.errors %}      
+    {{ form.start_date.errors}}  
+   {{ form.errors }} 
+            {% endif %}
+            <script src="{% static 'js/valid_end_date.js' %}"></script> 
+             <script src="{% static 'js/valid_start_date.js' %}"></script> 
 {% endblock %}

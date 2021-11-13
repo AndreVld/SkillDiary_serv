@@ -9,7 +9,6 @@ from task_app.models import File, Task, Comment
 from users_app.models import Person
 
 
-
 def dict_to_filter_params(d, prefix=''):
     """
     Translate a dictionary of attributes to a nested set of parameters suitable for QuerySet filtering. For example:
@@ -122,9 +121,11 @@ class NestedFileSerializer(WritableNestedSerializer):
 
 
 class NestedAdditionalInfoSerializer(WritableNestedSerializer):
+    files = NestedFileSerializer(many=True)
+
     class Meta:
         model = AdditionalInfo
-        fields = '__all__'
+        fields = ['id', 'name', 'url', 'note', 'type_info', 'is_active', 'course', 'files']
 
 
 class NestedTaskSerializer(WritableNestedSerializer):
@@ -184,21 +185,32 @@ class CourseWithOutTaskSerializer(serializers.ModelSerializer):
                   'update_at', 'is_active', 'profession', 'person', 'addinfo']
 
 
+class NestedCourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = ['id', 'url', 'name', ]
+
+
 class TaskSerializer(serializers.ModelSerializer):
     files = NestedFileSerializer(many=True)
     url = serializers.HyperlinkedIdentityField(view_name='task-detail')
-    # course = CourseSerializer()
+    course = NestedCourseSerializer()
     comments = NestedCommentSerializer(many=True)
 
     class Meta:
         model = Task
-        fields = ['id', 'url', 'name', 'start_date', 'end_date', 'status', 'is_active', 'comments', 'files',
+        fields = ['id', 'url', 'name', 'start_date', 'end_date', 'status', 'is_active', 'comments', 'files', 'course',
                   'update_at', ]
 
 
 class PersonDetailsSerializer(serializers.ModelSerializer):
     class Meta:
-        exclude=['password', 'is_superuser','activation_key',
-                 'activation_key_expires', 'groups', 'user_permissions']
+        exclude = ['password', 'is_superuser', 'activation_key',
+                   'activation_key_expires', 'groups', 'user_permissions']
         model = Person
 
+
+class ProfessionTaskSerializer(serializers.Serializer):
+    profession = serializers.CharField(max_length=200)
+    tasks = serializers.ListField(child=serializers.CharField(max_length=200)
+       )

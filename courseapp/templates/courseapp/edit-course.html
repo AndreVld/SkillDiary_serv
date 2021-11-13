@@ -1,10 +1,14 @@
 {% extends "base.html" %}
- 
-
 {% load static %}
 {% block title %}  {% endblock %}
 
-{% block content %}        
+{% block content %}  
+
+
+
+
+
+
  <form action="{% url 'course:course_edit' course.id %}" method="post" >
                  {% csrf_token %}
                 <div class="main-menu-wrap add-course-menu">
@@ -50,6 +54,7 @@
                        
                     </div>
                     <div class="date-wrap">
+                    
                         <div class="date-l">
                             <div class="title-field">
                                 <i class="fas fa-calendar-day"></i>Дата начала
@@ -73,25 +78,32 @@
                         </div>
 
                     </div>
+                     {{ form.start_date.errors}}
+                    {{ form.end_date.errors}}
                     <div class="title-field">
                         <i class="fas fa-check"></i></i>Цель
                     </div>
                     <div class="wrap-field">
                     {{ form.target}}
-                        
+                        {{ form.id }}
                     </div>
-
-           
                         
         </div>
-
-                
         </div>
-          
         </div>     
-          
+      
                 </div>
-              
+                
+                </form>
+         {% if form.errors %}         
+            {% endif %}
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+            <script >
+  $(document).ready(function() {
+    $('#id_profession').select2();
+});
+</script>
 
-        
+      <script src="{% static 'js/remove_error.js' %}"></script> 
       {% endblock %}
