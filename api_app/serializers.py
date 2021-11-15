@@ -2,6 +2,8 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned, FieldError
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+from rest_framework.serializers import raise_errors_on_nested_writes
+from rest_framework.utils import model_meta
 
 from SkillDiary import settings
 from courseapp.models import Profession, AdditionalInfo, Course
@@ -9,118 +11,25 @@ from task_app.models import File, Task, Comment
 from users_app.models import Person
 
 
-def dict_to_filter_params(d, prefix=''):
-    """
-    Translate a dictionary of attributes to a nested set of parameters suitable for QuerySet filtering. For example:
-
-        {
-            "name": "Foo",
-            "rack": {
-                "facility_id": "R101"
-            }
-        }
-
-    Becomes:
-
-        {
-            "name": "Foo",
-            "rack__facility_id": "R101"
-        }
-
-    And can be employed as filter parameters:
-
-        Device.objects.filter(**dict_to_filter(attrs_dict))
-    """
-    params = {}
-    for key, val in d.items():
-        k = prefix + key
-        if isinstance(val, dict):
-            params.update(dict_to_filter_params(val, k + '__'))
-        else:
-            params[k] = val
-    return params
-
-
-class BaseModelSerializer(serializers.ModelSerializer):
-    display = serializers.SerializerMethodField(read_only=True)
-
-    def get_display(self, obj):
-        return str(obj)
-
-
-#
-# Nested serializers
-#
-
-class WritableNestedSerializer(BaseModelSerializer):
-    """
-    Returns a nested representation of an object on read, but accepts only a primary key on write.
-    """
-
-    def to_internal_value(self, data):
-
-        if data is None:
-            return None
-
-        # Dictionary of related object attributes
-        if isinstance(data, dict):
-            params = dict_to_filter_params(data)
-            queryset = self.Meta.model.objects
-            try:
-                return queryset.get(**params)
-            except ObjectDoesNotExist:
-                raise ValidationError(
-                    "Related object not found using the provided attributes: {}".format(params)
-                )
-            except MultipleObjectsReturned:
-                raise ValidationError(
-                    "Multiple objects match the provided attributes: {}".format(params)
-                )
-            except FieldError as e:
-                raise ValidationError(e)
-
-        # Integer PK of related object
-        if isinstance(data, int):
-            pk = data
-        else:
-            try:
-                # PK might have been mistakenly passed as a string
-                pk = int(data)
-            except (TypeError, ValueError):
-                raise ValidationError(
-                    "Related objects must be referenced by numeric ID or by dictionary of attributes. Received an "
-                    "unrecognized value: {}".format(data)
-                )
-
-        # Look up object by PK
-        queryset = self.Meta.model.objects
-        try:
-            return queryset.get(pk=int(data))
-        except ObjectDoesNotExist:
-            raise ValidationError(
-                "Related object not found using the provided numeric ID: {}".format(pk)
-            )
-
-
-class NestedPersonSerializer(WritableNestedSerializer):
+class NestedPersonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Person
-        fields = '__all__'
+        fields = ['id', 'username', 'first_name', 'last_name', 'city', 'age', 'avatar', 'email']
 
 
-class NestedProfessionSerializer(WritableNestedSerializer):
+class FilesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Profession
-        fields = '__all__'
+        model = File
+        fields = ['id', 'name', 'description', 'file', 'task', 'additional_info']
 
 
-class NestedFileSerializer(WritableNestedSerializer):
+class NestedFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = File
         fields = '__all__'
 
 
-class NestedAdditionalInfoSerializer(WritableNestedSerializer):
+class NestedAdditionalInfoSerializer(serializers.ModelSerializer):
     files = NestedFileSerializer(many=True)
 
     class Meta:
@@ -128,24 +37,59 @@ class NestedAdditionalInfoSerializer(WritableNestedSerializer):
         fields = ['id', 'name', 'url', 'note', 'type_info', 'is_active', 'course', 'files']
 
 
-class NestedTaskSerializer(WritableNestedSerializer):
+class AdditionalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AdditionalInfo
+        fields = ['id', 'name', 'url', 'note', 'type_info', 'is_active', 'course', 'files']
+
+
+class AdditionalInfoSerializer(serializers.ModelSerializer):
+    files = NestedFileSerializer(many=True)
+    class Meta:
+        model = AdditionalInfo
+        fields = ['id', 'name', 'url', 'note', 'type_info', 'is_active', 'course', 'files']
+
+
+class NestedTaskSerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='task-detail')
     files = NestedFileSerializer(many=True)
 
     class Meta:
         model = Task
-        fields = ['id', 'url', 'name', 'start_date', 'end_date', 'status', 'is_active', 'files',
+        fields = ['id', 'url', 'name', 'start_date', 'end_date', 'status', 'is_active', 'files', 'done',
                   'update_at', ]
 
 
-class NestedCommentSerializer(WritableNestedSerializer):
+class CommentSerializer(serializers.ModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name='comment-detail')
+    id = serializers.IntegerField(required=False)
+
     class Meta:
         model = Comment
-        fields = '__all__'
+        fields = ['id', 'url', 'text', 'task', 'is_active']
+
+
+class NestedCommentSerializer(serializers.ModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name='comment-detail')
+    id = serializers.IntegerField()
+
+    class Meta:
+        model = Comment
+        fields = ['id', 'url', 'text', 'is_active']
+
+
+class NestedProfessionSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField(required=False)
+
+    class Meta:
+        model = Profession
+        fields = ['id', 'name']
 
 
 class ProfessionSerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='profession-detail')
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         model = Profession
@@ -162,45 +106,133 @@ class PersonSerializer(serializers.ModelSerializer):
 
 class CourseSerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='course-detail')
-    tasks = NestedTaskSerializer(many=True)
-    profession = NestedProfessionSerializer()
-    person = NestedPersonSerializer()
-    addinfo = NestedAdditionalInfoSerializer(many=True)
+    tasks = NestedTaskSerializer(many=True, read_only=True)
+    profession = NestedProfessionSerializer(required=False)
+    person = NestedPersonSerializer(read_only=True)
+    addinfo = NestedAdditionalInfoSerializer(many=True, read_only=True)
 
     class Meta:
         model = Course
         fields = ['id', 'url', 'name', 'location', 'target', 'status', 'level', 'rate', 'start_date', 'end_date',
-                  'update_at', 'is_active', 'profession', 'person', 'tasks', 'addinfo']
+                  'update_at', 'is_active','add_report', 'profession', 'person', 'tasks', 'addinfo']
+
+    def create(self, validated_data):
+
+        profession_id = validated_data['profession']['id']
+        validated_data['person'] = self.context['request'].user
+        validated_data['profession'] = Profession.objects.get(id=profession_id)
+        instance = Course.objects.create(**validated_data)
+        return instance
+
+    def update(self, instance, validated_data):
+        if 'profession' in validated_data:
+            profession_data = validated_data.pop('profession')
+            validated_data['profession'] = Profession.objects.get(id=profession_data.get('id'))
+        validated_data['person'] = Person.objects.get(id=self.context['request'].user.id)
+        instance.name = validated_data.get('name', instance.name)
+        instance.location = validated_data.get('location', instance.location)
+        instance.target = validated_data.get('target', instance.target)
+        instance.status = validated_data.get('status', instance.status)
+        instance.level = validated_data.get('level', instance.level)
+        instance.rate = validated_data.get('rate', instance.rate)
+        instance.start_date = validated_data.get('start_date', instance.start_date)
+        instance.end_date = validated_data.get('end_date', instance.end_date)
+        instance.is_active = validated_data.get('is_active', instance.is_active)
+        instance.profession = validated_data.get('profession', instance.profession)
+        instance.person = validated_data.get('person', instance.person)
+        instance.add_report = validated_data.get('add_report', instance.add_report)
+        instance.save()
+
+        return instance
 
 
 class CourseWithOutTaskSerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='course-detail')
-    profession = NestedProfessionSerializer()
-    person = NestedPersonSerializer()
-    addinfo = NestedAdditionalInfoSerializer(many=True)
+    profession = NestedProfessionSerializer(required=False)
+    person = NestedPersonSerializer(read_only=True)
+    addinfo = NestedAdditionalInfoSerializer(many=True, read_only=True)
 
     class Meta:
         model = Course
         fields = ['id', 'url', 'name', 'location', 'target', 'status', 'level', 'rate', 'start_date', 'end_date',
-                  'update_at', 'is_active', 'profession', 'person', 'addinfo']
+                  'update_at', 'is_active', 'add_report', 'profession', 'person', 'addinfo']
+
+    def create(self, validated_data):
+        profession_id = validated_data['profession']['id']
+        validated_data['person'] = self.context['request'].user
+        validated_data['profession'] = Profession.objects.get(id=profession_id)
+        instance = Course.objects.create(**validated_data)
+        return instance
+
+    def update(self, instance, validated_data):
+        if 'profession' in validated_data:
+            profession_data = validated_data.pop('profession')
+            validated_data['profession'] = Profession.objects.get(id=profession_data.get('id'))
+
+        validated_data['person'] = Person.objects.get(id=self.context['request'].user.id)
+        instance.name = validated_data.get('name', instance.name)
+        instance.location = validated_data.get('location', instance.location)
+        instance.target = validated_data.get('target', instance.target)
+        instance.status = validated_data.get('status', instance.status)
+        instance.level = validated_data.get('level', instance.level)
+        instance.rate = validated_data.get('rate', instance.rate)
+        instance.start_date = validated_data.get('start_date', instance.start_date)
+        instance.end_date = validated_data.get('end_date', instance.end_date)
+        instance.is_active = validated_data.get('is_active', instance.is_active)
+        instance.add_report = validated_data.get('add_report', instance.add_report)
+        instance.profession = validated_data.get('profession', instance.profession)
+        instance.person = validated_data.get('person', instance.person)
+        instance.save()
+
+        return instance
 
 
 class NestedCourseSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField(required=False)
+
     class Meta:
         model = Course
-        fields = ['id', 'url', 'name', ]
+        fields = ['id', 'name', ]
 
 
 class TaskSerializer(serializers.ModelSerializer):
-    files = NestedFileSerializer(many=True)
+    files = NestedFileSerializer(many=True, read_only=True)
     url = serializers.HyperlinkedIdentityField(view_name='task-detail')
-    course = NestedCourseSerializer()
-    comments = NestedCommentSerializer(many=True)
+    course = NestedCourseSerializer(required=False)
+    comments = NestedCommentSerializer(many=True, read_only=True)
+    user = NestedPersonSerializer(read_only=True)
 
     class Meta:
         model = Task
-        fields = ['id', 'url', 'name', 'start_date', 'end_date', 'status', 'is_active', 'comments', 'files', 'course',
-                  'update_at', ]
+        fields = ['id', 'url', 'name', 'start_date', 'end_date', 'status', 'is_active', 'comments', 'files', 'done',
+                  'course', 'user',
+                  ]
+
+    def create(self, validated_data):
+        course_data = validated_data.pop('course')
+        validated_data['user'] = self.context['request'].user
+        validated_data['course'] = Course.objects.get(id=course_data.get('id'))
+        instance = Task.objects.create(**validated_data)
+        return instance
+
+    def update(self, instance, validated_data):
+        if 'course' in validated_data:
+            course_data = validated_data.pop('course')
+            validated_data['course'] = Course.objects.get(id=course_data.get('id'))
+
+       # validated_data['user'] = self.context['request'].user
+        instance.name = validated_data.get('name', instance.name)
+        instance.status = validated_data.get('status', instance.status)
+        instance.start_date = validated_data.get('start_date', instance.start_date)
+        instance.end_date = validated_data.get('end_date', instance.end_date)
+        instance.is_active = validated_data.get('is_active', instance.is_active)
+        instance.done = validated_data.get('done', instance.done)
+        instance.course = validated_data.get('course', instance.course)
+        #instance.user = validated_data.get('user', instance.user)
+        instance.save()
+
+        return instance
 
 
 class PersonDetailsSerializer(serializers.ModelSerializer):
@@ -213,4 +245,4 @@ class PersonDetailsSerializer(serializers.ModelSerializer):
 class ProfessionTaskSerializer(serializers.Serializer):
     profession = serializers.CharField(max_length=200)
     tasks = serializers.ListField(child=serializers.CharField(max_length=200)
-       )
+                                  )

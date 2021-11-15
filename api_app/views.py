@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets, generics
 from rest_framework.authentication import SessionAuthentication
-from rest_framework.generics import RetrieveUpdateAPIView
+from rest_framework.generics import RetrieveUpdateAPIView, GenericAPIView
 from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
@@ -13,12 +13,34 @@ import json
 from rest_framework.views import APIView
 
 from api_app.serializers import PersonSerializer, CourseSerializer, TaskSerializer, ProfessionSerializer, \
-    CourseWithOutTaskSerializer, PersonDetailsSerializer, ProfessionTaskSerializer
+    CourseWithOutTaskSerializer, PersonDetailsSerializer, ProfessionTaskSerializer, CommentSerializer, \
+    AdditionalSerializer,FilesSerializer
 from courseapp.models import Profession, AdditionalInfo, Course
 from task_app.models import File, Task, Comment
 from users_app.models import Person
 
 UserModel = get_user_model()
+
+
+class FileViewSet(viewsets.ModelViewSet):
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = File.objects.all()
+    serializer_class = FilesSerializer
+
+
+class AdditionalViewSet(viewsets.ModelViewSet):
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = AdditionalInfo.objects.all()
+    serializer_class = AdditionalSerializer
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
 
 
 class ProfessionViewSet(viewsets.ModelViewSet):
@@ -85,7 +107,7 @@ def ProfessionTaskList(request):
         return Http404
 
 
-class CourseList(generics.ListAPIView):
+class CourseList(generics.RetrieveUpdateAPIView):
     authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
@@ -148,7 +170,7 @@ class TaskViewSet(viewsets.ModelViewSet):
         return Task.objects.filter(user=user)
 
 
-class PersonDetailsView(viewsets.ModelViewSet):
+class PersonDetailsView(RetrieveUpdateAPIView):
     """
     Reads and updates UserModel fields
     Accepts GET, PUT, PATCH methods.
