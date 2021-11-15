@@ -3,233 +3,119 @@
 {% block title %} {% endblock %}
 
 {% block content %}
-            <div class="main-menu-wrap">
-                <a class="btn btn-blue" href="{% url 'course:course_add' %}">
-                    <i class="fas fa-plus-circle"></i>Добавить курс
-                </a>
+    <div class="main-menu-wrap">
+        <a class="btn btn-blue" href="{% url 'course:course_add' %}">
+            <i class="fas fa-plus-circle"></i>Добавить курс
+        </a>
 
-                <form class="radio-select" id="form-status-select" method="get">
-                    <div>
-                        <input class="custom-radio" type="radio" id="1" name="status" value="all" {% if status == 'all' or not status %} checked {% endif %} onclick='$("#form-status-select").submit();'>
-                        <label for="1">Все курсы</label>
-                    </div>
-                    <div>
-                        <input class="custom-radio" type="radio" id="2" name="status" value="completed"  {% if status == 'completed' %} checked {% endif %} onclick='$("#form-status-select").submit();'>
-                        <label for="2">Пройденые курсы</label>
-                    </div>
-                    <div>
-                        <input class="custom-radio" type="radio" id="3" name="status" value="overdue" {% if status == 'overdue' %} checked {% endif %} onclick='$("#form-status-select").submit();'>
-                        <label for="3">Просроченые курсы</label>
-                    </div>
-                    <div>
-                        <input class="custom-radio" type="radio" id="4" name="status" value="plan" {% if status == 'plan' %} checked {% endif %} onclick='$("#form-status-select").submit();'>
-                        <label for="4">Не пройденные курсы</label>
-                    </div>
-                </form>
-
-                <a class="btn btn-blue" href="{% url 'course:report' %}">
-                    <i class="fas fa-file-alt"></i>Отчет
-                </a>
-                    
+        <form class="radio-select" id="form-status-select" method="get">
+            <div>
+                <input class="custom-radio" type="radio" id="1" name="status" value="all" {% if status == 'all' or not status %} checked {% endif %} onclick='$("#form-status-select").submit();'>
+                <label for="1">Все курсы</label>
             </div>
+            <div>
+                <input class="custom-radio" type="radio" id="2" name="status" value="completed"  {% if status == 'completed' %} checked {% endif %} onclick='$("#form-status-select").submit();'>
+                <label for="2">Пройденые курсы</label>
             </div>
-            <div class="col-sm-12 col-md-9">
-                <div class="sorts-wrap">
+            <div>
+                <input class="custom-radio" type="radio" id="3" name="status" value="overdue" {% if status == 'overdue' %} checked {% endif %} onclick='$("#form-status-select").submit();'>
+                <label for="3">Просроченые курсы</label>
+            </div>
+            <div>
+                <input class="custom-radio" type="radio" id="4" name="status" value="plan" {% if status == 'plan' %} checked {% endif %} onclick='$("#form-status-select").submit();'>
+                <label for="4">Не пройденные курсы</label>
+            </div>
+        </form>
 
-                     <div class="wrap-field">
-                         <i class="fas fa-search"></i>   
-                         <input class="field" placeholder="Поиск..." type="text">
-                     </div>
-
-                     <div class="wrap-field">
-                         Профессия
-                         <i class="fas fa-sort-down i-sort-1"></i>  
-                         <select class="field select">
-                             <option selected >Какая-то профессиия</option>
-                             <option>Какая-то профессиия два</option>
-                             <option>Python программист</option>
-                        </select>
-                        
-                     </div>
-
-                     <div class="wrap-field">
-                        Сортировка
-                        <i class="fas fa-sort-down i-sort-2"></i>  
-                        <select class="field select">
-                            <option selected >Дедлайн</option>
-                            <option>Пункт 2</option>
-                          </select>
-                       
-                    </div>
+        <a class="btn btn-blue" href="{% url 'course:report' %}">
+            <i class="fas fa-file-alt"></i>Отчет
+        </a>            
+    </div>
+    </div>
+    <div class="col-sm-12 col-md-9">
+        <form>
+        <div class="sorts-wrap">
+            <div class="wrap-field">
+                <i class="fas fa-search"></i>   
+                <input class="field" placeholder="Поиск..." type="text" id="searchIn" onkeyup="searchCourse()">
+            </div>
+            <!--<div class="wrap-field">
+                Профессия
+                <i class="fas fa-sort-down i-sort-1"></i>  
+                <select class="field select select-prof">
+                    <option selected >Какая-то профессиия</option>
+                    <option>Какая-то профессиия два</option>
+                    <option>Python программист</option>
+                </select>
+            </div>-->
+            <div class="wrap-field">
+                Сортировка
+                <i class="fas fa-sort-down i-sort-2"></i>  
+                <select class="field select select-sort" onchange="sortCourse()">
+                    <option selected disabled>Выбор:</option>
+                    <option value="1" id="11" >По убыванию даты окончания </option>
+                    <option value="2" id="22" >По возрастанию даты окончания </option>
+                    <option value="3" id="33" >По убыванию даты начала </option>
+                    <option value="4" id="44" >По возрастанию даты начала </option>
+                </select>             
+            </div>
+        </div>
+        </form>
+        <div class ="course-sort">
+        {% for course in course_list %}
+            <a href="{% url 'course:course_detail' course.id %}" 
+            {% if course.status == 'WORK' %} class="course-wrap "
+            {% elif course.status == 'PLAN' %} class="course-wrap course-plan " 
+            {% elif course.status == 'COMPLETED' %} class="course-wrap  complete" 
+            {% else %} class="course-wrap unfinished" {% endif %}
+            date-start={{course.start_date|date:"m/d/y"}} date-end={{course.end_date|date:"m/d/y"}}>
+                <div class="container mycontainer">
+                    <div class="row myrow ">
+                        <div class="col-11 mycol">
+                            <div class="course-main">
+                                <div class="course-title">
+                                    {{ course.name }}
+                                </div>
+                                <div class="course-location">
+                                    {{ course.location }}
+                                </div>
+                                <div class="course-progress">
+                                    Прогрес
+                                </div>
+                                <div class="course-bar">
+                                    <div class="coures-start-date">
+                                        {{ course.start_date|date:"d.m.y" }}
+                                    </div>
+                                    <div class="bar">
+                                        <div class="bar-blue w{{ course.round_rate }}"></div>
+                                    </div>
+                                    <div class="coures-end-date">
+                                        {{ course.end_date|date:"d.m.y" }}
+                                    </div>
+                                </div>
+                                <div class="course-description">
+                                {{ course.target }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-1 mycol">
+                            <div class="course-rate">
+                                {{ course.rate }}
+                            </div>
+                        </div>
+                    </div>          
                 </div>
-
-{% for course in course_list %}
-{% if course.status == 'WORK'%}
-                <a href="{% url 'course:course_detail' course.id %}" class="course-wrap">
-                    <div class="container mycontainer">
-                        <div class="row myrow">
-                            <div class="col-11 mycol">
-                                <div class="course-main">
-                                    <div class="course-title">
-                                        {{ course.name }}
-                                    </div>
-                                    <div class="course-location">
-                                       {{ course.location }}
-                                    </div>
-                                    <div class="course-progress">
-                                        Прогрес
-                                    </div>
-                                    <div class="course-bar">
-                                        <div class="coures-start-date">
-                                           {{ course.start_date|date:"d.m.y" }}
-                                        </div>
-                                        <div class="bar">
-                                           <div class="bar-blue w{{ course.round_rate }}"></div>
-                                        </div>
-                                        <div class="coures-end-date">
-                                            {{ course.end_date|date:"d.m.y" }}
-                                        </div>
-                                    </div>
-                                    <div class="course-description">
-                                    {{ course.target }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-1 mycol">
-                                <div class="course-rate">
-                                    {{ course.rate }}
-                                </div>
-                            </div>
-                        </div>          
-                    </div>
-                </a>
-{% elif course.status == 'PLAN' %}
-                 <a href="{% url 'course:course_detail' course.id %}" class="course-wrap course-plan ">
-                    <div class="container mycontainer">
-                        <div class="row myrow">
-                            <div class="col-11 mycol">
-                                <div class="course-main">
-                                    <div class="course-title">
-                                        {{ course.name }}
-                                    </div>
-                                    <div class="course-location">
-                                       {{ course.location }}
-                                    </div>
-                                    <div class="course-progress">
-                                        Прогрес
-                                    </div>
-                                    <div class="course-bar">
-                                        <div class="coures-start-date">
-                                           {{ course.start_date|date:"d.m.y" }}
-                                        </div>
-                                        <div class="bar">
-                                           <div class="bar-blue w{{ course.round_rate }}"></div>
-                                        </div>
-                                        <div class="coures-end-date">
-                                            {{ course.end_date|date:"d.m.y" }}
-                                        </div>
-                                    </div>
-                                    <div class="course-description">
-                                    {{ course.target }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-1 mycol">
-                                <div class="course-rate">
-                                    {{ course.rate }}
-                                </div>
-                            </div>
-                        </div>          
-                    </div>
-                </a>
-{% elif course.status == 'COMPLETED' %}
-         <a href="{% url 'course:course_detail' course.id %}" class="course-wrap  complete">
-                    <div class="container mycontainer">
-                        <div class="row myrow">
-                            <div class="col-11 mycol">
-                                <div class="course-main">
-                                    <div class="course-title">
-                                        {{ course.name }}
-                                    </div>
-                                    <div class="course-location">
-                                       {{ course.location }}
-                                    </div>
-                                    <div class="course-progress">
-                                        Прогрес
-                                    </div>
-                                    <div class="course-bar">
-                                        <div class="coures-start-date">
-                                           {{ course.start_date|date:"d.m.y" }}
-                                        </div>
-                                        <div class="bar">
-                                           <div class="bar-blue w{{ course.round_rate }}"></div>
-                                        </div>
-                                        <div class="coures-end-date">
-                                            {{ course.end_date|date:"d.m.y" }}
-                                        </div>
-                                    </div>
-                                    <div class="course-description">
-                                    {{ course.target }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-1 mycol">
-                                <div class="course-rate">
-                                    {{ course.rate }}
-                                </div>
-                            </div>
-                        </div>          
-                    </div>
-                </a>
-    {% else %}
-     <a href="{% url 'course:course_detail' course.id %}" class="course-wrap unfinished">
-                    <div class="container mycontainer">
-                        <div class="row myrow">
-                            <div class="col-11 mycol">
-                                <div class="course-main">
-                                    <div class="course-title">
-                                        {{ course.name }}
-                                    </div>
-                                    <div class="course-location">
-                                       {{ course.location }}
-                                    </div>
-                                    <div class="course-progress">
-                                        Прогрес
-                                    </div>
-                                    <div class="course-bar">
-                                        <div class="coures-start-date">
-                                           {{ course.start_date|date:"d.m.y" }}
-                                        </div>
-                                        <div class="bar">
-                                         <div class="bar-blue w{{ course.round_rate }}"></div>
-                                        </div>
-                                        <div class="coures-end-date">
-                                            {{ course.end_date|date:"d.m.y" }}
-                                        </div>
-                                    </div>
-                                    <div class="course-description">
-                                    {{ course.target }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-1 mycol">
-                                <div class="course-rate">
-                                    {{ course.rate }}
-                                </div>
-                            </div>
-                        </div>          
-                    </div>
-                </a>
-{% endif%}
-{% endfor %}
-
-                <div class="pagination">
-                    <a href="#" class="page">1</a>
-                    <a href="#" class="page">2</a>
-                    <a href="#" class="page">3</a>
-                </div>
-            </div>
-            </div>
+            </a>
+        {% endfor %}
+        </div>
+        <div class="pagination">
+            <a href="#" class="page">1</a>
+            <a href="#" class="page">2</a>
+            <a href="#" class="page">3</a>
+        </div>
+    </div>
 </div>
 </div>
-       {% endblock %}
+</div>
+<script src="{% static 'js/search_course.js' %}"></script>
+{% endblock %}
