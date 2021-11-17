@@ -8,24 +8,29 @@
             <i class="fas fa-plus-circle"></i>Добавить курс
         </a>
 
-        <form class="radio-select" id="form-status-select" method="get">
-            <div>
-                <input class="custom-radio" type="radio" id="1" name="status" value="all" {% if status == 'all' or not status %} checked {% endif %} onclick='$("#form-status-select").submit();'>
-                <label for="1">Все курсы</label>
-            </div>
-            <div>
-                <input class="custom-radio" type="radio" id="2" name="status" value="completed"  {% if status == 'completed' %} checked {% endif %} onclick='$("#form-status-select").submit();'>
-                <label for="2">Пройденые курсы</label>
-            </div>
-            <div>
-                <input class="custom-radio" type="radio" id="3" name="status" value="overdue" {% if status == 'overdue' %} checked {% endif %} onclick='$("#form-status-select").submit();'>
-                <label for="3">Просроченые курсы</label>
-            </div>
-            <div>
-                <input class="custom-radio" type="radio" id="4" name="status" value="plan" {% if status == 'plan' %} checked {% endif %} onclick='$("#form-status-select").submit();'>
-                <label for="4">Не пройденные курсы</label>
-            </div>
-        </form>
+                <form class="radio-select" id="form-status-select" method="get">
+                    <div>
+                        <input class="custom-radio" type="radio" id="1" name="status" value="all" {% if status == 'all' or not status %} checked {% endif %} onclick='$("#form-status-select").submit();'>
+                        <label for="1">Все курсы</label>
+                    </div>
+                      
+                    <div>
+                        <input class="custom-radio" type="radio" id="2" name="status" value="completed"  {% if status == 'completed' %} checked {% endif %} onclick='$("#form-status-select").submit();'>
+                        <label for="2">Пройденые курсы</label>
+                    </div>
+                    <div>
+                        <input class="custom-radio" type="radio" id="3" name="status" value="overdue" {% if status == 'overdue' %} checked {% endif %} onclick='$("#form-status-select").submit();'>
+                        <label for="3">Курсы пройденные не до конца</label>
+                    </div>
+                    <div>
+                        <input class="custom-radio" type="radio" id="4" name="status" value="plan" {% if status == 'plan' %} checked {% endif %} onclick='$("#form-status-select").submit();'>
+                        <label for="4"> Планируемые курсы</label>
+                    </div>
+                    <div>
+                        <input class="custom-radio" type="radio" id="5" name="status" value="work" {% if status == 'work' %} checked {% endif %} onclick='$("#form-status-select").submit();'>
+                        <label for="5">Курсы в работе</label>
+                    </div>
+                </form>
 
         <a class="btn btn-blue" href="{% url 'course:report' %}">
             <i class="fas fa-file-alt"></i>Отчет
@@ -33,6 +38,45 @@
     </div>
     </div>
     <div class="col-sm-12 col-md-9">
+    <!--- Сортировка с пагинацией 
+                <div class="sorts-wrap">
+                        <form  method="get" id="form-course-search">
+                     <div class="wrap-field">
+                         <i class="fas fa-search"></i>   
+                         <input class="field" placeholder="Поиск..." type="text" name="name_course" onchange="this.form.submit()">
+                     </div>
+                        </form>
+
+                     <form  method="get" id="form-profession-select">
+                     <div class="wrap-field">
+                         Профессия
+                         <i class="fas fa-sort-down i-sort-1"></i>  
+                         <select class="field select" name="profession_id" onchange="this.form.submit()">
+                          <option selected  disabled="disabled"> Выбирите профессию </option>
+                         {% for profession in professions %}
+                             <option name="profession_id" value= '{{profession.id}}'>{{ profession}}</option>
+                        {% endfor %}
+                        </select>
+                        
+                     </div>
+                    </form>
+                    <form  method="get" id="form-date-select">
+                     <div class="wrap-field">
+                           Сортировка
+                           <i class="fas fa-sort-down i-sort-2"></i>  
+                           <select class="field select" onchange="this.form.submit()" name='date_sort'>
+                            <option selected="selected" disabled="disabled">Выбор</option>
+                               <option value="1" id="1" >По убыванию даты окончания </option>
+                               <option value="2" id="2" >По возрастанию даты окончания </option>
+                               <option value="3" id="3" >По убыванию даты начала </option>
+                               <option value="4" id="4" >По возрастанию даты начала </option>
+                             </select>      
+                       </div>
+                       </form>
+                        
+                </div>
+                 -->
+    
         <form>
         <div class="sorts-wrap">
             <div class="wrap-field">
@@ -108,10 +152,34 @@
             </a>
         {% endfor %}
         </div>
+        
+        <!--
+                <div class="pagination">
+    
+        {% if page_obj.has_previous %}
+           
+            <a href="?page={{ page_obj.previous_page_number }}{% if querystring %}&amp;{{ querystring }}{% endif %}"><i class="fa fa-angle-double-left"></i></a>
+        {% endif %}
+        {% for num in page_obj.paginator.page_range %}
+	
+									{% if num == page_obj.number %}
+										<a href="?page={{ num }}{% if querystring %}&amp;{{ querystring }}{% endif %} " class='page active'> {{ num }} </a>
+									{% else %}
+										<a href="?page={{ num }}{% if querystring %}&amp;{{ querystring }}{% endif %} " class='page '>{{ num }} </a>
+									{% endif%}
+		{% endfor %}
+     
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if querystring %}&amp;{{ querystring }}{% endif %}"><i class="fa fa-angle-double-right"></i></a>
+
+        {% endif %}
+ 
+    </div>
+
+    -->
         <div class="pagination">
-            <a href="#" class="page">1</a>
-            <a href="#" class="page">2</a>
-            <a href="#" class="page">3</a>
+            
         </div>
     </div>
 </div>

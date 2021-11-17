@@ -20,7 +20,7 @@
                     <h1>  
                           {{user.surname}} {{ user.first_name| default:"Профиль" }} {{ user.last_name }} </h1>
                     <div class="location">
-                        <i class="fas fa-map-marker"></i> {{ user.city }}
+                        <i class="fas fa-map-marker"></i> {{ user.city|default:'Не указан' }}
                        
                        
                     </div>

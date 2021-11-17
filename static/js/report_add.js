@@ -4,11 +4,9 @@ $('.report').on('click', function(){
     data = {add_report:add_report}
     $.ajax({    
                 type:"GET",
-                url: 'http://127.0.0.1:8000/course_report/'+id, 
+                url: 'http://www.skilldiary.ru/course_report/'+id, 
                 data: data
                     
             }
-            
-            
             
             )})

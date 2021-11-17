@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'courseapp',
     'users_app',
     'task_app',
-    'api_app'
+    'api_app',
+    'hero_app',
 
 ]
 SITE_ID = 1

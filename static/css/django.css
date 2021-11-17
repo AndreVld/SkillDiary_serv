@@ -156,3 +156,29 @@ li {
 .course-plan .course-rate {
     background-color: #BEBEBE;
 }
+
+.active {
+    background-color: #f5f4f4;
+}
+
+.hero {
+    
+    position: absolute;
+    display: flex;
+    top: 120px;
+    right: 66px;
+    height: 400px;
+    width: 270px;
+
+}
+
+.hero-word {
+    min-height: 85px;
+    background: #FAFAFA;
+    border-radius: 19px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 72px;
+    padding: 20px;
+}

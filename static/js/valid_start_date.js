@@ -5,7 +5,7 @@ $(document).ready(function () {
         id =  $(form).attr('id') 
         $.ajax({
             data: $(this).serialize(), 
-            url:  'http://127.0.0.1:8000/course/'+ id +'/validate_startdate/' ,
+            url:  'http://www.skilldiary.ru/course/'+ id +'/validate_startdate/' ,
             success: function (response) {
                 if (response.is_taken == 'True' ) {
                     $('.errorlist').remove();

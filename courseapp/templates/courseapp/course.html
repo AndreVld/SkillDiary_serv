@@ -11,11 +11,16 @@
                      <a class="btn btn-green" href="{% url 'course:course_update_status' course.id %}">
                         <i class="fas fa-check"></i>Вернуть в работу
                     </a>
+                    <a class="btn btn-white" href="{% url 'tasks:add_task' course.id %}">
+                        <i class="fas fa-plus-circle"></i>Добавить задачу
+                    </a>
                     {% elif  course.status == 'OVERDUE' and today <= course.end_date  %}
                      <a class="btn btn-green" href="{% url 'course:course_update_status' course.id %}">
                         <i class="fas fa-check"></i>Вернуть в работу
                     </a>
-
+                    <a class="btn btn-white" href="{% url 'tasks:add_task' course.id %}">
+                        <i class="fas fa-plus-circle"></i>Добавить задачу
+                    </a>
                      {% elif  course.status == 'COMPLETED' and today > course.end_date %}
                      <div class="btn btn-green" id="btn-return">
                         <i class="fas fa-check"></i> Вернуть в работу
@@ -29,15 +34,17 @@
                     <div class="btn btn-green" id="btn-finish">
                         <i class="fas fa-check"></i>Завершить курс
                     </div>
+                    <a class="btn btn-white" href="{% url 'tasks:add_task' course.id %}">
+                        <i class="fas fa-plus-circle"></i>Добавить задачу
+                    </a>
                     {% else %}
                     <div class="btn btn-green" id="btn-finish-t">
                         <i class="fas fa-check"></i>Завершить курс
                     </div>
-                    {% endif %} 
-
                     <a class="btn btn-white" href="{% url 'tasks:add_task' course.id %}">
                         <i class="fas fa-plus-circle"></i>Добавить задачу
                     </a>
+                    {% endif %}    
 
                     <a class="btn btn-white" href="{% url 'course:additional_add' course.id %}">
                         <i class="fas fa-plus-circle"></i>Добавить доп. матерьялы
@@ -111,7 +118,7 @@
                     </div>
                     {% endif %}
                     <div class="extra-wrap"> 
-                    {% if course.addinfo.all %}
+                    {% if course.addinfo.exist %}
 
                         <i class="fas fa-file"></i>
                         <span class="b extra-title">Доп. матерьялы: </span>

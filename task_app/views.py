@@ -1,5 +1,5 @@
-from datetime import date
-from datetime import datetime
+from datetime import date, datetime
+import random
 
 from django.http import JsonResponse
 
@@ -10,6 +10,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, resolve
 from django.views.generic import DetailView, CreateView, UpdateView, ListView, DeleteView
 from django.shortcuts import get_object_or_404
+from hero_app.models import HeroBad, HeroGood
 
 from courseapp.models import Course
 from task_app.forms import TaskAddForm, CommentAddForm, FileAddForm, CompletedForm
@@ -142,10 +143,21 @@ def complete_task(request, pk, task_id):
 
 class TaskList(ListView):
     template_name = 'task_app/task-daily.html'
-
+    
     def get_queryset(self):
         comment=Count('comments', distinct=True, filter=Q(comments__is_active=True))
         return Task.objects.filter(user=self.request.user, is_active=True, end_date=date.today(), status = 'WORK').annotate(file_task = Count('files', distinct=True), cnt=comment)
+
+
+    def get_context_data(self, **kwargs):
+        context = super(TaskList, self).get_context_data() 
+
+        if self.object_list:
+            phrase = random.choice (HeroGood.objects.all())
+        else:
+            phrase = random.choice (HeroBad.objects.all())
+        context['phrase'] = phrase
+        return context
 
 def delete_comment(request, pk, task_id, comment_id):
     task = get_object_or_404(Task, pk=task_id)
@@ -187,7 +199,6 @@ def work_task(request, pk, task_id):
     Task.objects.filter(id=task_id).update(status='WORK')
     Task.objects.filter(id=task_id).update(done='False')
     return HttpResponseRedirect(reverse_lazy('course:course_detail', args=(pk,)))
-
 
 
 def validate_startdate(request, pk):

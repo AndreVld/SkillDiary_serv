@@ -22,7 +22,7 @@
             </div>
             <div class="email-wrap">
                 <i class="fas fa-map-marker"></i><span class="b">Адрес: </span>
-                {{ user.city }}
+                {{ user.city|default:'Не указан' }}
             </div>
             <div class="email-wrap">
                 <i class="fas fa-envelope"></i><span class="b">E-mail: </span>

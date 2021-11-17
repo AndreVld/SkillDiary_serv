@@ -1,11 +1,10 @@
 from django.db.models import Prefetch
-import math
 from datetime import date
 from django.db.models import Q
 from django.db.models import Count
-from django.views.generic import CreateView, ListView, UpdateView
+from django.views.generic import CreateView, ListView, UpdateView, View
 from django.views.generic.detail import DetailView
-from courseapp.models import Course, AdditionalInfo
+from courseapp.models import Course, AdditionalInfo, Profession
 from task_app.models import Task, File
 from django.urls import reverse_lazy, reverse
 from courseapp.forms import CourseEditForm, AddAdditionalInfoForm, LavelForm
@@ -15,30 +14,63 @@ from django.shortcuts import get_object_or_404, redirect, HttpResponseRedirect
 
 from django.shortcuts import render, redirect, HttpResponse
 
-
+"""
+class PaginatedFilterViews(View):
+    def get_context_data(self, **kwargs):
+        context = super(PaginatedFilterViews, self).get_context_data(**kwargs)
+        if self.request.GET:
+            querystring = self.request.GET.copy()
+            if self.request.GET.get('page'):
+                del querystring['page']
+            context['querystring'] = querystring.urlencode()
+        return context
+"""
+#class CourseList(PaginatedFilterViews, ListView):
 class CourseList(ListView):
     model = Course
     template_name = 'courseapp/courses.html'
+    # paginate_by = 2
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
+        # context ['professions'] = Profession.objects.filter(courses__person=self.request.user,courses__is_active=True).distinct()
         query = self.request.GET.get('status')
-
         context['status'] = query
         return context
 
     def get_queryset(self):
+        
+        """ 
+        query_id_profession = self.request.GET.get('profession_id')
+        if query_id_profession:
+            return Course.objects.filter(person=self.request.user, is_active=True, profession = query_id_profession)
+
+        name = self.request.GET.get('name_course')
+        if name:
+            return Course.objects.filter(name__istartswith = name, person=self.request.user, is_active=True)
+        sort_date = self.request.GET.get('date_sort')
+        if  sort_date:
+            if sort_date == '1':
+                return Course.objects.filter(person=self.request.user, is_active=True).order_by('end_date')
+            if sort_date == '2':
+                return Course.objects.filter(person=self.request.user, is_active=True).order_by('-end_date')
+            if sort_date == '3':
+                return Course.objects.filter(person=self.request.user, is_active=True).order_by('start_date')
+            if sort_date == '4':
+                return Course.objects.filter(person=self.request.user, is_active=True).order_by('-start_date')
+        """
+
         query = self.request.GET.get('status')
         if query == 'completed':
             return Course.objects.filter(person=self.request.user, is_active=True, status='COMPLETED')
         elif query == 'overdue':
-            return Course.objects.filter(person=self.request.user, is_active=True, status='OVERDUE') | \
-                   Course.objects.filter(person=self.request.user, is_active=True, end_date__lt=date.today()).exclude(
-                       status='COMPLETED')
+            return Course.objects.filter(person=self.request.user, is_active=True, status='OVERDUE')                
         elif query == 'plan':
-            return Course.objects.filter(person=self.request.user, is_active=True, status='WORK') | \
-                   Course.objects.filter(person=self.request.user, is_active=True, status='PLAN')
+            return Course.objects.filter(person=self.request.user, is_active=True, status='PLAN')
+        elif query == 'work':
+            return Course.objects.filter(person=self.request.user, is_active=True, status='WORK')
+                  
         else:
             return Course.objects.filter(person=self.request.user, is_active=True)
 
@@ -59,7 +91,6 @@ class CourseDetailView(DetailView):
         count_task = len(course.tasks.all())
         count_c = 0
         count_o = 0
-
         for task in course.tasks.all():
             task.check_status()
             if task.status == 'COMPLETED':
@@ -74,17 +105,20 @@ class CourseDetailView(DetailView):
             rate = int((100 / count_task) * count_c)
         else:
             rate = 0
-
+            
         course.rate = rate
-        course.save()
-
-        if course.status == 'WORK' and date.today() > course.end_date and count_o > 0:
-            Course.objects.filter(pk=course.pk).update(status='OVERDUE')
-        elif course.status == 'WORK' and date.today() > course.end_date and count_o == 0:
-            Course.objects.filter(pk=course.pk).update(status='COMPLETED')
+        status = course.status
+        if date.today() > course.end_date:
+            if count_o > 0:
+                status = 'OVERDUE'
+            else:
+                status = 'COMPLETED'
         elif course.status == 'PLAN' and date.today() >= course.start_date:
-            Course.objects.filter(pk=course.pk).update(status='WORK')
-
+            status = 'WORK'
+        
+        course.status = status
+        course.save()
+            
         return course
 
     def get_context_data(self, **kwargs):
@@ -103,18 +137,15 @@ class EditCourseView(UpdateView):
     extra_context = {'title': 'SkillDiary - Редактирование курса'}
     success_message = 'Все изменения сохранены!'
 
-    def form_valid(self, form):
-        if form.cleaned_data['start_date'] > date.today():
-            form.instance.status = 'PLAN'
-
-        return super(EditCourseView, self).form_valid(form)
-
     def get_success_url(self):
         return reverse_lazy('course:course_detail', kwargs=self.kwargs)
 
 
 def update_course_active(request, pk):
-    Course.objects.filter(pk=pk).update(is_active='False')
+    course = get_object_or_404(Course, pk=pk)
+    course.is_active='False'
+    course.save()
+    Task.objects.filter(course = course.pk).update(is_active='False')
     return redirect('course:course_list')
 
 
@@ -161,13 +192,6 @@ def update_course_status(request, pk):
         Course.objects.filter(pk=pk).update(status='PLAN')
 
     return redirect('course:course_detail', course.pk)
-
-
-def round_rate(rate):
-    if rate < 10:
-        return 0
-    else:
-        return (int(math.floor(rate / 10)) * 10)
 
 
 def course_add(request):
@@ -220,4 +244,4 @@ class ReportView(ListView):
     template_name = 'courseapp/report.html'
 
     def get_queryset(self):
-        return Course.objects.filter(person=self.request.user, add_report=True, status='COMPLETED')
+        return Course.objects.filter(person=self.request.user, add_report=True, status='COMPLETED', is_active = True)

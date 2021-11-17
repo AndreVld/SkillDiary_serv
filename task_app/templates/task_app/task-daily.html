@@ -3,9 +3,22 @@
 
 {% block content %}
              
+                <div class="hero-word">
+               {{ phrase }}
+                </div>
+               <div class="hero">
+                        {% if  task_list%}
+                        <img src="{% static 'img/hero.png'%}" alt="Герой"> 
+                        {% else %}
+                        <img src="{% static 'img/hero_sad.png'%}" alt="Герой"> 
+                        {% endif %}
+            </div>
             </div>
             <div class="col-sm-12 col-md-9">
                    
+           
+
+
               <div class="main-wrap">
               {% if task_list %}
                     <h2>Задачи на сегодня</h2>

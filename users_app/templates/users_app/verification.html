@@ -2,17 +2,21 @@
 {% load static %}
 
 {% block content %}
-
+       </div>
+<div class="col-sm-12 col-md-9">
+                   
+              <div class="main-wrap">
   {% if user.is_authenticated %}
-    <h3>Поздравляем!</h3>
+    <h2>Поздравляем!</h2>
     <br>
-    <h4>Пользователь {{user.username}} подтвержден.</h4>
+    <h3>Пользователь {{user.username}} подтвержден.</h3>
   {% else %}
-    <h3>Верификация не пройдена.</h3>
+    <h2>Верификация не пройдена.</h2>
   {% endif %}
   <br>
-  <button class="btn btn-round form-control">
-    <a href="/" class="">на главную</a>
-  </button>
 
+    <a href="/" class="btn btn-blue">на главную</a>
+
+</div>
+</div>
 {% endblock %}
